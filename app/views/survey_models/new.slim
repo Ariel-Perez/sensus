@@ -1,0 +1,12 @@
+- provide(:title, 'Crear Modelo de Encuesta')
+h1.text-center Crear Modelo de Encuesta
+
+.row
+  .col-md-6.col-md-offset-3
+    = form_for(@model) do |f|
+      = f.hidden_field :user_id, :value => "#{current_user.id}"
+
+      = f.label :name
+      = f.text_field :name, class: 'form-control'
+
+      = f.submit "Crear", class: "btn btn-primary"

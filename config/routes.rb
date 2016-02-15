@@ -16,6 +16,11 @@ Sensus::Application.routes.draw do
   delete 'logout'  => 'sessions#destroy'
 
   resources :users
+  resources :surveys
+  resources :survey_models
+  resources :questions
+  resources :students
+  resources :answers
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

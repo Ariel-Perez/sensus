@@ -18,7 +18,7 @@ header.navbar.navbar-fixed-top.navbar-inverse
         - if logged_in?
           li
             a.no-link href="#"
-              |
+              | |
           li
             a [href="#{data_path}"]
               i.glyphicon.glyphicon-upload aria-hidden="true"
@@ -42,7 +42,7 @@ header.navbar.navbar-fixed-top.navbar-inverse
                   | Perfil
               li.divider
               li
-                a data-method="delete" rel="nofollow" [href="#{logout_path}"]
+                a [href="#{logout_path}" data-method="delete" rel="nofollow"]
                   i.glyphicon.glyphicon-log-out aria-hidden="true"
                   | Cerrar Sesión
         - else

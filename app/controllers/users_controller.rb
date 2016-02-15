@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
   skip_before_filter :require_user, :only => [:new, :create]
+  before_filter :set_user, :only => [:show, :update, :delete]
 
   def index
     @users = User.all
   end
 
   def show
-    @user = User.find(params[:id])
   end
 
   def new
@@ -28,5 +28,9 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation)
+    end
+
+    def set_user
+      @user = User.find(params[:id])
     end
 end

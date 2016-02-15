@@ -1,0 +1,20 @@
+h1 Modelos de Encuesta
+table
+  thead
+    tr
+      th Nombre
+      th Creador
+      th Fecha
+  tbody
+  - @models.each do |instance|
+    tr
+      td
+        = instance.name
+      td
+        = instance.user ? instance.user.name : '-'
+      td
+        = instance.created_at
+
+br
+
+= link_to 'Nuevo Modelo', new_survey_model_path
