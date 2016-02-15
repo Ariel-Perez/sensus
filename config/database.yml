@@ -58,4 +58,4 @@ production:
   host: localhost
   pool: 5
   username: sensus
-  password: foris123
+  password: Rails.application.secrets.db_password
