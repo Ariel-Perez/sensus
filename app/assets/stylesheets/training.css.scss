@@ -1,0 +1,115 @@
+.canvas
+{
+  position: relative;
+}
+
+.disc
+{
+  background-color: #888;
+  position: absolute;
+}
+
+.circle
+{
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+span.label
+{
+  position: relative;
+  top: 40%;
+  display: block;
+  text-align: center;
+  font-family: 'Arial';
+}
+
+span.label input
+{
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  text-align: center;
+  width: 100%;
+  font-size: 14px;
+}
+
+.category.classified
+{
+  -moz-box-shadow: 0 0 75px #fcf;
+  -webkit-box-shadow: 0 0 75px #fcf;
+  box-shadow: 0px 0px 75px #fcf;
+}
+
+.category
+{
+  cursor: pointer;
+}
+
+.category:after
+{
+  font-family: 'Arial';
+  position: relative;
+  top: 40%;
+  text-align: center;
+  content: attr(data-count);
+  display: block;
+}
+
+.center
+{
+  font-size: 16px;
+  // border: thick solid #aaa;
+  background-color: #fff;
+
+  position: absolute;
+
+  z-index: 12;
+}
+
+.center:hover
+{
+  background-color: #fafafa;
+  border-color: #999;
+}
+
+.satellite
+{
+  // border: thick solid #aaa;
+  background-color: #eee;
+  position: absolute;
+
+  z-index: 10;
+}
+
+.satellite:hover
+{
+  background-color: #ddd;
+  border-color: #999;
+  z-index: 15;
+}
+
+.satellite.add
+{
+  color: #52A84D;
+
+  background-image: image-url("plus.png");
+  background-size: 50px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 11;
+
+  cursor: pointer;
+}
+
+.circle .label {
+  color: black;
+}
+
+.center {
+  text-align: center;
+}
+
+.center h1 {
+  margin-bottom: 10px;
+}

@@ -1,0 +1,44 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+body {
+  padding-top: 60px;
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.glyphicon {
+  margin-right: 5px;
+}
+
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}
+
+.gravatar_edit {
+  margin-top: 15px;
+}
+
+#logo {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+a.no-link {
+  cursor: default;
+}
+
+.jumbotron {
+  background-color: inherit;
+}
+
+#help-manual {
+  padding: 0px;
+}
