@@ -11,7 +11,59 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215030915) do
+ActiveRecord::Schema.define(version: 20160215143246) do
+
+  create_table "answers", force: :cascade do |t|
+    t.string   "text"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "question_id"
+    t.integer  "student_id"
+    t.integer  "survey_id"
+  end
+
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id"
+  add_index "answers", ["student_id"], name: "index_answers_on_student_id"
+  add_index "answers", ["survey_id"], name: "index_answers_on_survey_id"
+
+  create_table "questions", force: :cascade do |t|
+    t.integer  "index"
+    t.string   "label"
+    t.string   "description"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "survey_model_id"
+  end
+
+  add_index "questions", ["survey_model_id"], name: "index_questions_on_survey_model_id"
+
+  create_table "students", force: :cascade do |t|
+    t.string   "identifier"
+    t.string   "meta"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "survey_models", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+  end
+
+  add_index "survey_models", ["user_id"], name: "index_survey_models_on_user_id"
+
+  create_table "surveys", force: :cascade do |t|
+    t.string   "name"
+    t.string   "path"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "user_id"
+    t.integer  "survey_model_id"
+  end
+
+  add_index "surveys", ["survey_model_id"], name: "index_surveys_on_survey_model_id"
+  add_index "surveys", ["user_id"], name: "index_surveys_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "name"

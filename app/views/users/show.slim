@@ -1,0 +1,23 @@
+- provide(:title, @user.name)
+
+.jumbotron
+  h1
+    = gravatar_for @user
+    = @user.name
+  hr
+  p Esta página es un resumen de tu historial en la aplicación.
+  .col-md-6
+    h3 Archivos Subidos
+    #user-files
+      a.list-group-item href="#" Encuesta de Prueba
+      a.list-group-item href="#" Encuesta Inacap 2015
+      a.list-group-item href="#" Encuesta Inacap 2015(2)
+  .col-md-6
+    h3 Encuestas Etiquetadas
+    #user-surveys
+      a.list-group-item href="#"
+        | Encuesta de Prueba
+        span.badge.pull-right 16
+      a.list-group-item href="#"
+        | Encuesta Inacap 2015
+        span.badge.pull-right 42

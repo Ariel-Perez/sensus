@@ -1,0 +1,50 @@
+header.navbar.navbar-fixed-top.navbar-inverse
+  .container
+    nav
+      ul.nav.navbar-nav.navbar-left
+        li
+          a#logo [href="#{root_path}"]
+            i.glyphicon.glyphicon-list-alt aria-hidden="true"
+            | Sensus
+      ul.nav.navbar-nav.navbar-right
+        li
+          a [href="#{root_path}"]
+            i.glyphicon.glyphicon-home aria-hidden="true"
+            | Inicio
+        li
+          a [href="#{help_path}"]
+            i.glyphicon.glyphicon-question-sign aria-hidden="true"
+            | Ayuda
+        - if logged_in?
+          li
+            a.no-link href="#"
+              |
+          li
+            a [href="#{data_path}"]
+              i.glyphicon.glyphicon-upload aria-hidden="true"
+              | Datos
+          li
+            a [href="#{training_path}"]
+              i.glyphicon.glyphicon-tags aria-hidden="true"
+              | Entrenamiento
+          li
+            a [href="#{results_path}"]
+              i.glyphicon.glyphicon-stats aria-hidden="true"
+              | Resultados
+          li.dropdown
+            a.dropdown-toggle href="#" data-toggle="dropdown"
+              = current_user.name
+              b.caret
+            ul.dropdown-menu
+              li
+                a [href="#{user_path(current_user)}"]
+                  i.glyphicon.glyphicon-user aria-hidden="true"
+                  | Perfil
+              li.divider
+              li
+                a data-method="delete" rel="nofollow" [href="#{logout_path}"]
+                  i.glyphicon.glyphicon-log-out aria-hidden="true"
+                  | Cerrar Sesión
+        - else
+          li
+            = link_to "Iniciar Sesión", login_path

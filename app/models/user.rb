@@ -8,4 +8,7 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
 
   has_secure_password
+
+  has_many :surveys
+  has_many :survey_models
 end
