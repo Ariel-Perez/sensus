@@ -17,9 +17,9 @@
 development:
   adapter: sqlite3
   encoding: unicode
-  database: survey_development
+  database: sensus_development
   pool: 5
-  username: survey
+  username: sensus
   password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
@@ -46,16 +46,16 @@ development:
 test:
   adapter: sqlite3
   encoding: unicode
-  database: survey_test
+  database: sensus_test
   pool: 5
-  username: survey
+  username: sensus
   password:
 
 production:
   adapter: postgresql
   encoding: unicode
-  database: survey_production
+  database: sensus_production
   host: localhost
   pool: 5
-  username: survey
+  username: sensus
   password: foris123
