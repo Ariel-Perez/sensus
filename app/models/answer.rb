@@ -6,4 +6,7 @@ class Answer < ActiveRecord::Base
   belongs_to :student
   belongs_to :survey
   belongs_to :question
+
+  has_many :answer_categories
+  has_many :categories, through: :answer_categories
 end

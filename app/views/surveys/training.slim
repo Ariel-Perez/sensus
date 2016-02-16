@@ -1,0 +1,14 @@
+- @answers.each do |answer|
+  = answer.text
+
+#disc-container.canvas
+h2#question-indicator
+#training-navegation
+  h3
+    | Respuesta #
+    span#query-index<
+
+  button#training-previous.btn.btn-default
+    | Anterior
+  button#training-next.btn.btn-default
+    | Siguiente

@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215143246) do
+ActiveRecord::Schema.define(version: 20160216042956) do
+
+  create_table "answer_categories", force: :cascade do |t|
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "user_id"
+    t.integer  "answer_id"
+    t.integer  "category_id"
+  end
+
+  add_index "answer_categories", ["answer_id"], name: "index_answer_categories_on_answer_id"
+  add_index "answer_categories", ["category_id"], name: "index_answer_categories_on_category_id"
+  add_index "answer_categories", ["user_id"], name: "index_answer_categories_on_user_id"
 
   create_table "answers", force: :cascade do |t|
     t.string   "text"
@@ -25,6 +37,15 @@ ActiveRecord::Schema.define(version: 20160215143246) do
   add_index "answers", ["question_id"], name: "index_answers_on_question_id"
   add_index "answers", ["student_id"], name: "index_answers_on_student_id"
   add_index "answers", ["survey_id"], name: "index_answers_on_survey_id"
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "question_id"
+  end
+
+  add_index "categories", ["question_id"], name: "index_categories_on_question_id"
 
   create_table "questions", force: :cascade do |t|
     t.integer  "index"

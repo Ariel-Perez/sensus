@@ -6,4 +6,5 @@ class Question < ActiveRecord::Base
 
   belongs_to :survey_model
   has_many :answers
+  has_many :categories
 end

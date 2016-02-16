@@ -1,5 +1,5 @@
 class SurveysController < ApplicationController
-  before_filter :set_survey, :only => [:show, :update, :delete]
+  before_filter :set_survey, :only => [:show, :update, :delete, :training]
 
   def index
     @surveys = Survey.all
@@ -13,21 +13,23 @@ class SurveysController < ApplicationController
   end
 
   def create
-    @survey = Survey.new(survey_params)
-    if @survey.save
-      flash[:success] = "Encuesta cargada con éxito"
-      redirect_to @survey
-    else
-      render 'new'
-    end
+    @survey = Survey.import(survey_params, params[:survey][:file])
+    redirect_to survey_models_path
+  end
+
+  def training
+    @model = SurveyModel.find(@survey.survey_model_id)
+    @questions = Question.where(survey_model_id: @model.id).order(:index)
+
+    @answers = Answer.where(survey_id: @survey.id).where.not(id: current_user.answers.pluck(:id))
   end
 
   private
-    def survey_model_params
-      params.require(:survey_model).permit(:name, :user_id)
+    def survey_params
+      params.require(:survey).permit(:name, :user_id, :survey_model_id)
     end
 
     def set_survey
-      @survey = Survey.find(params[:id])
+      @survey = Survey.find(params[:id] || params[:survey_id])
     end
 end

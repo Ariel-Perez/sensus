@@ -1,5 +1,8 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  Rails.logger = Logger.new(STDOUT)
+  config.log_level = :warn # In any environment initializer, or
+  Rails.logger.level = 0
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development

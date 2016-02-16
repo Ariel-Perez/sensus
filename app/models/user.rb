@@ -11,4 +11,7 @@ class User < ActiveRecord::Base
 
   has_many :surveys
   has_many :survey_models
+  has_many :answer_categories
+
+  has_many :answers, through: :answer_categories
 end

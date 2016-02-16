@@ -1,12 +1,27 @@
 h1 = @model.name
 
-h3 Preguntas
+.row
+  .col-md-6
+    h3 Preguntas
+    .list-group
+    - @model.questions.each do |question|
+      a.list-group-item href="#"
+        h4.list-group-item-heading = question.label
+        p.list-group-item-text = question.description
 
-.list-group
-- @model.questions.each do |question|
-  a.list-group-item href="#"
-    h4.list-group-item-heading = question.label
-    p.list-group-item-text = question.description
+  .col-md-6
+    h3 Crear Nueva Encuesta
+    = form_for(@survey) do |f|
+      = f.hidden_field :survey_model_id, :value => "#{@model.id}"
+      = f.hidden_field :user_id, :value => "#{current_user.id}"
+
+      = f.label :name, "Nombre"
+      = f.text_field :name, class: 'form-control'
+
+      = f.label :file, "Archivo"
+      = f.file_field :file, class: 'form-control'
+
+      = f.submit "Subir Archivo", class: "btn btn-primary"
 
 h4 Agregar Preguntas
 
@@ -14,7 +29,7 @@ h4 Agregar Preguntas
   = f.hidden_field :survey_model_id, :value => "#{@model.id}"
 
   = f.label :index, "Índice"
-  = f.text_field :index, class: 'form-control'
+  = f.number_field :index, class: 'form-control'
 
   = f.label :label, "Etiqueta"
   = f.text_field :label, class: 'form-control'
