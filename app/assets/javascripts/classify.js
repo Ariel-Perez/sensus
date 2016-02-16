@@ -81,14 +81,25 @@ function linkCategory(satellite, category) {
   var label = $(satellite.circle).find('.label');
   var input = $('<input type="text"></input>');
   input.attr('placeholder', placeholder);
+  input.attr('readonly', '');
   input.val(category.name);
   label.append(input);
 
+  input.dblclick(function(event) {
+    input.removeAttr('readonly');
+    event.stopImmediatePropagation();
+  });
   input.click(function(event) {
-    event.stopPropagation();
-  })
+    if (!input.is('[readonly]')) {
+      event.stopImmediatePropagation();
+    }
+  });
+  input.focusout(function(event) {
+    input.attr('readonly', '');
+  });
   input.change(function() {
     category.name = input.val();
+    input.attr('readonly', '');
   });
   input.keyup(function (e) {
     if (e.keyCode == 13) {
@@ -109,8 +120,8 @@ function linkCategory(satellite, category) {
 }
 
 function setQueryIndex(index) {
-  $('.classified').removeClass('classified');
   if (0 <= index && index < data.queries.length) {
+    $('.classified').removeClass('classified');
     disc.setText(data.queries[index]);
     if (classifications[index] === undefined) {
       classifications[index] = [];
@@ -122,6 +133,16 @@ function setQueryIndex(index) {
     }
     $('#query-index').text(index);
     queryIndex = index;
+  }
+  if (queryIndex <= 0) {
+    $('#training-previous').attr('disabled', true);
+  } else {
+    $('#training-previous').removeAttr('disabled');
+  }
+  if (queryIndex >=  data.queries.length - 1) {
+    $('#training-next').attr('disabled', true);
+  } else {
+    $('#training-next').removeAttr('disabled');
   }
 }
 

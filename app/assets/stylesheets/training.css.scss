@@ -46,6 +46,11 @@ span.label input
   cursor: pointer;
 }
 
+.category input[readonly]::selection
+{
+  background: inherit;
+}
+
 .category:after
 {
   font-family: 'Arial';
