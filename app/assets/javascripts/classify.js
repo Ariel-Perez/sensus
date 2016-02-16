@@ -10,19 +10,20 @@ var Category = function(id, name, count) {
 
 var data = {
   categories: [
-    new Category(1, 'Docencia', 3),
-    new Category(2, 'Infraestructura', 2),
+    new Category(1, 'Docencia', 0),
+    new Category(2, 'Infraestructura', 0),
   ],
   queries: [
-    'Los profesores son muy buenos',
-    'Las salas se gotean',
-    'Más áreas verdes',
-    'La comida es muy mala',
-    'El profesor tiene mala voluntad',
-    'La profesora llega tarde',
-    'Las salas tienen mucho espacio',
-    'Los aranceles son muy caros',
-    'La institución tiene mucho prestigio',
+    'TODO FUNCIONA IMPECABLE, DERREPENTE FALLAN ALGUNOS DOCENTES.',
+    'LO UNICO QUE NO ME GUSTA ES LO PEQUENO DE LA BIBLIOTECA Y CASINO PARA TANTOS ALUMNOS.',
+    'PROFESORES CON FALTA DE SENTIDO COMUN, FALTA DE SABIDURIA, MUY EXAGERADOS. POCO EMPATICOS CON LOS ALUMNOS.',
+    'ES MUY LENTO',
+    'LA EXPERIENCIA HA SIDO SATISFACTORIA EN GENERAL COMO SERVICIO, PERO LA CALIDAD NO ES LA ESPERADA. LA CALIDAD DE LOS PROFESORES, ES LA CALIDAD DE LOS ALUMNOS',
+    'POR LAS OPORTUNIDADES BRINDADAS POR LA INSTITUCION Y CALIDAD HUMANA DE CIERTOS PROFESORES',
+    'POR QUE EN GENERAL ES MUY BUENA UNIVERSIDAD',
+    'CUANDO NECESITO ALGO NO SIEMPRE ESTAN DISPONIBLES O LAS RESPUESTAS LA DAN ASI COMO ASI',
+    'EXCELENTE LUGAR, GRATO AMBIENTE, LIMPIO Y ORDENADO.',
+    'POR QUE POSEE BUENOS ESPACIOS, PERO PODRIA SER MEJOR.',
   ]
 };
 var classifications = {};
