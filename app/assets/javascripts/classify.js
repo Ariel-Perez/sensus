@@ -81,8 +81,10 @@ function linkCategory(satellite, category) {
   var label = $(satellite.circle).find('.label');
   var input = $('<input type="text"></input>');
   input.attr('placeholder', placeholder);
-  input.attr('readonly', '');
   input.val(category.name);
+  if (category.name) {
+    input.attr('readonly', '');
+  }
   label.append(input);
 
   input.dblclick(function(event) {
@@ -95,11 +97,15 @@ function linkCategory(satellite, category) {
     }
   });
   input.focusout(function(event) {
-    input.attr('readonly', '');
+    if (input.val()) {
+      input.attr('readonly', '');
+    }
   });
   input.change(function() {
     category.name = input.val();
-    input.attr('readonly', '');
+    if (input.val()) {
+      input.attr('readonly', '');
+    }
   });
   input.keyup(function (e) {
     if (e.keyCode == 13) {
