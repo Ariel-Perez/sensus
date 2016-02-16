@@ -21,6 +21,7 @@ class SurveysController < ApplicationController
     @model = SurveyModel.find(@survey.survey_model_id)
     @questions = Question.where(survey_model_id: @model.id).order(:index)
 
+    # @categories = Category.where(survey_id: @questions.pluck(:id))
     @answers = Answer.where(survey_id: @survey.id).where.not(id: current_user.answers.pluck(:id))
   end
 

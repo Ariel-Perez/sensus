@@ -1,4 +1,37 @@
+var Category = function(id, name, count) {
+  Category.incrementalId = Category.incrementalId || 1;
+
+  this.id = id || Category.incrementalId;
+  this.name = name || '';
+  this.count = count || 0;
+
+  Category.incrementalId = Math.max(Category.incrementalId, this.id + 1);
+};
+
+var data = {
+  categories: [
+    new Category(1, 'Docencia', 3),
+    new Category(2, 'Infraestructura', 2),
+  ],
+  queries: [
+    'Los profesores son muy buenos',
+    'Las salas se gotean',
+    'Más áreas verdes',
+    'La comida es muy mala',
+    'El profesor tiene mala voluntad',
+    'La profesora llega tarde',
+    'Las salas tienen mucho espacio',
+    'Los aranceles son muy caros',
+    'La institución tiene mucho prestigio',
+  ]
+};
+var classifications = {};
+
 ready = function() {
+  $('.canvas').empty();
+  window.newClassId = 0;
+  window.queryIndex =-1;
+
   var wHeight = $(window).height();
   var wWidth = $(window).width();
   var discSize = wHeight - 75;
@@ -76,7 +109,6 @@ function linkCategory(satellite, category) {
 }
 
 function setQueryIndex(index) {
-  console.log(index);
   $('.classified').removeClass('classified');
   if (0 <= index && index < data.queries.length) {
     disc.setText(data.queries[index]);
@@ -118,34 +150,3 @@ function toggleClassification(id) {
     }
   }
 }
-
-var Category = function(id, name, count) {
-  Category.incrementalId = Category.incrementalId || 1;
-
-  this.id = id || Category.incrementalId;
-  this.name = name || '';
-  this.count = count || 0;
-
-  Category.incrementalId = Math.max(Category.incrementalId, this.id + 1);
-};
-
-var newClassId = 0;
-var queryIndex =-1;
-var data = {
-  categories: [
-    new Category(1, 'Docencia', 3),
-    new Category(2, 'Infraestructura', 2),
-  ],
-  queries: [
-    'Los profesores son muy buenos',
-    'Las salas se gotean',
-    'Más áreas verdes',
-    'La comida es muy mala',
-    'El profesor tiene mala voluntad',
-    'La profesora llega tarde',
-    'Las salas tienen mucho espacio',
-    'Los aranceles son muy caros',
-    'La institución tiene mucho prestigio',
-  ]
-};
-var classifications = {};

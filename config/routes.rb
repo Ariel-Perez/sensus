@@ -19,8 +19,11 @@ Sensus::Application.routes.draw do
   resources :surveys do
     get 'training'
   end
+
   resources :survey_models
-  resources :questions
+  resources :questions do
+    get 'answers'
+  end
   resources :students
   resources :answers
 
