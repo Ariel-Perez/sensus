@@ -1,0 +1,15 @@
+function ajaxCallback(url, query, callback, method) {
+  if (method === undefined) {
+    method = 'POST';
+  }
+  $.ajax({
+    url: location.protocol + '//' + location.host + url,
+    data: query,
+    type: method,
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    success: function(response) {
+      callback(response);
+    }
+  });
+}

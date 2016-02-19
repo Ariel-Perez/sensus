@@ -23,9 +23,9 @@ Sensus::Application.routes.draw do
   resources :survey_models
   resources :questions do
     get 'answers'
+    get 'categories'
   end
   resources :students
-  resources :answers
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

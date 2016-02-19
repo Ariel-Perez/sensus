@@ -1,0 +1,18 @@
+.row
+  .col-md-4
+    h2#question-indicator Pregunta a Clasificar
+    select.form-control id="question-select"
+      - @questions.each do |question|
+        option value="#{question.id}"
+          = "#{question.label}: #{question.description}"
+    #training-navegation
+      h3
+        | Respuesta #
+        span#query-index<
+
+      button#training-previous.btn.btn-default
+        | Anterior
+      button#training-next.btn.btn-default
+        | Siguiente
+  .col-md-8
+    #disc-container.canvas

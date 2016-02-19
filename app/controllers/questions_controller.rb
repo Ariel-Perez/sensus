@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_filter :set_question, :only => [:show, :update, :delete, :answers]
+  before_filter :set_question, :only => [:show, :update, :delete, :answers, :categories]
 
   def show
     @answers = Answer.where(question_id: @question.id)
@@ -19,6 +19,23 @@ class QuestionsController < ApplicationController
 
   def answers
     @answers = Answer.where(question_id: @question.id)
+    if params[:filter] == "unseen"
+      @answers = @answers.where.not(id: current_user.answers)
+    end
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @answers }
+    end
+  end
+
+  def categories
+    @categories = Category.where(question_id: @question.id)
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @categories }
+    end
   end
 
   private

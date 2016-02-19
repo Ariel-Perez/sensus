@@ -39,7 +39,7 @@ ready = function() {
   var discCenterSize = discSize / 2;
   var satelliteSize = discSize / 4 - 10;
 
-  window.disc = new Disc(new Point(wWidth / 2, discSize / 2), discCenterSize, discSize);
+  window.disc = new Disc(new Point(discSize / 2, discSize / 2), discCenterSize, discSize);
   window.add = new Satellite(disc.position, satelliteSize, {'class': 'add'});
 
   add.satellite.click(function() {
@@ -50,19 +50,45 @@ ready = function() {
   $('.canvas').append(disc.disc);
 
   disc.appendSatellite(add);
-  data.categories.forEach(function(category) {
-    disc.appendSatellite(
-      createCategorySatellite(disc.position, add.size, category));
-  });
 
-  next();
-  $('#question-indicator').text('Pregunta 2');
+  setupQuestionSelect();
   $('#training-next').click(next);
   $('#training-previous').click(previous);
 }
 
 $(document).ready(ready);
 $(document).on('page:load', ready);;
+
+function setupQuestionSelect()
+{
+  $('#question-select').change(function() {
+    var id = $(this).val();
+    ajaxCallback('/questions/' + id + '/answers.json',
+      {'filter': 'unseen'},
+      function(data) {
+        window.data['queries'] = [];
+        data.forEach(function(element) {
+          window.data['queries'].push(element.text);
+          window.queryIndex = -1;
+          next();
+        });
+      }, 'GET');
+    ajaxCallback('/questions/' + id + '/categories.json',
+      {}, function(data) {
+        $('.canvas .category').remove();
+        window.data.categories = [];
+        window.disc.satellites = [window.disc.satellites[0]];
+        data.forEach(function(element) {
+          category = new Category(element.id, element.name, 0);
+          window.data.categories.push(category)
+          disc.appendSatellite(
+            createCategorySatellite(disc.position, add.size, category));
+        });
+        console.log(data);
+      }, 'GET');
+  });
+  $('#question-select').change();
+}
 
 function createCategorySatellite(position, size, category) {
   var sat = new Satellite(position, size, {'class': 'category'});
@@ -127,6 +153,8 @@ function linkCategory(satellite, category) {
 }
 
 function setQueryIndex(index) {
+  console.log(index);
+  console.log(window.data.queries);
   if (0 <= index && index < data.queries.length) {
     $('.classified').removeClass('classified');
     disc.setText(data.queries[index]);
