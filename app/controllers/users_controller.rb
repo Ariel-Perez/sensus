@@ -7,6 +7,8 @@ class UsersController < ApplicationController
   end
 
   def show
+    @uploaded_surveys = Survey.where(user_id: @user.id)
+    @survey_classifications = Survey.joins(:answer_categories).where(answer_categories: {user_id: @user.id})
   end
 
   def new

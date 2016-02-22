@@ -9,15 +9,20 @@
   .col-md-6
     h3 Archivos Subidos
     #user-files
-      a.list-group-item href="#" Encuesta de Prueba
-      a.list-group-item href="#" Encuesta Inacap 2015
-      a.list-group-item href="#" Encuesta Inacap 2015(2)
+    - if @uploaded_surveys.count > 0
+      - @uploaded_surveys.each do |survey|
+        a.list-group-item href="#{survey}" = survey.name
+    - else
+      p
+        em No ha subido ningún archivo
   .col-md-6
     h3 Encuestas Etiquetadas
     #user-surveys
-      a.list-group-item href="#"
-        | Encuesta de Prueba
-        span.badge.pull-right 16
-      a.list-group-item href="#"
-        | Encuesta Inacap 2015
-        span.badge.pull-right 42
+    - if @survey_classifications.count > 0
+      - @survey_classifications.each do |survey|
+        a.list-group-item href="#"
+          = survey.name
+          span.badge.pull-right = survey.answer_categories.count
+    - else
+      p
+        em No ha etiquetado ninguna encuesta
