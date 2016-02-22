@@ -1,9 +1,12 @@
 .jumbotron
   h1 Entrenamiento de Clasificadores
   hr
-  p El entrenamiento de clasificadores en <em><strong>Sensus</strong></em> está deshabilitado temporalmente.
-  p Pronto habrá nuevos avances.
+  p Para entrenar un clasificador de <em><strong>Sensus</strong></em>, debe seleccionar una de las encuestas cargadas al sistema.
 
-  p
-    == image_tag "excel.png", alt: "Excel File", height: "60px"
-    span Encuesta Inacap 2015
+  - @surveys.each do |survey|
+    a.list-group-item href="#{survey_training_path(survey)}"
+      == image_tag "excel.png", alt: "Excel File", height: "30px"
+      = survey.name
+  / p
+  /   == image_tag "excel.png", alt: "Excel File", height: "60px"
+  /   span Encuesta Inacap 2015

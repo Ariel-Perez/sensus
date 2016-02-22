@@ -1,6 +1,6 @@
 class Survey < ActiveRecord::Base
   validates :name,  presence: true
-  # validates :path,  presence: true
+  validates :path,  presence: true
   validates :user_id,  presence: true
   validates :survey_model_id,  presence: true
 
@@ -15,7 +15,7 @@ class Survey < ActiveRecord::Base
 
     survey = Survey.new(params)
     # Survey.transaction do
-    survey.path = spreadsheet.last_row.to_s
+    survey.path = spreadsheet.name
     survey.save
 
     questions = Question.where(survey_model_id: survey.survey_model_id)
