@@ -19,8 +19,23 @@ class QuestionsController < ApplicationController
 
   def answers
     @answers = Answer.where(question_id: @question.id)
-    if params[:filter] == "unseen"
-      @answers = @answers.where.not(id: current_user.answers)
+
+    if params.has_key? :filter
+      if params[:filter].has_key? :unseen
+        @answers = @answers.where.not(id: current_user.answers)
+      end
+
+      if params[:filter].has_key? :notempty
+        @answers = @answers.where.not(text: "")
+      end
+    end
+
+    if params.has_key? :limit
+      @answers = @answers.limit(params[:limit])
+    end
+
+    if params.has_key? :shuffle
+      @answers = @answers.order("RANDOM()")
     end
 
     respond_to do |format|

@@ -16,6 +16,10 @@ Sensus::Application.routes.draw do
   delete 'logout'  => 'sessions#destroy'
 
   resources :users
+  resources :answers, only: [:show] do
+    post 'classify'
+  end
+
   resources :surveys do
     get 'training'
   end

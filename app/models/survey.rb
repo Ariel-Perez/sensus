@@ -17,20 +17,18 @@ class Survey < ActiveRecord::Base
       survey.path = spreadsheet.last_row.to_s
       survey.save
 
-      questions = Question.where(survey_model_id: survey.survey_model_id).pluck(:id, :index)
+      questions = Question.where(survey_model_id: survey.survey_model_id)
+      model = SurveyModel.find(survey.survey_model_id)
 
       (2..spreadsheet.last_row).each do |i|
         row = spreadsheet.row(i)
-        student_identifier = row[0]
+        student_identifier = row[model.student_identifier]
         student = Student.find_or_create_by(identifier: student_identifier)
 
         questions.each do |question|
-          question_id = question[0]
-          question_idx = question[1]
-
-          text = row[question_idx]
+          text = row[question.index] || ""
           Answer.create_with(text: text).find_or_create_by(
-            question_id: question_id,
+            question_id: question.id,
             student_id: student.id,
             survey_id: survey.id)
         end

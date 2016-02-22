@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160216042956) do
+ActiveRecord::Schema.define(version: 20160222032600) do
 
   create_table "answer_categories", force: :cascade do |t|
     t.datetime "created_at",  null: false
@@ -67,9 +67,10 @@ ActiveRecord::Schema.define(version: 20160216042956) do
 
   create_table "survey_models", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "user_id"
+    t.integer  "student_identifier", default: 0
   end
 
   add_index "survey_models", ["user_id"], name: "index_survey_models_on_user_id"

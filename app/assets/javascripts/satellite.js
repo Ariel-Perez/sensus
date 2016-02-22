@@ -95,6 +95,7 @@ var Disc = function(position, size, orbit, options) {
 
   this.setText = function(text) {
     this.center.setText(text);
+    this.center.label.css('top', this.size / 2 - this.center.label.height() / 2);
   }
 }
 

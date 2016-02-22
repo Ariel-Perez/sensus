@@ -8,24 +8,7 @@ var Category = function(id, name, count) {
   Category.incrementalId = Math.max(Category.incrementalId, this.id + 1);
 };
 
-var data = {
-  categories: [
-    new Category(1, 'Docencia', 0),
-    new Category(2, 'Infraestructura', 0),
-  ],
-  queries: [
-    'TODO FUNCIONA IMPECABLE, DERREPENTE FALLAN ALGUNOS DOCENTES.',
-    'LO UNICO QUE NO ME GUSTA ES LO PEQUENO DE LA BIBLIOTECA Y CASINO PARA TANTOS ALUMNOS.',
-    'PROFESORES CON FALTA DE SENTIDO COMUN, FALTA DE SABIDURIA, MUY EXAGERADOS. POCO EMPATICOS CON LOS ALUMNOS.',
-    'ES MUY LENTO',
-    'LA EXPERIENCIA HA SIDO SATISFACTORIA EN GENERAL COMO SERVICIO, PERO LA CALIDAD NO ES LA ESPERADA. LA CALIDAD DE LOS PROFESORES, ES LA CALIDAD DE LOS ALUMNOS',
-    'POR LAS OPORTUNIDADES BRINDADAS POR LA INSTITUCION Y CALIDAD HUMANA DE CIERTOS PROFESORES',
-    'POR QUE EN GENERAL ES MUY BUENA UNIVERSIDAD',
-    'CUANDO NECESITO ALGO NO SIEMPRE ESTAN DISPONIBLES O LAS RESPUESTAS LA DAN ASI COMO ASI',
-    'EXCELENTE LUGAR, GRATO AMBIENTE, LIMPIO Y ORDENADO.',
-    'POR QUE POSEE BUENOS ESPACIOS, PERO PODRIA SER MEJOR.',
-  ]
-};
+var data = {};
 var classifications = {};
 
 ready = function() {
@@ -64,7 +47,7 @@ function setupQuestionSelect()
   $('#question-select').change(function() {
     var id = $(this).val();
     ajaxCallback('/questions/' + id + '/answers.json',
-      {'filter': 'unseen'},
+      {'filter[unseen]': true, 'filter[notempty]': true, 'shuffle': true, 'limit': 100},
       function(data) {
         window.data['queries'] = [];
         data.forEach(function(element) {
@@ -76,6 +59,7 @@ function setupQuestionSelect()
     ajaxCallback('/questions/' + id + '/categories.json',
       {}, function(data) {
         $('.canvas .category').remove();
+        Category.incrementalId = 0;
         window.data.categories = [];
         window.disc.satellites = [window.disc.satellites[0]];
         data.forEach(function(element) {
@@ -84,7 +68,6 @@ function setupQuestionSelect()
           disc.appendSatellite(
             createCategorySatellite(disc.position, add.size, category));
         });
-        console.log(data);
       }, 'GET');
   });
   $('#question-select').change();
@@ -95,7 +78,7 @@ function createCategorySatellite(position, size, category) {
 
   if (category === undefined) {
     category = new Category();
-    window.data['categories'].push(category);
+    window.data.categories.push(category);
   }
 
   linkCategory(sat, category);
@@ -153,8 +136,6 @@ function linkCategory(satellite, category) {
 }
 
 function setQueryIndex(index) {
-  console.log(index);
-  console.log(window.data.queries);
   if (0 <= index && index < data.queries.length) {
     $('.classified').removeClass('classified');
     disc.setText(data.queries[index]);
