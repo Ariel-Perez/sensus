@@ -30,6 +30,8 @@ Sensus::Application.routes.draw do
     get 'categories'
   end
   resources :students
+  
+  mount Resque::Server, :at => "/resque"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

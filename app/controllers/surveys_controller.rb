@@ -13,7 +13,11 @@ class SurveysController < ApplicationController
   end
 
   def create
-    @survey = Survey.import(survey_params, params[:survey][:file])
+    require 'fileutils'
+    tmp = params[:survey][:file].tempfile
+    filepath = File.join("public", params[:survey][:file].original_filename)
+    FileUtils.cp tmp.path, filepath
+    Resque.enqueue(SurveyLoader, survey_params, filepath)
     redirect_to survey_models_path
   end
 
