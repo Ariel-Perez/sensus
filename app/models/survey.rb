@@ -10,19 +10,19 @@ class Survey < ActiveRecord::Base
   has_many :answer_categories, through: :answers
 
   def self.import(params, file)
-    spreadsheet = self.open_spreadsheet(file)
-    header = spreadsheet.row(1)
+    book = Spreadsheet.open(file.path)
+    sheet = book.worksheet(0)
+    header = sheet.row(1)
 
     survey = Survey.new(params)
     # Survey.transaction do
-    survey.path = spreadsheet.name
+    survey.path = sheet.name
     survey.save
 
     questions = Question.where(survey_model_id: survey.survey_model_id)
     model = SurveyModel.find(survey.survey_model_id)
 
-    (2..spreadsheet.last_row).each do |i|
-      row = spreadsheet.row(i)
+    sheet.each 1 do |row|
       student_identifier = row[model.student_identifier]
       student = Student.find_or_create_by(identifier: student_identifier)
 

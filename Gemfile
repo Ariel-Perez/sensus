@@ -36,9 +36,7 @@ end
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.2'
 
-# Manage Excel / CSV imports
-gem 'roo'
-gem 'roo-xls'
+gem 'spreadsheet'
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
