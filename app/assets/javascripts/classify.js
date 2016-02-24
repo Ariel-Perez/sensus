@@ -53,8 +53,8 @@ function setupQuestionSelect()
         data.forEach(function(element) {
           window.data['queries'].push(element);
           window.queryIndex = -1;
-          next();
         });
+        next();
       }, 'GET');
     ajaxCallback('/questions/' + id + '/categories.json',
       {}, function(data) {
