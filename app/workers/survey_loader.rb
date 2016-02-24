@@ -53,7 +53,7 @@ class SurveyLoader
       end
     end 
 
-    sql = "INSERT INTO answers (`question_id`, `student_id`, `survey_id`, `text`, `created_at`, `updated_at`) VALUES #{inserts.join(", ")}"
+    sql = "INSERT INTO answers (question_id, student_id, survey_id, text, created_at, updated_at) VALUES #{inserts.join(", ")};"
     ActiveRecord::Base.connection.exec_query(sql, :skip_logging)
     FileUtils.rm filepath
   end

@@ -1,6 +1,8 @@
 - Guía
 =======================================
-http://ryanbigg.com/2014/10/ubuntu-ruby-ruby-install-chruby-and-you/
+Deploy: http://ryanbigg.com/2014/10/ubuntu-ruby-ruby-install-chruby-and-you/
+Redis: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-redis
+Resque: http://railscasts.com/episodes/271-resque?autoplay=true
 
 (Server) - Instalar Cosas
 =======================================
@@ -8,6 +10,7 @@ sudo apt-get install build-essential
 
 (Server) - Ruby install
 =======================================
+cd ~/Downloads
 wget -O ruby-install-0.6.0.tar.gz \
   https://github.com/postmodern/ruby-install/archive/v0.6.0.tar.gz
 tar -xzvf ruby-install-0.6.0.tar.gz
@@ -24,6 +27,7 @@ ruby-install --latest ruby 2.3.0
 
 (Server) - Instalar chruby
 =======================================
+cd ~/Downloads
 wget -O chruby-0.3.9.tar.gz \
   https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
 tar -xzvf chruby-0.3.9.tar.gz
@@ -105,3 +109,25 @@ sudo apt-get install nodejs
 =======================================
 mina setup --verbose
 mina deploy --trace
+
+(Server) - Configurar Redis y Resque
+           (regular make test fails: https://github.com/antirez/redis/issues/2715)
+           (All defauts: Redis port 6379)
+=======================================
+sudo apt-get install tcl8.5
+cd ~/Downloads
+wget http://download.redis.io/releases/redis-stable.tar.gz
+tar xzf redis-stable.tar.gz
+cd redis-stable
+make
+taskset -c 0 sudo make test
+sudo make install
+cd utils
+sudo ./install_server.sh
+sudo update-rc.d redis_6379 defaults
+redis-server redis.conf
+
+
+(Server) - Run
+=======================================
+rails server -e production -b 0.0.0.0 -p 3000
