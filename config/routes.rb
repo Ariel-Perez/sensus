@@ -18,6 +18,7 @@ Sensus::Application.routes.draw do
   resources :users
   resources :answers, only: [:show] do
     post 'classify'
+    post 'declassify'
   end
 
   resources :surveys do

@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: surveys
+#
+#  id              :integer          not null, primary key
+#  name            :string
+#  path            :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :integer
+#  survey_model_id :integer
+#
+
 class Survey < ActiveRecord::Base
   validates :name,  presence: true
   validates :path,  presence: true

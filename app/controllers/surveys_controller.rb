@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: surveys
+#
+#  id              :integer          not null, primary key
+#  name            :string
+#  path            :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :integer
+#  survey_model_id :integer
+#
+
 class SurveysController < ApplicationController
   before_filter :set_survey, :only => [:show, :update, :delete, :training]
 
@@ -18,6 +31,7 @@ class SurveysController < ApplicationController
     filepath = File.join("public", params[:survey][:file].original_filename)
     FileUtils.cp tmp.path, filepath
     Resque.enqueue(SurveyLoader, survey_params, filepath)
+    flash[:success] = "La encuesta está siendo procesada"
     redirect_to survey_models_path
   end
 

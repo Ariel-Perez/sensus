@@ -1,0 +1,49 @@
+- Guía
+=======================================
+http://ryanbigg.com/2014/10/ubuntu-ruby-ruby-install-chruby-and-you/
+
+- Instalar
+=======================================
+sudo apt-get install build-essential
+
+- Ruby install
+=======================================
+wget -O ruby-install-0.6.0.tar.gz \
+  https://github.com/postmodern/ruby-install/archive/v0.6.0.tar.gz
+tar -xzvf ruby-install-0.6.0.tar.gz
+cd ruby-install-0.6.0/
+sudo make install
+
+- Revisar Instalaruby-install --latest ruby 2.3.0ción (debería mostrar: ruby-install: 0.6.0)
+=======================================
+ruby-install -V
+
+- Instalar Ruby 2.3.0
+=======================================
+ruby-install --latest ruby 2.3.0
+
+- Instalar chruby
+=======================================
+wget -O chruby-0.3.9.tar.gz \
+  https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
+tar -xzvf chruby-0.3.9.tar.gz
+cd chruby-0.3.9/
+sudo make install
+
+- Crear Configuración chruby
+=======================================
+cd ~
+touch ruby-version
+nano ruby-version
+	ruby-2.3.0
+chruby ruby-2.3.0
+cd /usr/local/share/chruby
+sudo nano chruby.sh
+  RUBIES=()
+  RUBIES+=(
+    /usr/local/
+  )
+
+- Instalar Rails 4.2.5
+=======================================
+gem install rails -v 4.2.5 --no-rdoc --no-ri

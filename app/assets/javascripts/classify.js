@@ -51,7 +51,7 @@ function setupQuestionSelect()
       function(data) {
         window.data['queries'] = [];
         data.forEach(function(element) {
-          window.data['queries'].push(element.text);
+          window.data['queries'].push(element);
           window.queryIndex = -1;
           next();
         });
@@ -60,11 +60,11 @@ function setupQuestionSelect()
       {}, function(data) {
         $('.canvas .category').remove();
         Category.incrementalId = 0;
-        window.data.categories = [];
+        window.data.categories = {};
         window.disc.satellites = [window.disc.satellites[0]];
         data.forEach(function(element) {
           category = new Category(element.id, element.name, 0);
-          window.data.categories.push(category)
+          window.data.categories[element.id] = category;
           disc.appendSatellite(
             createCategorySatellite(disc.position, add.size, category));
         });
@@ -78,7 +78,7 @@ function createCategorySatellite(position, size, category) {
 
   if (category === undefined) {
     category = new Category();
-    window.data.categories.push(category);
+    window.data.categories[category.id] = category;
   }
 
   linkCategory(sat, category);
@@ -138,7 +138,7 @@ function linkCategory(satellite, category) {
 function setQueryIndex(index) {
   if (0 <= index && index < data.queries.length) {
     $('.classified').removeClass('classified');
-    disc.setText(data.queries[index]);
+    disc.setText(data.queries[index]['text']);
     if (classifications[index] === undefined) {
       classifications[index] = [];
     } else {
@@ -171,19 +171,24 @@ function previous() {
 
 function toggleClassification(id) {
   if (0 <= queryIndex && queryIndex < data.queries.length) {
+    console.log(id);
     var satellite = $('[data-id=' + id + ']');
     var classified = satellite.hasClass('classified');
     if (classified) {
-      satellite.attr('data-count', --data.categories[id - 1].count);
+      satellite.attr('data-count', --data.categories[id].count);
       satellite.removeClass('classified');
       idx = classifications[queryIndex].indexOf(id);
       if (idx !== -1) {
         classifications[queryIndex].splice(idx, 1);
       }
+      url = 'answers/' + data.queries[queryIndex]['id'] + '/declassify.json';
     } else {
-      satellite.attr('data-count', ++data.categories[id - 1].count);
+      satellite.attr('data-count', ++data.categories[id].count);
       satellite.addClass('classified');
       classifications[queryIndex].push(id);
+      url = 'answers/' + data.queries[queryIndex]['id'] + '/classify.json';
     }
+
+    ajaxFormPost(url, {'category_id': id}, function(data){ console.log(data); }, 'POST');
   }
 }

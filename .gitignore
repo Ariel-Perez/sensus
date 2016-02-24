@@ -15,6 +15,10 @@ pickle-email-*.html
 sensus_development
 sensus_test
 
+public/*.xls
+public/*.xlsx
+public/*.csv
+
 # TODO Comment out these rules if you are OK with secrets being uploaded to the repo
 # config/initializers/secret_token.rb
 # config/secrets.yml

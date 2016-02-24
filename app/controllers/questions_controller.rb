@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: questions
+#
+#  id              :integer          not null, primary key
+#  index           :integer
+#  label           :string
+#  description     :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  survey_model_id :integer
+#
+
 class QuestionsController < ApplicationController
   before_filter :set_question, :only => [:show, :update, :delete, :answers, :categories]
 

@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  name            :string
+#  email           :string
+#  password_digest :string
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
 class UsersController < ApplicationController
   skip_before_filter :require_user, :only => [:new, :create]
   before_filter :set_user, :only => [:show, :update, :delete]
