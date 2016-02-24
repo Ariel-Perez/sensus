@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20160222032600) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "answer_categories", force: :cascade do |t|
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -21,9 +24,9 @@ ActiveRecord::Schema.define(version: 20160222032600) do
     t.integer  "category_id"
   end
 
-  add_index "answer_categories", ["answer_id"], name: "index_answer_categories_on_answer_id"
-  add_index "answer_categories", ["category_id"], name: "index_answer_categories_on_category_id"
-  add_index "answer_categories", ["user_id"], name: "index_answer_categories_on_user_id"
+  add_index "answer_categories", ["answer_id"], name: "index_answer_categories_on_answer_id", using: :btree
+  add_index "answer_categories", ["category_id"], name: "index_answer_categories_on_category_id", using: :btree
+  add_index "answer_categories", ["user_id"], name: "index_answer_categories_on_user_id", using: :btree
 
   create_table "answers", force: :cascade do |t|
     t.string   "text"
@@ -34,9 +37,9 @@ ActiveRecord::Schema.define(version: 20160222032600) do
     t.integer  "survey_id"
   end
 
-  add_index "answers", ["question_id"], name: "index_answers_on_question_id"
-  add_index "answers", ["student_id"], name: "index_answers_on_student_id"
-  add_index "answers", ["survey_id"], name: "index_answers_on_survey_id"
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
+  add_index "answers", ["student_id"], name: "index_answers_on_student_id", using: :btree
+  add_index "answers", ["survey_id"], name: "index_answers_on_survey_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -45,7 +48,7 @@ ActiveRecord::Schema.define(version: 20160222032600) do
     t.integer  "question_id"
   end
 
-  add_index "categories", ["question_id"], name: "index_categories_on_question_id"
+  add_index "categories", ["question_id"], name: "index_categories_on_question_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
     t.integer  "index"
@@ -56,7 +59,7 @@ ActiveRecord::Schema.define(version: 20160222032600) do
     t.integer  "survey_model_id"
   end
 
-  add_index "questions", ["survey_model_id"], name: "index_questions_on_survey_model_id"
+  add_index "questions", ["survey_model_id"], name: "index_questions_on_survey_model_id", using: :btree
 
   create_table "students", force: :cascade do |t|
     t.string   "identifier"
@@ -73,7 +76,7 @@ ActiveRecord::Schema.define(version: 20160222032600) do
     t.integer  "student_identifier", default: 0
   end
 
-  add_index "survey_models", ["user_id"], name: "index_survey_models_on_user_id"
+  add_index "survey_models", ["user_id"], name: "index_survey_models_on_user_id", using: :btree
 
   create_table "surveys", force: :cascade do |t|
     t.string   "name"
@@ -84,8 +87,8 @@ ActiveRecord::Schema.define(version: 20160222032600) do
     t.integer  "survey_model_id"
   end
 
-  add_index "surveys", ["survey_model_id"], name: "index_surveys_on_survey_model_id"
-  add_index "surveys", ["user_id"], name: "index_surveys_on_user_id"
+  add_index "surveys", ["survey_model_id"], name: "index_surveys_on_survey_model_id", using: :btree
+  add_index "surveys", ["user_id"], name: "index_surveys_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
@@ -95,6 +98,17 @@ ActiveRecord::Schema.define(version: 20160222032600) do
     t.datetime "updated_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
+  add_foreign_key "answer_categories", "answers"
+  add_foreign_key "answer_categories", "categories"
+  add_foreign_key "answer_categories", "users"
+  add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "students"
+  add_foreign_key "answers", "surveys"
+  add_foreign_key "categories", "questions"
+  add_foreign_key "questions", "survey_models"
+  add_foreign_key "survey_models", "users"
+  add_foreign_key "surveys", "survey_models"
+  add_foreign_key "surveys", "users"
 end

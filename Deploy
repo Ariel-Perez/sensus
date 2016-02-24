@@ -2,11 +2,11 @@
 =======================================
 http://ryanbigg.com/2014/10/ubuntu-ruby-ruby-install-chruby-and-you/
 
-- Instalar
+(Server) - Instalar Cosas
 =======================================
 sudo apt-get install build-essential
 
-- Ruby install
+(Server) - Ruby install
 =======================================
 wget -O ruby-install-0.6.0.tar.gz \
   https://github.com/postmodern/ruby-install/archive/v0.6.0.tar.gz
@@ -14,15 +14,15 @@ tar -xzvf ruby-install-0.6.0.tar.gz
 cd ruby-install-0.6.0/
 sudo make install
 
-- Revisar Instalaruby-install --latest ruby 2.3.0ción (debería mostrar: ruby-install: 0.6.0)
+(Server) - Revisar Instalación (debería mostrar: ruby-install: 0.6.0)
 =======================================
 ruby-install -V
 
-- Instalar Ruby 2.3.0
+(Server) - Instalar Ruby 2.3.0
 =======================================
 ruby-install --latest ruby 2.3.0
 
-- Instalar chruby
+(Server) - Instalar chruby
 =======================================
 wget -O chruby-0.3.9.tar.gz \
   https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
@@ -30,7 +30,7 @@ tar -xzvf chruby-0.3.9.tar.gz
 cd chruby-0.3.9/
 sudo make install
 
-- Crear Configuración chruby
+(Server) - Crear Configuración chruby
 =======================================
 cd ~
 touch ruby-version
@@ -44,6 +44,64 @@ sudo nano chruby.sh
     /usr/local/
   )
 
-- Instalar Rails 4.2.5
+(Local) - Instalar Rails 4.2.5
 =======================================
 gem install rails -v 4.2.5 --no-rdoc --no-ri
+
+(Local) - Agregar gema Mina a Gemfile
+=======================================
+gem 'mina'
+bundle install
+
+(Local) - Crear archivo config/deploy.rb
+=======================================
+mina init
+
+(Local) - Configurar config/deploy.rb
+=======================================
+  require 'mina/chruby'
+
+  set :chruby_path, '/usr/local/share/chruby/chruby.sh'
+  
+  set :domain, 'provincia.zapto.org'
+  set :deploy_to, '/var/www/sensus'
+  set :repository, 'https://github.com/Ariel-Perez/sensus'
+  set :branch, 'master'
+
+  set :user, 'foris'
+  set :term_mode, :nil 
+  set :forward_agent, true     # SSH forward_agent.
+
+  task :environment do
+    # Use chruby
+    invoke :'chruby[ruby-2.3.0]'
+  end
+
+(Server) - Crear carpeta
+=======================================
+sudo mkdir /var/www/sensus
+sudo chown -R foris /var/www/sensus
+
+(Server) - Instalar PostgreSQL
+=======================================
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib libpq-dev
+
+(Server) - Crear Base de Datos y Usuario 
+=======================================
+sudo -u postgres createuser -s sensus
+sudo -u postgres psql
+  # \password sensus
+  Enter new password: 
+  Enter it again: 
+  # create database sensus owner sensus;
+  # \q
+
+(Server) - Instalar Node
+=======================================
+sudo apt-get install nodejs
+
+(Local) - Ejecutar Mina
+=======================================
+mina setup --verbose
+mina deploy --trace
