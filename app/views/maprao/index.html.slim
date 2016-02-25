@@ -1,0 +1,15 @@
+.jumbotron
+  h1.text-center
+    = image_tag 'maprao-small.jpg', alt: "Maprao Logo", height: "100px"
+  	| Foris Challenge
+  .row.maprao
+    .col-md-4.col-md-offset-4
+      div.list-group
+      - @users.each do |user|
+        div.list-group-item
+          - if user == @users[0]
+            i.glyphicon.glyphicon-star
+          - else
+            i.glyphicon.glyphicon-user
+          = user.name
+          span.badge = user.answer_categories.count

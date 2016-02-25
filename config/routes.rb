@@ -5,6 +5,8 @@ Sensus::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'home#index'
 
+  get 'maprao' => 'maprao#index'
+
   get 'help' => 'home#help'
   get 'data' => 'data#index'
   get 'training' => 'training#index'

@@ -126,8 +126,11 @@ cd utils
 sudo ./install_server.sh
 sudo update-rc.d redis_6379 defaults
 redis-server redis.conf
+resque-web
 
 
 (Server) - Run
 =======================================
-rails server -e production -b 0.0.0.0 -p 3000
+chruby ruby-2.3.0
+bundle exec rake resque:work QUEUE=' RAILS_ENV=production &
+rails server -e production -b 0.0.0.0 -p 3000 -d &
