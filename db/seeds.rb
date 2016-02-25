@@ -8,7 +8,7 @@
 
 sm = SurveyModel.find_or_create_by(name: 'Encuesta Oficial Inacap', student_identifier: 3)
 
-q = Question.create_with(description: "¿Por qué razón o razones evalúas de esa forma tu experiencia general como alumno de INACAP?").
+q = Question.create_with(description: "¿Por qué razón o razones evalúas de esa forma tu experiencia general como alumno de Inacap?").
              find_or_create_by(survey_model_id: sm.id, label: "P2", index: 23) 
 Category.find_or_create_by(question_id: q.id, name: "Aprender Haciendo")
 Category.find_or_create_by(question_id: q.id, name: "Eval. Académica")
@@ -24,7 +24,7 @@ Category.find_or_create_by(question_id: q.id, name: "Gestión Institucional")
 Category.find_or_create_by(question_id: q.id, name: "Infraestructura")
 Category.find_or_create_by(question_id: q.id, name: "Financiamiento")
 
-q = Question.create_with(description: "¿Por qué razón evalúas con esa nota la satisfacción con tu SEDE de INACAP?").
+q = Question.create_with(description: "¿Por qué razón evalúas con esa nota la satisfacción con tu Sede de Inacap?").
              find_or_create_by(survey_model_id: sm.id, label: "P4", index: 25)
 Category.find_or_create_by(question_id: q.id, name: "Aprender Haciendo")
 Category.find_or_create_by(question_id: q.id, name: "Eval. Académica")
@@ -56,7 +56,7 @@ Category.find_or_create_by(question_id: q.id, name: "Gestión Institucional")
 Category.find_or_create_by(question_id: q.id, name: "Infraestructura")
 Category.find_or_create_by(question_id: q.id, name: "Financiamiento")
 
-q = Question.create_with(description: "¿Por qué razón o razones tienes ese nivel de satisfacción con el recibimiento que te dio INACAP en tu Sede?").
+q = Question.create_with(description: "¿Por qué razón o razones tienes ese nivel de satisfacción con el recibimiento que te dio Inacap en tu Sede?").
              find_or_create_by(survey_model_id: sm.id, label: "P7", index: 35) 
 Category.find_or_create_by(question_id: q.id, name: "Aprender Haciendo")
 Category.find_or_create_by(question_id: q.id, name: "Eval. Académica")
@@ -109,7 +109,7 @@ Category.find_or_create_by(question_id: q.id, name: "Ciencia y Tecnología")
 Category.find_or_create_by(question_id: q.id, name: "Seminarios")
 Category.find_or_create_by(question_id: q.id, name: "Mercado Laboral")
 
-q = Question.create_with(description: "¿Qué tipo de Actividades Extra-curriculares, te gustaría que se organizaran en tu sede de INACAP?").
+q = Question.create_with(description: "¿Qué tipo de Actividades Extra-curriculares, te gustaría que se organizaran en tu sede de Inacap?").
              find_or_create_by(survey_model_id: sm.id, label: "P30", index: 98) 
 Category.find_or_create_by(question_id: q.id, name: "Deportivo")
 Category.find_or_create_by(question_id: q.id, name: "Cultural")
@@ -162,7 +162,7 @@ Category.find_or_create_by(question_id: q.id, name: "Trámites")
 Category.find_or_create_by(question_id: q.id, name: "Financiamiento")
 Category.find_or_create_by(question_id: q.id, name: "Infraestructura")
 
-q = Question.create_with(description: "¿Podrías mencionar a cuál o cuáles instancias de INACAP acudiste para plantear tu problema?").
+q = Question.create_with(description: "¿Podrías mencionar a cuál o cuáles instancias de Inacap acudiste para plantear tu problema?").
              find_or_create_by(survey_model_id: sm.id, label: "P47", index: 151) 
 Category.find_or_create_by(question_id: q.id, name: "Autoridades Carrera")
 Category.find_or_create_by(question_id: q.id, name: "Rectoría")
@@ -189,7 +189,7 @@ Category.find_or_create_by(question_id: q.id, name: "Gestión Institucional")
 Category.find_or_create_by(question_id: q.id, name: "Infraestructura")
 Category.find_or_create_by(question_id: q.id, name: "Financiamiento")
 
-q = Question.create_with(description: "¿Cuáles serían las sugerencias más importantes que harías a tu sede de INACAP ?").
+q = Question.create_with(description: "¿Cuáles serían las sugerencias más importantes que harías a tu sede de Inacap ?").
              find_or_create_by(survey_model_id: sm.id, label: "P55", index: 159)  
 Category.find_or_create_by(question_id: q.id, name: "Aprender Haciendo")
 Category.find_or_create_by(question_id: q.id, name: "Evaluación Académica")

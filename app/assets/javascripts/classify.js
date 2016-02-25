@@ -49,6 +49,8 @@ function setupQuestionSelect()
 {
   $('#question-select').change(function() {
     var id = $(this).val();
+    var text = $(this).find("option:selected").text();
+    $('#question-text').text(text);
     ajaxCallback('/questions/' + id + '/answers.json',
       {'filter[unseen]': true, 'filter[notempty]': true, 'shuffle': true, 'limit': 100},
       function(data) {
@@ -91,6 +93,8 @@ function createCategorySatellite(position, size, category) {
 
 function linkCategory(satellite, category) {
   var placeholder = 'Categoría';
+  satellite.setText(category.name);
+  /*
   var label = $(satellite.circle).find('.label');
   var input = $('<input type="text"></input>');
   input.attr('placeholder', placeholder);
@@ -125,17 +129,17 @@ function linkCategory(satellite, category) {
       input.blur();
     }
   });
+  satellite.setText = function(text) {
+    input.val(text);
+    category.name = input.val();
+  };
+  */
 
   satellite.circle.attr('data-count', category.count);
   satellite.circle.attr('data-id', category.id);
   satellite.circle.click(function() {
     toggleClassification(category.id);
   });
-
-  satellite.setText = function(text) {
-    input.val(text);
-    category.name = input.val();
-  };
 }
 
 function setQueryIndex(index) {

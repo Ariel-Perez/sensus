@@ -5,8 +5,10 @@
       - @questions.each do |question|
         option value="#{question.id}"
           = "#{question.label}: #{question.description}"
+    h3#question-text
+    hr
     #training-navegation
-      h3
+      h4
         | Respuesta #
         span#query-index<
 
