@@ -23,16 +23,19 @@ ready = function() {
   var satelliteSize = discSize / 4 - 10;
 
   window.disc = new Disc(new Point(discSize / 2, discSize / 2), discCenterSize, discSize);
-  window.add = new Satellite(disc.position, satelliteSize, {'class': 'add'});
+  window.satelliteSize = satelliteSize;
+  // window.add = new Satellite(disc.position, satelliteSize, {'class': 'add'});
 
+  /*
   add.satellite.click(function() {
     var sat = createCategorySatellite(add.position, add.size);
     disc.appendSatellite(sat);
   });
+  */
 
   $('.canvas').append(disc.disc);
 
-  disc.appendSatellite(add);
+  // disc.appendSatellite(add);
 
   setupQuestionSelect();
   $('#training-next').click(next);
@@ -61,12 +64,12 @@ function setupQuestionSelect()
         $('.canvas .category').remove();
         Category.incrementalId = 0;
         window.data.categories = {};
-        window.disc.satellites = [window.disc.satellites[0]];
+        window.disc.satellites = []; //[window.disc.satellites[0]];
         data.forEach(function(element) {
           category = new Category(element.id, element.name, 0);
           window.data.categories[element.id] = category;
           disc.appendSatellite(
-            createCategorySatellite(disc.position, add.size, category));
+            createCategorySatellite(disc.position, window.satelliteSize, category));
         });
       }, 'GET');
   });

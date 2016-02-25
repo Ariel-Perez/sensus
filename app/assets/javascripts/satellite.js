@@ -86,7 +86,7 @@ var Disc = function(position, size, orbit, options) {
   };
 
   this.appendSatellite = function(satellite) {
-    this.satellites.splice(1, 0, satellite);
+    this.satellites.splice(0, 0, satellite);
     if (this.disc.parent()) {
       this.disc.parent().append(satellite.satellite);
     }

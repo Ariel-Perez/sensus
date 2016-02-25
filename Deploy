@@ -133,4 +133,4 @@ resque-web
 =======================================
 chruby ruby-2.3.0
 bundle exec rake resque:work QUEUE=' RAILS_ENV=production &
-rails server -e production -b 0.0.0.0 -p 3000 -d &
+rails server -e production -b 0.0.0.0 -p 3001 -d &
