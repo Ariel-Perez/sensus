@@ -55,6 +55,7 @@ Category.find_or_create_by(question_id: q.id, name: "Trámites Académicos")
 Category.find_or_create_by(question_id: q.id, name: "Gestión Institucional")
 Category.find_or_create_by(question_id: q.id, name: "Infraestructura")
 Category.find_or_create_by(question_id: q.id, name: "Financiamiento")
+Category.find_or_create_by(question_id: q.id, name: "Empleabilidad")
 
 q = Question.create_with(description: "¿Por qué razón o razones tienes ese nivel de satisfacción con el recibimiento que te dio Inacap en tu Sede?").
              find_or_create_by(survey_model_id: sm.id, label: "P7", index: 35) 
@@ -72,6 +73,9 @@ Category.find_or_create_by(question_id: q.id, name: "Gestión Institucional")
 Category.find_or_create_by(question_id: q.id, name: "Infraestructura")
 Category.find_or_create_by(question_id: q.id, name: "Financiamiento")
 Category.find_or_create_by(question_id: q.id, name: "Proceso Matrícula")
+Category.find_or_create_by(question_id: q.id, name: "Toma de Ramos")
+Category.find_or_create_by(question_id: q.id, name: "Actividades Bienvenida")
+Category.find_or_create_by(question_id: q.id, name: "Apoyo")
 
 q = Question.create_with(description: "¿Por qué razón o razones tienes ese nivel de satisfacción con el Vicerrector de tu Sede?").
              find_or_create_by(survey_model_id: sm.id, label: "P10", index: 41)              
