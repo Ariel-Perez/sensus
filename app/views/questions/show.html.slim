@@ -1,5 +1,18 @@
-h1 = @question.label
-h3 = @question.description
-ul
-- @answers.each do |answer|
-  li = answer.text
+h1 = @question.survey_model.name
+h3 = @question.label + ": " + @question.description
+h4 = "Clasificadas: (#{@categorized_answers}/#{@total_answers})"
+
+/ = @answers_per_category
+
+.row
+  h3 Categorías
+  .list-group
+  - @categories.each do |category|
+    .list-group-item.col-md-3.col-sm-6
+      = category.name
+      span.badge.pull-right = @answers_per_category[category.id]
+hr
+.row.text-center
+  a.btn.btn-lg.btn-primary href="#{question_download_path(@question)}" 
+    i.glyphicon.glyphicon-download
+    = "Descarga Datos Clasificados"

@@ -31,6 +31,7 @@ Sensus::Application.routes.draw do
   resources :questions do
     get 'answers'
     get 'categories'
+    get 'download'
   end
   resources :students
   

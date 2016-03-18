@@ -12,10 +12,19 @@
 #
 
 class QuestionsController < ApplicationController
-  before_filter :set_question, :only => [:show, :update, :delete, :answers, :categories]
+  before_filter :set_question, :only => [:show, :update, :delete, :answers, :categories, :download]
 
   def show
-    @answers = Answer.where(question_id: @question.id)
+    @categories = @question.categories
+    category_ids = @categories.pluck(:id)
+
+    @total_answers = Answer.where(question_id: @question.id).count
+    @categorized_answers = AnswerCategory.where(category_id: category_ids).group(:answer_id).count.count
+    @answers_per_category = AnswerCategory.where(category_id: category_ids).group(:category_id).count
+    @answers_per_category.default = 0
+
+
+    @categories = @categories.sort_by {|category| -@answers_per_category[category.id]}
   end
 
   def create
@@ -28,6 +37,37 @@ class QuestionsController < ApplicationController
   end
 
   def delete
+  end
+
+  def download
+    column_separator = ","
+    line_separator = "\n"
+
+    categories = @question.categories
+    header = (["Sample"] + categories.pluck(:name)).join(column_separator)
+
+    answer_ids = AnswerCategory.where(
+      category_id: categories.pluck(:id)).uniq.pluck(:answer_id)
+    answers = Answer.where(id: answer_ids)
+    
+    category_column_map = {}
+    categories.each_with_index do |c, i|
+      category_column_map[c.id] = i
+    end
+
+    rows = []
+    answers.each do |answer|
+      answer_category_ids = AnswerCategory.where(answer_id: answer.id).uniq.pluck(:category_id)
+      category_data = ["0"] * categories.length
+      answer_category_ids.each do |c|
+        category_data[category_column_map[c]] = "1"
+      end
+
+      rows.push(([answer.student.identifier] + [category_data]).join(column_separator))
+    end
+
+    data = ([header] + rows).join(line_separator)
+    send_data(data, :filename => @question.label + ".csv")
   end
 
   def answers
