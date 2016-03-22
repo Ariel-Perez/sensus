@@ -84,6 +84,7 @@ class QuestionsController < ApplicationController
 
     word_cloud_ready_words = []
     word_frequencies.each do |word, frequency|
+      if word not in 
       word_cloud_ready_words << {text: word, size: frequency}
     end
 
