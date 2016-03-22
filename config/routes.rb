@@ -32,6 +32,7 @@ Sensus::Application.routes.draw do
     get 'answers'
     get 'categories'
     get 'download'
+    get 'wordcloud'
   end
   resources :students
   

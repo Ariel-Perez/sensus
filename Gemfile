@@ -55,6 +55,8 @@ end
 
 gem 'mina'
 
+gem 'gon'
+
 # Use unicorn as the app server
 # gem 'unicorn'
 

@@ -12,7 +12,7 @@
 #
 
 class QuestionsController < ApplicationController
-  before_filter :set_question, :only => [:show, :update, :delete, :answers, :categories, :download]
+  before_filter :set_question, :only => [:show, :update, :delete, :answers, :categories, :download, :wordcloud]
 
   def show
     @categories = @question.categories
@@ -68,6 +68,27 @@ class QuestionsController < ApplicationController
 
     data = ([header] + rows).join(line_separator)
     send_data(data, :filename => @question.label + ".csv")
+  end
+
+  def wordcloud
+    answers = Answer.where(question_id: @question.id)
+    word_frequencies = {}
+    word_frequencies.default = 0
+
+    answers.each do |answer|
+      words = answer.text.downcase.split(/\W+/)
+      words.each do |word|
+        word_frequencies[word] += 1
+      end
+    end
+
+    word_cloud_ready_words = []
+    word_frequencies.each do |word, frequency|
+      word_cloud_ready_words << {text: word, size: frequency}
+    end
+
+    gon.word_frequencies = word_cloud_ready_words
+    gon.highest_frequency = word_frequencies.values.max
   end
 
   def answers

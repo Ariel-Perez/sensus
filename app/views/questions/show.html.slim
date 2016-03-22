@@ -13,6 +13,11 @@ h4 = "Clasificadas: (#{@categorized_answers}/#{@total_answers})"
       span.badge.pull-right = @answers_per_category[category.id]
 hr
 .row.text-center
-  a.btn.btn-lg.btn-primary href="#{question_download_path(@question)}" 
-    i.glyphicon.glyphicon-download
-    = "Descarga Datos Clasificados"
+  .col-sm-6
+    a.btn.btn-lg.btn-primary href="#{question_download_path(@question)}" 
+      i.glyphicon.glyphicon-download
+      = "Descarga Datos Clasificados"
+  .col-sm-6
+    a.btn.btn-lg.btn-success href="#{question_wordcloud_path(@question)}" 
+      i.glyphicon.glyphicon-download
+      = "Visualización Nube de Palabras"
