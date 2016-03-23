@@ -80,7 +80,8 @@ class QuestionsController < ApplicationController
       'el', 'la', 'que', 'de', 'por', 'los', 'las', 'y', 
       'porque', 'para', 'en', 'mi', 'porque', 'es', 'entre', 
       'son', 'hay', 'muy', 'se', 'no', 'me', 'lo', 'asi', 'a',
-      'como', 'del', 'sin']
+      'como', 'del', 'sin', 'ante', 'bajo', 'con', 'contra', 'desde',
+      'hacia', 'segun', 'sobre', 'tras', 'ha', 'ya', 'o', 'u', 'al', 'si', 'he']
 
     answers.each do |answer|
       words = answer.text.downcase.split(/\W+/)
