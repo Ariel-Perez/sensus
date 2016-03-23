@@ -85,7 +85,9 @@ class QuestionsController < ApplicationController
     answers.each do |answer|
       words = answer.text.downcase.split(/\W+/)
       words.each do |word|
-        word_frequencies[word] += 1
+        unless stopwords.include? word
+          word_frequencies[word] += 1
+        end
       end
     end
 
