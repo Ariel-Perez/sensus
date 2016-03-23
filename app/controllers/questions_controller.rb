@@ -75,6 +75,13 @@ class QuestionsController < ApplicationController
     word_frequencies = {}
     word_frequencies.default = 0
 
+    require 'set'
+    stopwords = Set.new [
+      'el', 'la', 'que', 'de', 'por', 'los', 'las', 'y', 
+      'porque', 'para', 'en', 'mi', 'porque', 'es', 'entre', 
+      'son', 'hay', 'muy', 'se', 'no', 'me', 'lo', 'asi', 'a',
+      'como', 'del', 'sin']
+
     answers.each do |answer|
       words = answer.text.downcase.split(/\W+/)
       words.each do |word|
@@ -84,8 +91,9 @@ class QuestionsController < ApplicationController
 
     word_cloud_ready_words = []
     word_frequencies.each do |word, frequency|
-      if word not in 
-      word_cloud_ready_words << {text: word, size: frequency}
+      unless stopwords.include? word
+        word_cloud_ready_words << {text: word, size: frequency}
+      end
     end
 
     gon.word_frequencies = word_cloud_ready_words
