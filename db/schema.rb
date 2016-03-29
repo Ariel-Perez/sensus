@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222032600) do
+ActiveRecord::Schema.define(version: 20160329140316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,16 @@ ActiveRecord::Schema.define(version: 20160222032600) do
 
   add_index "categories", ["question_id"], name: "index_categories_on_question_id", using: :btree
 
+  create_table "processed_answers", force: :cascade do |t|
+    t.string   "stemmed_text"
+    t.string   "unstemmed_text"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "answer_id"
+  end
+
+  add_index "processed_answers", ["answer_id"], name: "index_processed_answers_on_answer_id", using: :btree
+
   create_table "questions", force: :cascade do |t|
     t.integer  "index"
     t.string   "label"
@@ -70,10 +80,9 @@ ActiveRecord::Schema.define(version: 20160222032600) do
 
   create_table "survey_models", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "user_id"
-    t.integer  "student_identifier", default: 0
   end
 
   add_index "survey_models", ["user_id"], name: "index_survey_models_on_user_id", using: :btree
@@ -107,6 +116,7 @@ ActiveRecord::Schema.define(version: 20160222032600) do
   add_foreign_key "answers", "students"
   add_foreign_key "answers", "surveys"
   add_foreign_key "categories", "questions"
+  add_foreign_key "processed_answers", "answers"
   add_foreign_key "questions", "survey_models"
   add_foreign_key "survey_models", "users"
   add_foreign_key "surveys", "survey_models"
