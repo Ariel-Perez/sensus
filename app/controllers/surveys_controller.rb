@@ -12,7 +12,7 @@
 #
 
 class SurveysController < ApplicationController
-  before_filter :set_survey, :only => [:show, :update, :delete, :training]
+  before_filter :set_survey, :only => [:show, :update, :delete, :training, :results]
 
   def index
     @surveys = Survey.all
@@ -23,6 +23,7 @@ class SurveysController < ApplicationController
 
   def new
     @survey = Survey.new
+    @survey_models = SurveyModel.all
   end
 
   def create
@@ -38,6 +39,10 @@ class SurveysController < ApplicationController
   def training
     @model = SurveyModel.find(@survey.survey_model_id)
     @questions = Question.where(survey_model_id: @model.id).order(:index)
+  end
+
+  def results
+    @model = SurveyModel.find(@survey.survey_model_id)
   end
 
   private

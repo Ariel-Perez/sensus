@@ -1,0 +1,27 @@
+h1 = "Editar #{@model.name}"
+
+.row
+  .col-md-6
+    h3 Preguntas
+    .list-group
+    - @model.questions.each do |question|
+      = link_to question, {class: 'list-group-item'}
+        h4.list-group-item-heading = question.label
+        p.list-group-item-text = question.description
+
+  .col-md-6
+    h3 Agregar Preguntas
+
+    = form_for(@question) do |f|
+      = f.hidden_field :survey_model_id, :value => "#{@model.id}"
+
+      = f.label :index, "Índice"
+      = f.number_field :index, class: 'form-control'
+
+      = f.label :label, "Etiqueta"
+      = f.text_field :label, class: 'form-control'
+
+      = f.label :description, "Descripción"
+      = f.text_field :description, class: 'form-control'
+
+      = f.submit "Crear", class: "btn btn-primary"

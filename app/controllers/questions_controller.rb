@@ -13,18 +13,28 @@
 
 class QuestionsController < ApplicationController
   before_filter :set_question, :only => [:show, :update, :delete, :answers, :categories, :download, :wordcloud]
+  before_filter :set_survey, :only => [:show, :wordcloud]
 
   def show
-    @categories = @question.categories
-    category_ids = @categories.pluck(:id)
+    @categories = @question.categories.order(:id)
+    @answers = Answer.where(question_id: @question.id)
 
-    @total_answers = Answer.where(question_id: @question.id).count
-    @categorized_answers = AnswerCategory.where(category_id: category_ids).group(:answer_id).count.count
-    @answers_per_category = AnswerCategory.where(category_id: category_ids).group(:category_id).count
-    @answers_per_category.default = 0
+    if @survey
+      @answers = @answers.where(survey_id: @survey.id)
+    end
 
+    @answer_categories = AnswerCategory.where(
+      answer_id: @answers.pluck(:id)).
+      group(:category_id).count()
 
-    @categories = @categories.sort_by {|category| -@answers_per_category[category.id]}
+    @all_categorized_answers = AnswerCategory.where(
+      category_id: @categories.pluck(:id), answer_id: @answers.pluck(:id)).
+      group(:answer_id).count.count
+
+    @total_answers = @answers.count
+
+    gon.category_names = @categories.pluck(:name)
+    gon.category_counts = @categories.map { |category| @answer_categories[category.id] }
   end
 
   def create
@@ -72,6 +82,10 @@ class QuestionsController < ApplicationController
 
   def wordcloud
     answers = Answer.where(question_id: @question.id)
+    if @survey
+      answers = answers.where(survey_id: @survey.id)
+    end
+
     word_frequencies = {}
     word_frequencies.default = 0
 
@@ -194,5 +208,9 @@ class QuestionsController < ApplicationController
 
     def set_question
       @question = Question.find(params[:id] || params[:question_id])
+    end
+
+    def set_survey
+      @survey = params[:survey_id] ? Survey.find(params[:survey_id]) : nil
     end
 end

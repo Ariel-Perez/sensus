@@ -1,0 +1,16 @@
+.jumbotron
+  h2 Crear Nueva Encuesta
+  hr
+  = form_for(@survey) do |f|
+    = f.hidden_field :user_id, :value => "#{current_user.id}"
+
+    = f.label :survey_model_id, "Modelo"
+    = f.collection_select(:survey_model_id, @survey_models, :id, :name, {}, {'class' => 'form-control'})
+
+    = f.label :name, "Nombre"
+    = f.text_field :name, class: 'form-control'
+
+    = f.label :file, "Archivo"
+    = f.file_field :file, class: 'form-control'
+
+    = f.submit "Subir Archivo", class: "btn btn-primary"

@@ -66,14 +66,14 @@ mina init
   require 'mina/chruby'
 
   set :chruby_path, '/usr/local/share/chruby/chruby.sh'
-  
+
   set :domain, 'provincia.zapto.org'
   set :deploy_to, '/var/www/sensus'
   set :repository, 'https://github.com/Ariel-Perez/sensus'
   set :branch, 'master'
 
   set :user, 'foris'
-  set :term_mode, :nil 
+  set :term_mode, :nil
   set :forward_agent, true     # SSH forward_agent.
 
   task :environment do
@@ -91,13 +91,13 @@ sudo chown -R foris /var/www/sensus
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib libpq-dev
 
-(Server) - Crear Base de Datos y Usuario 
+(Server) - Crear Base de Datos y Usuario
 =======================================
 sudo -u postgres createuser -s sensus
 sudo -u postgres psql
   # \password sensus
-  Enter new password: 
-  Enter it again: 
+  Enter new password:
+  Enter it again:
   # create database sensus owner sensus;
   # \q
 
@@ -132,5 +132,5 @@ resque-web
 (Server) - Run
 =======================================
 chruby ruby-2.3.0
-bundle exec rake resque:work QUEUE=' RAILS_ENV=production &
+bundle exec rake resque:work QUEUE='*' RAILS_ENV=production &
 rails server -e production -b 0.0.0.0 -p 3001 -d &

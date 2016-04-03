@@ -1,11 +1,18 @@
-header.navbar.navbar-fixed-top.navbar-inverse
-  .container
-    nav
-      ul.nav.navbar-nav.navbar-left
-        li
-          a#logo [href="#{root_path}"]
-            i.glyphicon.glyphicon-list-alt aria-hidden="true"
-            | Sensus
+header.navbar.navbar-default
+  .container-fluid
+    / Brand and toggle get grouped for better mobile display
+    .navbar-header
+      button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-sensus-navbar-collapse" aria-expanded="false"
+        span.sr-only Toggle Navegación
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a#logo.navbar-brand [href="#{root_path}"]
+        i.glyphicon.glyphicon-list-alt aria-hidden="true"
+        | Sensus
+
+    / Collect the nav links, forms, and other content for toggling
+    #bs-sensus-navbar-collapse.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
         li
           a [href="#{root_path}"]

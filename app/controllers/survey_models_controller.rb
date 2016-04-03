@@ -10,15 +10,18 @@
 #
 
 class SurveyModelsController < ApplicationController
-  before_filter :set_survey_model, :only => [:show, :update, :delete]
+  before_filter :set_survey_model, :only => [:show, :update, :delete, :edit]
 
   def index
     @models = SurveyModel.all
   end
 
+  def edit
+    @question = Question.new
+  end
+
   def show
     @survey = Survey.new
-    @question = Question.new
   end
 
   def new

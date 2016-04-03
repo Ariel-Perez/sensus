@@ -3,13 +3,13 @@ class SurveyLoader
   def self.perform(survey_params, filepath)
     require 'fileutils'
 
-    survey = Survey.new(survey_params)
-    survey.path = survey.name
-    survey.save
-
     book = Spreadsheet.open(filepath)
     sheet = book.worksheet(0)
     header = sheet.row(0)
+
+    survey = Survey.new(survey_params)
+    survey.path = survey.name
+    survey.save
 
     model = SurveyModel.find(survey.survey_model_id)
     questions = Question.where(survey_model_id: model.id)
@@ -23,7 +23,7 @@ class SurveyLoader
       questions.each do |question|
         text = ActiveRecord::Base.sanitize(row[question.index] || "")
         answer_values.push({
-          question: question.id, 
+          question: question.id,
           student: student_identifier,
           survey: survey.id,
           text: text
@@ -42,16 +42,16 @@ class SurveyLoader
     answer_values.each do |values|
       if values[:text].length > 2
         processed_values = [
-          values[:question], 
-          student_id_map[values[:student]], 
-          values[:survey], 
-          values[:text], 
-          "'#{Time.zone.now}'", 
+          values[:question],
+          student_id_map[values[:student]],
+          values[:survey],
+          values[:text],
+          "'#{Time.zone.now}'",
           "'#{Time.zone.now}'"
         ]
         inserts.push("(#{processed_values.join(", ")})")
       end
-    end 
+    end
 
     sql = "INSERT INTO answers (question_id, student_id, survey_id, text, created_at, updated_at) VALUES #{inserts.join(", ")};"
     ActiveRecord::Base.connection.exec_query(sql, :skip_logging)

@@ -25,6 +25,11 @@ Sensus::Application.routes.draw do
 
   resources :surveys do
     get 'training'
+    get 'results'
+    resources :questions do
+      get 'show'
+      get 'wordcloud'
+    end
   end
 
   resources :survey_models
@@ -33,9 +38,10 @@ Sensus::Application.routes.draw do
     get 'categories'
     get 'download'
     get 'wordcloud'
+    get 'charts'
   end
   resources :students
-  
+
   mount Resque::Server, :at => "/resque"
 
   # Example of regular route:
