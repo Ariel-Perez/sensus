@@ -1,5 +1,5 @@
 class TrainingController < ApplicationController
   def index
-    @surveys = Survey.where(id: Answer.pluck(:survey_id))
+    @surveys = Survey.all
   end
 end

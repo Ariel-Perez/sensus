@@ -8,13 +8,13 @@ var Category = function(id, name, count) {
   Category.incrementalId = Math.max(Category.incrementalId, this.id + 1);
 };
 
-var data = {};
-var classifications = {};
 
 ready = function() {
   $('.canvas').empty();
   window.newClassId = 0;
   window.queryIndex =-1;
+  window.data = {};
+  window.classifications = {};
 
   var wHeight = $(window).height();
   var wWidth = $(window).width();
@@ -24,26 +24,15 @@ ready = function() {
 
   window.disc = new Disc(new Point(discSize / 2, discSize / 2), discCenterSize, discSize);
   window.satelliteSize = satelliteSize;
-  // window.add = new Satellite(disc.position, satelliteSize, {'class': 'add'});
-
-  /*
-  add.satellite.click(function() {
-    var sat = createCategorySatellite(add.position, add.size);
-    disc.appendSatellite(sat);
-  });
-  */
 
   $('.canvas').append(disc.disc);
-
-  // disc.appendSatellite(add);
 
   setupQuestionSelect();
   $('#training-next').click(next);
   $('#training-previous').click(previous);
 }
 
-$(document).ready(ready);
-$(document).on('page:load', ready);;
+document.addEventListener("turbolinks:load", ready);
 
 function setupQuestionSelect()
 {
