@@ -7,6 +7,8 @@ class SurveyLoader
     sheet = book.worksheet(0)
     header = sheet.row(0)
 
+    time = '#{Time.zone.now}'
+
     survey = Survey.new(survey_params)
     survey.path = survey.name
     survey.save
@@ -34,8 +36,12 @@ class SurveyLoader
     old_students = Student.where(identifier: student_ids)
     old_student_ids = old_students.pluck(:identifier)
     new_student_ids = student_ids - old_student_ids
-    new_students = Student.create(new_student_ids.map {|x| {identifier: x}})
-    all_students = old_students | new_students
+
+    inserts = new_student_ids.map { |id| "(#{id},#{time},#{time})"}
+    sql = "INSERT INTO students (identifier, created_at, updated_at) VALUES #{inserts.join(", ")};"
+    ActiveRecord::Base.connection.exec_query(sql, :skip_logging)
+
+    all_students = Student.all
     student_id_map = Hash[ all_students.collect { |x| [x.identifier, x.id] } ]
 
     inserts = []
@@ -46,8 +52,8 @@ class SurveyLoader
           student_id_map[values[:student]],
           values[:survey],
           values[:text],
-          "'#{Time.zone.now}'",
-          "'#{Time.zone.now}'"
+          time,
+          time
         ]
         inserts.push("(#{processed_values.join(", ")})")
       end
