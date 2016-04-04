@@ -45,22 +45,24 @@ class QuestionsController < ApplicationController
 
   def upload_stems
     require 'fileutils'
-    tmp = params[:survey][:file].tempfile
-    filepath = File.join("public", params[:survey][:file].original_filename)
+    puts params
+    tmp = params[:file].tempfile
+    filepath = File.join("public", params[:file].original_filename)
     FileUtils.cp tmp.path, filepath
     Resque.enqueue(StemLoader, filepath)
     flash[:success] = "Cargando los textos procesados a la base de datos"
-    redirect_to @survey ? @survey_question_path(@survey, @question) : @question_path(@question)
+
+    redirect_to @survey ? survey_question_path(@survey, @question) : question_path(@question)
   end
 
   def upload_classifications
     require 'fileutils'
-    tmp = params[:survey][:file].tempfile
-    filepath = File.join("public", params[:survey][:file].original_filename)
+    tmp = params[:file].tempfile
+    filepath = File.join("public", params[:file].original_filename)
     FileUtils.cp tmp.path, filepath
     Resque.enqueue(ResultLoader, @question.id, filepath)
     flash[:success] = "Cargando las clasificaciones a la base de datos"
-    redirect_to @survey ? @survey_question_path(@survey, @question) : @question_path(@question)
+    redirect_to @survey ? survey_question_path(@survey, @question) : question_path(@question)
   end
 
   def download_answers

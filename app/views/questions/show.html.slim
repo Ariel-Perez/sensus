@@ -11,7 +11,7 @@ h4 Descargas
 h4 Descargas
 .row
   .col-sm-4
-    form enctype="multipart/form-data" action="upload_stems" charset="UTF-8" method="post"
+    form enctype="multipart/form-data" action="#{survey_question_upload_stems_path(@survey, @question)}" charset="UTF-8" method="post"
       = hidden_field_tag :authenticity_token, :value => form_authenticity_token
       = hidden_field_tag :user_id, :value => "#{current_user.id}"
 
