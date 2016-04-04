@@ -19,6 +19,7 @@ class SurveysController < ApplicationController
   end
 
   def show
+    @model = @survey.survey_model
   end
 
   def new

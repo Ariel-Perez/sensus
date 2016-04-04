@@ -12,10 +12,10 @@
 #
 
 class QuestionsController < ApplicationController
-  before_filter :set_question, :only => [:show, :update, :delete, :answers, :categories, :download, :wordcloud]
-  before_filter :set_survey, :only => [:show, :wordcloud]
+  before_filter :set_question, :except => [:create]
+  before_filter :set_survey, :except => [:create]
 
-  def show
+  def charts
     @categories = @question.categories.order(:id)
     @answers = Answer.where(question_id: @question.id)
 
@@ -43,22 +43,57 @@ class QuestionsController < ApplicationController
     redirect_to @question.survey_model
   end
 
-  def update
+  def upload_stems
+    require 'fileutils'
+    tmp = params[:survey][:file].tempfile
+    filepath = File.join("public", params[:survey][:file].original_filename)
+    FileUtils.cp tmp.path, filepath
+    Resque.enqueue(StemLoader, filepath)
+    flash[:success] = "Cargando los textos procesados a la base de datos"
+    redirect_to @survey ? @survey_question_path(@survey, @question) : @question_path(@question)
   end
 
-  def delete
+  def upload_classifications
+    require 'fileutils'
+    tmp = params[:survey][:file].tempfile
+    filepath = File.join("public", params[:survey][:file].original_filename)
+    FileUtils.cp tmp.path, filepath
+    Resque.enqueue(ResultLoader, @question.id, filepath)
+    flash[:success] = "Cargando las clasificaciones a la base de datos"
+    redirect_to @survey ? @survey_question_path(@survey, @question) : @question_path(@question)
   end
 
-  def download
+  def download_answers
+    column_separator = ","
+    line_separator = "\n"
+
+    categories = @question.categories
+    header = ["id", "student_id"].join(column_separator)
+    answers = Answer.where(question_id: @question.id)
+
+    if @survey
+      answers = answers.where(survey_id: @survey.id)
+    end
+
+    rows = answers.map {|answer| [answer.id, answer.student_id, answer.text].join(column_separator)}
+
+    data = ([header] + rows).join(line_separator)
+    send_data(data, :filename => @question.label + ".csv")
+  end
+
+  def download_classifications
     column_separator = ","
     line_separator = "\n"
 
     categories = @question.categories
     header = (["Sample"] + categories.pluck(:name)).join(column_separator)
 
-    answer_ids = AnswerCategory.where(
-      category_id: categories.pluck(:id)).uniq.pluck(:answer_id)
+    answer_categories = AnswerCategory.where(category_id: categories.pluck(:id))
+    answer_ids = answer_categories.uniq.pluck(:answer_id)
     answers = Answer.where(id: answer_ids)
+    if @survey
+      answers = answers.where(survey_id: @survey.id)
+    end
 
     category_column_map = {}
     categories.each_with_index do |c, i|
@@ -142,12 +177,6 @@ class QuestionsController < ApplicationController
       end
     end
 
-    # most_common_answers = answers.group_by { |r| r["count"] }
-    #   .sort_by  { |k, v| -k }
-    #   .first(2)
-    #   .map(&:last)
-    #   .flatten
-
     word_cloud_ready_words = []
     word_frequencies.each do |word, frequency|
       unless stopwords.include? word
@@ -160,7 +189,7 @@ class QuestionsController < ApplicationController
   end
 
   def answers
-    @answers = Answer.where(question_id: @question.id)
+    @answers = @question.answers
 
     if params.has_key? :filter
       if params[:filter].has_key? :unseen

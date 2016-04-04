@@ -24,7 +24,7 @@ hr
           i.glyphicon.glyphicon-download
           | Descarga Datos
       .col-xs-12.col-sm-3
-        a.btn.btn-wide.btn-success href="#{@survey ? survey_question_path(@survey, @question) : question_path(@question)}"
+        a.btn.btn-wide.btn-success href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
           i.glyphicon.glyphicon-stats
           | Gráficos
     .row

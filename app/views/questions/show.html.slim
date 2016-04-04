@@ -1,55 +1,31 @@
 h1 = "#{@question.survey_model.name} #{@survey ? '- ' + @survey.name : ''}"
-h3 = "#{@question.label}: #{@question.description}"
-h4 = "Clasificadas: (#{@all_categorized_answers}/#{@total_answers})"
+h3 = @question.label + ": " + @question.description
 hr
 
+h4 Descargas
 .row
-  .col-xs-12.col-md-3
-    h3
-      i.glyphicon.glyphicon-filter
-      | Filtros
-    select.form-control
-      option value="1" Todas las Sedes
-      option value="2" Antofagasta
-    select.form-control
-      option value="1" Todas las Jornadas
-    select.form-control
-      option value="1" Todas las Instituciones
-    button.btn.btn-default.btn-wide
-      i.glyphicon.glyphicon-ok
-      | Aplicar Filtros
-  .col-xs-12.col-md-9
-    .row.text-center
-      .col-xs-12.col-sm-offset-6.col-sm-3
-        a.btn.btn-wide.btn-primary href="#{question_download_path(@question)}"
-          i.glyphicon.glyphicon-download
-          | Descarga Datos
-      .col-xs-12.col-sm-3
-        a.btn.btn-wide.btn-success href="#{@survey ? survey_question_wordcloud_path(@survey, @question) : question_wordcloud_path(@question)}"
-          i.glyphicon.glyphicon-cloud
-          | Nube de Palabras
-    .row
-      .col-xs-12
-        canvas#my-chart width="850" height="350"
-        javascript:
-          // Use this sometime.
-          var fill = d3.scale.category20();
-          var data = {
-            labels: gon.category_names,
-            datasets: [
-              {
-                label: "My First dataset",
-                fillColor: "rgba(91,144,191,0.5)",
-                strokeColor: "rgba(82,128,169,0.8)",
-                highlightFill: "rgba(91,144,191,0.75)",
-                highlightStroke: "rgba(82,128,169,1.0)",
-                data: gon.category_counts
-              }
-            ]
-          };
+  .col-sm-4
+    a.btn-lg.btn.btn-primary href="#{@survey ? survey_question_download_answers_path(@survey, @question) : question_download_answers_path(@question)}"
+      i.glyphicon.glyphicon-download
+      | Decargar Respuestas Originales
+h4 Descargas
+.row
+  .col-sm-4
+    form enctype="multipart/form-data" action="upload_stems" charset="UTF-8" method="post"
+      = hidden_field_tag :authenticity_token, :value => form_authenticity_token
+      = hidden_field_tag :user_id, :value => "#{current_user.id}"
 
-          // Get context with jQuery - using jQuery's .get() method.
-          var ctx = $("#my-chart").get(0).getContext("2d");
-          // This will get the first returned node in the jQuery collection.
-          var myBarChart = new Chart(ctx).Bar(data, {});
+      = label_tag :file, "Archivo"
+      = file_field_tag :file, class: 'form-control'
 
+      input.btn-lg.btn.btn-success type="submit" value="Cargar Respuestas Procesadas"
+
+  .col-sm-4
+    form enctype="multipart/form-data" action="upload_classifications" charset="UTF-8" method="post"
+      = hidden_field_tag :authenticity_token, :value => form_authenticity_token
+      = hidden_field_tag :user_id, :value => "#{current_user.id}"
+
+      = label_tag :file, "Archivo"
+      = file_field_tag :file, class: 'form-control'
+
+      input.btn-lg.btn.btn-success type="submit" value="Cargar Respuestas Clasificadas"

@@ -23,24 +23,32 @@ Sensus::Application.routes.draw do
     post 'declassify'
   end
 
+  resources :students
+  resources :survey_models
   resources :surveys do
     get 'training'
     get 'results'
     resources :questions do
-      get 'show'
+      get 'charts'
       get 'wordcloud'
+      get 'download_answers'
+      get 'download_classifications'
+      get 'answers'
+      post 'upload_stems'
+      post 'upload_classifications'
     end
   end
 
-  resources :survey_models
   resources :questions do
     get 'answers'
     get 'categories'
-    get 'download'
+    get 'download_answers'
+    get 'download_classifications'
     get 'wordcloud'
     get 'charts'
+    post 'upload_stems'
+    post 'upload_classifications'
   end
-  resources :students
 
   mount Resque::Server, :at => "/resque"
 

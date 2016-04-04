@@ -19,7 +19,7 @@ class AnswersController < ApplicationController
 
   def classify
     AnswerCategory.find_or_create_by(
-      category_id: params[:category_id], 
+      category_id: params[:category_id],
       user_id: current_user.id,
       answer_id: @answer.id)
 
@@ -31,7 +31,7 @@ class AnswersController < ApplicationController
 
   def declassify
     AnswerCategory.where(
-      category_id: params[:category_id], 
+      category_id: params[:category_id],
       user_id: current_user.id,
       answer_id: @answer.id).destroy_all
 
