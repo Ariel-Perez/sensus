@@ -8,6 +8,8 @@ var Category = function(id, name, count) {
   Category.incrementalId = Math.max(Category.incrementalId, this.id + 1);
 };
 
+window.classifyLoaded = window.classifyLoaded || false;
+
 
 ready = function() {
   $('.canvas').empty();
@@ -32,7 +34,15 @@ ready = function() {
   $('#training-previous').click(previous);
 }
 
-document.addEventListener("turbolinks:load", ready);
+
+var bodyData = $('body').data();
+if (bodyData.controllerName == 'surveys' && bodyData.actionName == 'training') {
+  if (!window.classifyLoaded) {
+    console.log("turbo load");
+    document.addEventListener("turbolinks:load", ready);
+    window.classifyLoaded = true;
+  }
+}
 
 function setupQuestionSelect()
 {
