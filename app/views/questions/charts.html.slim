@@ -33,23 +33,21 @@ hr
         canvas#my-chart width="850" height="350"
         javascript:
           // Use this sometime.
-          document.addEventListener("turbolinks:load", function() {
-            var data = {
-              labels: gon.category_names,
-              datasets: [
-                {
-                  label: "My First dataset",
-                  fillColor: "rgba(91,144,191,0.5)",
-                  strokeColor: "rgba(82,128,169,0.8)",
-                  highlightFill: "rgba(91,144,191,0.75)",
-                  highlightStroke: "rgba(82,128,169,1.0)",
-                  data: gon.category_counts
-                }
-              ]
-            };
+          var data = {
+            labels: gon.category_names,
+            datasets: [
+              {
+                label: "My First dataset",
+                fillColor: "rgba(91,144,191,0.5)",
+                strokeColor: "rgba(82,128,169,0.8)",
+                highlightFill: "rgba(91,144,191,0.75)",
+                highlightStroke: "rgba(82,128,169,1.0)",
+                data: gon.category_counts
+              }
+            ]
+          };
 
-            // Get context with jQuery - using jQuery's .get() method.
-            var ctx = $("#my-chart").get(0).getContext("2d");
-            // This will get the first returned node in the jQuery collection.
-            var myBarChart = new Chart(ctx).Bar(data, {});
-          });
+          // Get context with jQuery - using jQuery's .get() method.
+          var ctx = $("#my-chart").get(0).getContext("2d");
+          // This will get the first returned node in the jQuery collection.
+          var myBarChart = new Chart(ctx).Bar(data, {});
