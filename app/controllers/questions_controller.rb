@@ -71,13 +71,13 @@ class QuestionsController < ApplicationController
 
     categories = @question.categories
     header = ["id", "student_id"].join(column_separator)
-    answers = Answer.where(question_id: @question.id)
+    answers = Answer.includes(:student).where(question_id: @question.id)
 
     if @survey
       answers = answers.where(survey_id: @survey.id)
     end
 
-    rows = answers.map {|answer| [answer.id, answer.student_id, answer.text].join(column_separator)}
+    rows = answers.map {|answer| [answer.id, answer.student.identifier, answer.text].join(column_separator)}
 
     data = ([header] + rows).join(line_separator)
     send_data(data, :filename => @question.label + ".csv")
