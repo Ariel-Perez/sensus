@@ -77,7 +77,7 @@ class QuestionsController < ApplicationController
       answers = answers.where(survey_id: @survey.id)
     end
 
-    rows = answers.map {|answer| [answer.id, answer.student.identifier, answer.text].join(column_separator)}
+    rows = answers.map {|answer| [answer.id, answer.student.identifier, "\"#{answer.text}\""].join(column_separator)}
 
     data = ([header] + rows).join(line_separator)
     send_data(data, :filename => @question.label + ".csv")

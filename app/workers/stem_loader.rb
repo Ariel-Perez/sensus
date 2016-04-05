@@ -9,7 +9,6 @@ class StemLoader
 
     time = '#{Time.zone.now}'
 
-
     inserts = []
     sheet.each 1 do |row|
       answer_id = row[0].to_s
