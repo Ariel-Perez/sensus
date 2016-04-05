@@ -4,9 +4,6 @@ hr
 
 .row
   .col-xs-12.col-md-3
-    h3
-      i.glyphicon.glyphicon-filter
-      | Filtros
     select.form-control
       option value="1" Todas las Sedes
       option value="2" Antofagasta
@@ -14,22 +11,22 @@ hr
       option value="1" Todas las Jornadas
     select.form-control
       option value="1" Todas las Instituciones
-    button.btn.btn-default.btn-wide
-      i.glyphicon.glyphicon-ok
-      | Aplicar Filtros
+    select.form-control
+      option value="1" Todas las Categorías
+
+    a.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
+      i.glyphicon.glyphicon-stats
+      | Generar Gráfico
+    a.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_wordcloud_path(@survey, @question) : question_wordcloud_path(@question)}"
+      i.glyphicon.glyphicon-cloud
+      | Nube de Palabras
+    a.btn.btn-wide.btn-primary.text-left href="#{question_download_classifications_path(@question)}"
+      i.glyphicon.glyphicon-download
+      | Descargar Datos
   .col-xs-12.col-md-9
-    .row.text-center
-      .col-xs-12.col-sm-offset-6.col-sm-3
-        a.btn.btn-wide.btn-primary href="#{question_download_classifications_path(@question)}"
-          i.glyphicon.glyphicon-download
-          | Descarga Datos
-      .col-xs-12.col-sm-3
-        a.btn.btn-wide.btn-success href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
-          i.glyphicon.glyphicon-stats
-          | Gráficos
     .row
       .col-xs-12
-        div#canvas width="850" height="350"
+        div#canvas width="850" height="400"
 
 javascript:
   $(document).ready(function() {
@@ -38,7 +35,7 @@ javascript:
 
     var cloud = d3.layout.cloud;
     var fill = d3.scale.category20();
-    var height = 350;
+    var height = 400;
     var width = 850;
 
     function draw(words) {
