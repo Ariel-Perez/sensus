@@ -21,7 +21,7 @@ h4 Descargas
       input.btn-lg.btn.btn-success type="submit" value="Cargar Respuestas Procesadas"
 
   .col-sm-4
-    form enctype="multipart/form-data" action="upload_classifications" charset="UTF-8" method="post"
+    form enctype="multipart/form-data" action="#{survey_question_upload_classifications_path(@survey, @question)}" charset="UTF-8" method="post"
       = hidden_field_tag :authenticity_token, :value => form_authenticity_token
       = hidden_field_tag :user_id, :value => "#{current_user.id}"
 
