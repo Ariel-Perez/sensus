@@ -24,9 +24,10 @@ class ResultLoader
       student_id = row[1].to_s
       original_text = row[2].to_s
       (3..row.length - 1).each do |i|
-        category_id = category_hash[row[i].to_s]
-
-        inserts.push("(#{answer_id},#{category_id},#{time},#{time})")
+        if row[i].to_s.length > 0
+          category_id = category_hash[row[i].to_s]
+          inserts.push("(#{answer_id},#{category_id},#{time},#{time})")
+        end
       end
     end
 
