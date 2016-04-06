@@ -7,7 +7,7 @@ class StemLoader
     sheet = book.worksheet(0)
     header = sheet.row(0)
 
-    time = '#{Time.zone.now}'
+    time = "'#{Time.zone.now}'"
 
     inserts = []
     sheet.each 1 do |row|
@@ -18,11 +18,13 @@ class StemLoader
       stemmed_text = row[3].to_s
       unstemmed_text = row[4].to_s
 
-      inserts.push("(#{answer_id},#{unstemmed_text},#{stemmed_text}),#{time},#{time}")
+      inserts.push("(#{answer_id},'#{unstemmed_text}','#{stemmed_text}',#{time},#{time})")
     end
 
+    # inserts.each_slice(1000) do |slice|
     sql = "INSERT INTO processed_answers (answer_id, unstemmed_text, stemmed_text, created_at, updated_at) VALUES #{inserts.join(", ")};"
     ActiveRecord::Base.connection.exec_query(sql, :skip_logging)
+    # end
     FileUtils.rm filepath
   end
 end
