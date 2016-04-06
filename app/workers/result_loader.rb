@@ -25,7 +25,7 @@ class ResultLoader
       original_text = row[2].to_s
       (3..row.length - 1).each do |i|
         if row[i].to_s.length > 0
-          category_id = row[i].to_s
+          category_id = row[i].to_s.encode 'UTF-8'
           if category_hash.key?(category_id)
             category_id = category_hash[category_id]
           end
