@@ -12,10 +12,13 @@ class StemLoader
     inserts = []
     sheet.each 1 do |row|
       answer_id = row[0].to_s
-      text = row[1].to_s
-      stems = row[2].to_s
+      student_id = row[1].to_s
+      original_text = row[2].to_s
 
-      inserts.push("(#{answer_id},#{text},#{stems}),#{time},#{time}")
+      stemmed_text = row[3].to_s
+      unstemmed_text = row[4].to_s
+
+      inserts.push("(#{answer_id},#{unstemmed_text},#{stemmed_text}),#{time},#{time}")
     end
 
     sql = "INSERT INTO processed_answers (answer_id, unstemmed_text, stemmed_text, created_at, updated_at) VALUES #{inserts.join(", ")};"
