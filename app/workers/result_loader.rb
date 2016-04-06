@@ -1,4 +1,4 @@
-class ResultLoader
+class ResultLoadermm
   @queue = :surveys_queue
   def self.perform(question_id, filepath)
     require 'fileutils'
@@ -25,7 +25,10 @@ class ResultLoader
       original_text = row[2].to_s
       (3..row.length - 1).each do |i|
         if row[i].to_s.length > 0
-          category_id = category_hash[row[i].to_s]
+          category_id = row[i].to_s
+          if category_hash.key?(category_id)
+            category_id = category_hash[category_id]
+          end
           inserts.push("(#{answer_id},#{category_id},#{time},#{time})")
         end
       end
