@@ -12,7 +12,9 @@ hr
     select.form-control
       option value="1" Todas las Instituciones
     select.form-control
-      option value="1" Todas las Categorías
+      option value="0" No filtrar por Categoría
+      - @categories.each do |category|
+        option value="#{category.id}" = category.name
 
     a.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
       i.glyphicon.glyphicon-stats

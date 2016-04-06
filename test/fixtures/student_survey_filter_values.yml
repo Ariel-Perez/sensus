@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  filter_value_id: 
+  survey_id: 
+  student_id: 
+
+two:
+  filter_value_id: 
+  survey_id: 
+  student_id: 

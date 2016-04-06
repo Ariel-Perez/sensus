@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160329122809) do
+ActiveRecord::Schema.define(version: 20160406213218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,24 @@ ActiveRecord::Schema.define(version: 20160329122809) do
 
   add_index "categories", ["question_id"], name: "index_categories_on_question_id", using: :btree
 
+  create_table "filter_values", force: :cascade do |t|
+    t.string   "value"
+    t.integer  "filter_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "filter_values", ["filter_id"], name: "index_filter_values_on_filter_id", using: :btree
+
+  create_table "filters", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "survey_model_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "filters", ["survey_model_id"], name: "index_filters_on_survey_model_id", using: :btree
+
   create_table "processed_answers", force: :cascade do |t|
     t.string   "stemmed_text"
     t.string   "unstemmed_text"
@@ -70,6 +88,18 @@ ActiveRecord::Schema.define(version: 20160329122809) do
   end
 
   add_index "questions", ["survey_model_id"], name: "index_questions_on_survey_model_id", using: :btree
+
+  create_table "student_survey_filter_values", force: :cascade do |t|
+    t.integer  "filter_value_id"
+    t.integer  "survey_id"
+    t.integer  "student_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "student_survey_filter_values", ["filter_value_id"], name: "index_student_survey_filter_values_on_filter_value_id", using: :btree
+  add_index "student_survey_filter_values", ["student_id"], name: "index_student_survey_filter_values_on_student_id", using: :btree
+  add_index "student_survey_filter_values", ["survey_id"], name: "index_student_survey_filter_values_on_survey_id", using: :btree
 
   create_table "students", force: :cascade do |t|
     t.string   "identifier"
@@ -117,8 +147,13 @@ ActiveRecord::Schema.define(version: 20160329122809) do
   add_foreign_key "answers", "students"
   add_foreign_key "answers", "surveys"
   add_foreign_key "categories", "questions"
+  add_foreign_key "filter_values", "filters"
+  add_foreign_key "filters", "survey_models"
   add_foreign_key "processed_answers", "answers"
   add_foreign_key "questions", "survey_models"
+  add_foreign_key "student_survey_filter_values", "filter_values"
+  add_foreign_key "student_survey_filter_values", "students"
+  add_foreign_key "student_survey_filter_values", "surveys"
   add_foreign_key "survey_models", "users"
   add_foreign_key "surveys", "survey_models"
   add_foreign_key "surveys", "users"

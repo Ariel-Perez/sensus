@@ -118,6 +118,7 @@ class QuestionsController < ApplicationController
   end
 
   def wordcloud
+    @categories = @question.categories.order(:id)
     answers = Answer.where(question_id: @question.id)
     if @survey
       answers = answers.where(survey_id: @survey.id)
