@@ -1,4 +1,4 @@
-class ResultLoadermm
+class ResultLoader
   @queue = :surveys_queue
   def self.perform(question_id, filepath)
     require 'fileutils'
