@@ -26,7 +26,7 @@ class ResultLoader
       (3..row.length - 1).each do |i|
         category_id = category_hash[row[i].to_s]
 
-        inserts.push("(#{answer_id},#{category_id},#{time},#{time}")
+        inserts.push("(#{answer_id},#{category_id},#{time},#{time})")
       end
     end
 
