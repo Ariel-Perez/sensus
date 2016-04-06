@@ -7,7 +7,7 @@ class SurveyLoader
     sheet = book.worksheet(0)
     header = sheet.row(0)
 
-    time = '#{Time.zone.now}'
+    time = "'#{Time.zone.now}'"
 
     survey = Survey.new(survey_params)
     survey.path = survey.name
