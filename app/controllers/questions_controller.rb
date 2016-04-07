@@ -95,6 +95,7 @@ class QuestionsController < ApplicationController
     if @survey
       answers = answers.where(survey_id: @survey.id)
     end
+    answers = filter_answers(answers)
 
     category_column_map = {}
     categories.each_with_index do |c, i|

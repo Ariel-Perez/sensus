@@ -6,24 +6,24 @@ hr
 .row
   .col-xs-12.col-md-3
     - @filters.each do |filter|
-      select.form-control
+      select.filter.form-control
         option value="0" = "No filtrar por #{filter.name}"
         - filter.filter_values.each do |value|
           option value="#{value.id}" = "#{value.value}"
-    select.form-control
+    select#category.form-control
       option value="0" No filtrar por Categoría
       - @categories.each do |category|
         option value="#{category.id}" = category.name
 
-    a.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
+    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
       i.glyphicon.glyphicon-stats
       | Generar Gráfico
-    a.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_wordcloud_path(@survey, @question) : question_wordcloud_path(@question)}"
+    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_wordcloud_path(@survey, @question) : question_wordcloud_path(@question)}"
       i.glyphicon.glyphicon-cloud
       | Nube de Palabras
-    a.btn.btn-wide.btn-primary.text-left href="#{question_download_classifications_path(@question)}"
-      i.glyphicon.glyphicon-download
-      | Descargar Datos
+    / a.add-filters.btn.btn-wide.btn-primary.text-left href="#{question_download_classifications_path(@question)}"
+    /   i.glyphicon.glyphicon-download
+    /   | Descargar Datos
   .col-xs-12.col-md-9
     .row
       .col-xs-12
@@ -48,3 +48,36 @@ hr
           var ctx = $("#my-chart").get(0).getContext("2d");
           // This will get the first returned node in the jQuery collection.
           var myBarChart = new Chart(ctx).Bar(data, {});
+
+          // Set filters
+          if (gon.filter) {
+            var filters = gon.filter.split(',');
+            filters.forEach(function(value, index) {
+              if (value != '0') {
+                $('select.filter')[index].value = value;
+              }
+            });
+          }
+          if (gon.category) {
+            $('#category').val(gon.category);
+          }
+
+          $('.add-filters').click(function(event) {
+            event.preventDefault();
+            var new_link = $(this).attr('href') + '?filter=';
+
+            var filters = $('select.filter');
+            filters.each(function(i, e) {
+              if (i > 0) {
+                new_link += ',';
+              }
+              new_link += e.value;
+            });
+
+            var category = $('select#category').val();
+            new_link += '&category=' + category;
+
+            window.location = new_link;
+          });
+
+
