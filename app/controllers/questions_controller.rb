@@ -120,32 +120,11 @@ class QuestionsController < ApplicationController
   def wordcloud
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    answers = Answer.where(question_id: @question.id)
-    answers = filter_answers(answers)
+    result = @question.wordcloud(@survey, params[:filter], params[:category])
 
-    proc_answers = ProcessedAnswer.where(answer_id: answers.pluck(:id))
 
-    stem_frequencies = Hash.new(0)
-    stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
-
-    proc_answers.each do |proc_answer|
-      stems = proc_answer.stemmed_text.downcase.split(' ')
-      origins = proc_answer.unstemmed_text.downcase.split(' ')
-
-      stems.zip origins.each do |stem, origin|
-        stem_frequencies[stem] += 1
-        stem_origins[stem][origin] += 1
-      end
-    end
-
-    word_cloud_ready_words = []
-    stem_frequencies.each do |stem, frequency|
-
-      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: frequency}
-    end
-
-    gon.word_frequencies = word_cloud_ready_words
-    gon.highest_frequency = stem_frequencies.values.max
+    gon.word_frequencies = result[:wordcloud]
+    gon.highest_frequency = result[:stem_frequencies].values.max
   end
 
   def answers
