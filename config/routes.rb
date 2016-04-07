@@ -28,6 +28,8 @@ Sensus::Application.routes.draw do
   resources :surveys do
     get 'training'
     get 'results'
+    get 'filters'
+    post 'upload_filters'
     resources :questions do
       get 'charts'
       get 'wordcloud'

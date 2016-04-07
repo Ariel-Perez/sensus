@@ -1,0 +1,14 @@
+h1 = "#{@survey.survey_model.name} - #{@survey.name}"
+h3 Filtros
+hr
+
+.row
+  .col-sm-4
+    form enctype="multipart/form-data" action="#{survey_upload_filters_path(@survey)}" charset="UTF-8" method="post"
+      = hidden_field_tag :authenticity_token, :value => form_authenticity_token
+      = hidden_field_tag :user_id, :value => "#{current_user.id}"
+
+      = label_tag :file, "Archivo"
+      = file_field_tag :file, class: 'form-control'
+
+      input.btn-lg.btn.btn-success type="submit" value="Cargar Filtros Encuesta"

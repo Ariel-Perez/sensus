@@ -1,5 +1,5 @@
 class ResultLoader
-  @queue = :surveys_queue
+  @queue = :results_queue
   def self.perform(question_id, filepath)
     require 'fileutils'
 

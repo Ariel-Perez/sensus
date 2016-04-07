@@ -12,7 +12,7 @@
 #
 
 class SurveysController < ApplicationController
-  before_filter :set_survey, :only => [:show, :update, :delete, :training, :results]
+  before_filter :set_survey, :only => [:show, :update, :delete, :training, :results, :filters, :upload_filters]
 
   def index
     @surveys = Survey.all
@@ -44,6 +44,20 @@ class SurveysController < ApplicationController
 
   def results
     @model = SurveyModel.find(@survey.survey_model_id)
+  end
+
+  def filters
+  end
+
+  def upload_filters
+    require 'fileutils'
+    tmp = params[:file].tempfile
+    filepath = File.join("public", params[:file].original_filename)
+    FileUtils.cp tmp.path, filepath
+    Resque.enqueue(FilterLoader, @survey.id, filepath)
+    flash[:success] = "Cargando los filtros a la base de datos"
+
+    redirect_to @survey
   end
 
   private

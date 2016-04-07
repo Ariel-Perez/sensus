@@ -1,5 +1,5 @@
 class StemLoader
-  @queue = :surveys_queue
+  @queue = :stems_queue
   def self.perform(filepath)
     require 'fileutils'
 

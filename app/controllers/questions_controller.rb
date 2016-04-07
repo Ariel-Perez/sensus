@@ -16,6 +16,7 @@ class QuestionsController < ApplicationController
   before_filter :set_survey, :except => [:create]
 
   def charts
+    @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
     @answers = Answer.where(question_id: @question.id)
 
@@ -45,7 +46,6 @@ class QuestionsController < ApplicationController
 
   def upload_stems
     require 'fileutils'
-    puts params
     tmp = params[:file].tempfile
     filepath = File.join("public", params[:file].original_filename)
     FileUtils.cp tmp.path, filepath
@@ -118,6 +118,7 @@ class QuestionsController < ApplicationController
   end
 
   def wordcloud
+    @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
     answers = Answer.where(question_id: @question.id)
     if @survey
