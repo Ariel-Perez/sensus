@@ -245,7 +245,7 @@ class QuestionsController < ApplicationController
 
         gon.filter = params[:filter]
       end
-      if params[:category]
+      if params[:category] and params[:category] != "0"
         answers = answers.where(id: AnswerCategory.where(category_id: params[:category]).uniq.pluck(:answer_id))
         gon.category = params[:category]
       end
