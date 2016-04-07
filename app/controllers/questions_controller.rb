@@ -19,20 +19,19 @@ class QuestionsController < ApplicationController
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
     @answers = Answer.where(question_id: @question.id)
-
     if @survey
       @answers = @answers.where(survey_id: @survey.id)
     end
-
-    @answer_categories = AnswerCategory.where(
-      answer_id: @answers.pluck(:id)).
-      group(:category_id).count()
+    @total_answers = @answers.count
 
     @all_categorized_answers = AnswerCategory.where(
       category_id: @categories.pluck(:id), answer_id: @answers.pluck(:id)).
       group(:answer_id).count.count
 
-    @total_answers = @answers.count
+    @answers = filter_answers(@answers)
+    @answer_categories = AnswerCategory.where(
+      answer_id: @answers.pluck(:id)).
+      group(:category_id).count()
 
     gon.category_names = @categories.pluck(:name)
     gon.category_counts = @categories.map { |category| @answer_categories[category.id] }
@@ -121,9 +120,7 @@ class QuestionsController < ApplicationController
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
     answers = Answer.where(question_id: @question.id)
-    if @survey
-      answers = answers.where(survey_id: @survey.id)
-    end
+    answers = filter_answers(answers)
 
     word_frequencies = {}
     word_frequencies.default = 0
@@ -231,6 +228,28 @@ class QuestionsController < ApplicationController
   private
     def question_params
       params.require(:question).permit(:index, :label, :description, :survey_model_id)
+    end
+
+    def filter_answers(answers)
+      if params[:filter]
+        filters = Filter.where(survey_model_id: @question.survey_model.id)
+        query_values = params[:filter].split(',')
+
+        query_values.each do |value_id|
+          unless value_id == "0"
+            valid_students = Student.where(id: StudentSurveyFilterValue.where(filter_value_id: value_id).uniq.pluck(:student_id))
+            answers = answers.where(student_id: valid_students.pluck(:id))
+          end
+        end
+
+        gon.filter = params[:filter]
+      end
+      if params[:category]
+        answers = answers.where(id: AnswerCategory.where(category_id: params[:category]).uniq.pluck(:answer_id))
+        gon.category = params[:category]
+      end
+
+      return answers
     end
 
     def filter_params
