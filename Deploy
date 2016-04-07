@@ -134,3 +134,8 @@ resque-web
 chruby ruby-2.3.0
 bundle exec rake resque:work QUEUE='*' RAILS_ENV=production &
 rails server -e production -b 0.0.0.0 -p 3001 -d &
+
+(Server) - Terminate Resque
+=======================================
+echo `ps aux | grep [r]esque | grep -v grep | cut -c 10-16`
+sudo kill -9  `ps aux | grep [r]esque | grep -v grep | cut -c 10-16`
