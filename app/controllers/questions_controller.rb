@@ -145,7 +145,7 @@ class QuestionsController < ApplicationController
     end
 
     gon.word_frequencies = word_cloud_ready_words
-    gon.highest_frequency = word_frequencies.values.max
+    gon.highest_frequency = stem_frequencies.values.max
   end
 
   def answers
