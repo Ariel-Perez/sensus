@@ -141,7 +141,7 @@ class QuestionsController < ApplicationController
     word_cloud_ready_words = []
     stem_frequencies.each do |stem, frequency|
 
-      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}, size: frequency}
+      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: frequency}
     end
 
     gon.word_frequencies = word_cloud_ready_words
