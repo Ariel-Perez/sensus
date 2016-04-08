@@ -42,17 +42,7 @@ class Question < ActiveRecord::Base
       end
     end
 
-    n = 100
-    wordcloud_stems = HashHelper.get_n_largest(stem_frequencies, n)
-
-    word_cloud_ready_words = []
-    wordcloud_stems.each do |stem|
-      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: stem_frequencies[stem]}
-    end
-
-    result = {
-      wordcloud: word_cloud_ready_words,
-      stem_frequencies: stem_frequencies}
+    build_wordcloud_result(stem_frequencies, stem_origins, 100)
   end
 
   def bigrams(survey, filter, category)
@@ -92,17 +82,7 @@ class Question < ActiveRecord::Base
       end
     end
 
-    n = 100
-    wordcloud_stems = HashHelper.get_n_largest(stem_frequencies, n)
-
-    word_cloud_ready_words = []
-    wordcloud_stems.each do |stem|
-      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: stem_frequencies[stem]}
-    end
-
-    result = {
-      wordcloud: word_cloud_ready_words,
-      stem_frequencies: stem_frequencies}
+    build_wordcloud_result(stem_frequencies, stem_origins, 100)
   end
 
   def trigrams(survey, filter, category)
@@ -146,17 +126,7 @@ class Question < ActiveRecord::Base
       end
     end
 
-    n = 100
-    wordcloud_stems = HashHelper.get_n_largest(stem_frequencies, n)
-
-    word_cloud_ready_words = []
-    wordcloud_stems.each do |stem|
-      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: stem_frequencies[stem]}
-    end
-
-    result = {
-      wordcloud: word_cloud_ready_words,
-      stem_frequencies: stem_frequencies}
+    build_wordcloud_result(stem_frequencies, stem_origins, 100)
   end
 
   def ngrams(survey, n, filter, category)
@@ -204,17 +174,7 @@ class Question < ActiveRecord::Base
       end
     end
 
-    n = 100
-    wordcloud_stems = HashHelper.get_n_largest(stem_frequencies, n)
-
-    word_cloud_ready_words = []
-    wordcloud_stems.each do |stem|
-      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: stem_frequencies[stem]}
-    end
-
-    result = {
-      wordcloud: word_cloud_ready_words,
-      stem_frequencies: stem_frequencies}
+    build_wordcloud_result(stem_frequencies, stem_origins, 100)
   end
 
   private
@@ -234,5 +194,18 @@ class Question < ActiveRecord::Base
       end
 
       return filtered_answers
+    end
+
+    def build_wordcloud_result(stem_frequencies, stem_origins, n)
+      wordcloud_stems = HashHelper.get_n_largest(stem_frequencies, n)
+
+      word_cloud_ready_words = []
+      wordcloud_stems.each do |stem|
+        word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: stem_frequencies[stem]}
+      end
+
+      result = {
+        wordcloud: word_cloud_ready_words,
+        stem_frequencies: stem_frequencies}
     end
 end
