@@ -117,14 +117,34 @@ class QuestionsController < ApplicationController
     send_data(data, :filename => @question.label + ".csv")
   end
 
-  def wordcloud
+  def unigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.wordcloud(@survey, params[:filter], params[:category])
-
+    result = @question.unigrams(@survey, params[:filter], params[:category])
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
+    render :wordcloud
+  end
+
+  def bigrams
+    @filters = @question.survey_model.filters
+    @categories = @question.categories.order(:id)
+    result = @question.bigrams(@survey, params[:filter], params[:category])
+
+    gon.word_frequencies = result[:wordcloud]
+    gon.highest_frequency = result[:stem_frequencies].values.max
+    render :wordcloud
+  end
+
+  def trigrams
+    @filters = @question.survey_model.filters
+    @categories = @question.categories.order(:id)
+    result = @question.trigrams(@survey, params[:filter], params[:category])
+
+    gon.word_frequencies = result[:wordcloud]
+    gon.highest_frequency = result[:stem_frequencies].values.max
+    render :wordcloud
   end
 
   def answers
