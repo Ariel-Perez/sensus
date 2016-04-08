@@ -120,7 +120,7 @@ class QuestionsController < ApplicationController
   def unigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.ngrams(@survey, 1, params[:filter], params[:category])
+    result = @question.unigrams(@survey, params[:filter], params[:category])
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
@@ -132,7 +132,7 @@ class QuestionsController < ApplicationController
   def bigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.ngrams(@survey, 2, params[:filter], params[:category])
+    result = @question.bigrams(@survey, params[:filter], params[:category])
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
@@ -144,7 +144,7 @@ class QuestionsController < ApplicationController
   def trigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.ngrams(@survey, 3, params[:filter], params[:category])
+    result = @question.trigrams(@survey, params[:filter], params[:category])
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
