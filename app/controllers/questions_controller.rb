@@ -120,30 +120,36 @@ class QuestionsController < ApplicationController
   def unigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.unigrams(@survey, params[:filter], params[:category])
+    result = @question.ngrams(@survey, 1, params[:filter], params[:category])
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
+    gon.filter = params[:filter]
+    gon.category = params[:category]
     render :wordcloud
   end
 
   def bigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.bigrams(@survey, params[:filter], params[:category])
+    result = @question.ngrams(@survey, 2, params[:filter], params[:category])
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
+    gon.filter = params[:filter]
+    gon.category = params[:category]
     render :wordcloud
   end
 
   def trigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.trigrams(@survey, params[:filter], params[:category])
+    result = @question.ngrams(@survey, 3, params[:filter], params[:category])
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
+    gon.filter = params[:filter]
+    gon.category = params[:category]
     render :wordcloud
   end
 

@@ -23,124 +23,46 @@ class Question < ActiveRecord::Base
   has_many :answers
   has_many :categories
 
-  def unigrams(survey, filter, category)
+  def ngrams(survey, n, filter, category)
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
 
+    def build_key(stems)
+      key_parts = stems.sort
+      key = key_parts.join(' ')
+    end
+
+    max_delta = (n - 1) * 2
     proc_answers.each do |proc_answer|
       unless proc_answer.stemmed_text == "0"
         stems = proc_answer.stemmed_text.downcase.split(' ')
         origins = proc_answer.unstemmed_text.downcase.split(' ')
 
-        stems.zip origins.each do |stem, origin|
-          stem_frequencies[stem] += 1
-          stem_origins[stem][origin] += 1
-        end
-      end
-    end
+        length = stems.length
+        indices = (0..n - 1).to_a
 
-    n = 100
-    wordcloud_stems = HashHelper.get_n_largest(stem_frequencies, n)
+        while indices[0] <= stems.length - n do
+          ngram_stems = indices.map { |index| stems[index] }
+          ngram_origins = indices.map { |index| origins[index] }
 
-    word_cloud_ready_words = []
-    wordcloud_stems.each do |stem|
-      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: stem_frequencies[stem]}
-    end
+          key = build_key(ngram_stems)
+          value = ngram_origins.join(' ')
 
-    result = {
-      wordcloud: word_cloud_ready_words,
-      stem_frequencies: stem_frequencies}
-  end
+          stem_frequencies[key] += 1
+          stem_origins[key][value] += 1
 
-  def bigrams(survey, filter, category)
-    filtered_answers = filter_answers(answers, filter, category)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
+          index_iterator = n - 1
+          indices[index_iterator] += 1
 
-    stem_frequencies = Hash.new(0)
-    stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
-
-    def build_key(stem1, stem2)
-      key_parts = [stem1, stem2].sort
-      key = "#{key_parts[0]} #{key_parts[1]}"
-    end
-
-    max_delta = 2
-    proc_answers.each do |proc_answer|
-      unless proc_answer.stemmed_text == "0"
-        stems = proc_answer.stemmed_text.downcase.split(' ')
-        origins = proc_answer.unstemmed_text.downcase.split(' ')
-
-        (0..stems.length - 1).each do |i|
-          max_j = [stems.length - 1, i + max_delta].min
-          (i + 1..max_j).each do |j|
-            i_stem = stems[i]
-            j_stem = stems[j]
-
-            i_origin = origins[i]
-            j_origin = origins[j]
-
-            key = build_key(i_stem, j_stem)
-            value = "#{i_origin} #{j_origin}"
-
-            stem_frequencies[key] += 1
-            stem_origins[key][value] += 1
+          while index_iterator > 0 and indices[index_iterator] > length - n + index_iterator
+            indices[index_iterator - 1] += 1
+            index_iterator -= 1
           end
-        end
-      end
-    end
-
-    n = 100
-    wordcloud_stems = HashHelper.get_n_largest(stem_frequencies, n)
-
-    word_cloud_ready_words = []
-    wordcloud_stems.each do |stem|
-      word_cloud_ready_words << {text: stem_origins[stem].max_by{|k,v| v}[0], size: stem_frequencies[stem]}
-    end
-
-    result = {
-      wordcloud: word_cloud_ready_words,
-      stem_frequencies: stem_frequencies}
-  end
-
-  def trigrams(survey, filter, category)
-    filtered_answers = filter_answers(answers, filter, category)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
-
-    stem_frequencies = Hash.new(0)
-    stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
-
-    def build_key(stem1, stem2, stem3)
-      key_parts = [stem1, stem2, stem3].sort
-      key = "#{key_parts[0]} #{key_parts[1]} #{key_parts[2]}"
-    end
-
-    max_delta = 4
-    proc_answers.each do |proc_answer|
-      unless proc_answer.stemmed_text == "0"
-        stems = proc_answer.stemmed_text.downcase.split(' ')
-        origins = proc_answer.unstemmed_text.downcase.split(' ')
-
-        (0..stems.length - 1).each do |i|
-          max_k = [stems.length - 1, i + max_delta].min
-          (i + 1..max_k).each do |j|
-            (j + 1..max_k).each do |k|
-              i_stem = stems[i]
-              j_stem = stems[j]
-              k_stem = stems[k]
-
-              i_origin = origins[i]
-              j_origin = origins[j]
-              k_origin = origins[k]
-
-              key = build_key(i_stem, j_stem, k_stem)
-              value = "#{i_origin} #{j_origin} #{k_origin}"
-
-              stem_frequencies[key] += 1
-              stem_origins[key][value] += 1
-            end
+          (index_iterator + 1..n - 1).each do |i|
+            indices[i] = indices[i - 1] + 1
           end
         end
       end

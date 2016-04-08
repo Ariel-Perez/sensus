@@ -18,9 +18,15 @@ hr
     a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
       i.glyphicon.glyphicon-stats
       | Generar Gráfico
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_wordcloud_path(@survey, @question) : question_wordcloud_path(@question)}"
+    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_unigrams_path(@survey, @question) : question_unigrams_path(@question)}"
       i.glyphicon.glyphicon-cloud
-      | Nube de Palabras
+      | Nube de Unigramas
+    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_bigrams_path(@survey, @question) : question_bigrams_path(@question)}"
+      i.glyphicon.glyphicon-cloud
+      | Nube de Bigramas
+    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_trigrams_path(@survey, @question) : question_trigrams_path(@question)}"
+      i.glyphicon.glyphicon-cloud
+      | Nube de Trigramas
     / a.add-filters.btn.btn-wide.btn-primary.text-left href="#{question_download_classifications_path(@question)}"
     /   i.glyphicon.glyphicon-download
     /   | Descargar Datos
