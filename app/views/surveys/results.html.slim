@@ -1,8 +1,15 @@
-h1 = "#{@model.name} - #{@survey.name}"
+ol.breadcrumb
+  li
+    a href="/"
+      i.glyphicon.glyphicon-home
+  li
+    a href="#{results_path}" Resultados
+  li.active = "#{@survey.survey_model.name} - #{@survey.name}"
+
+h4 Seleccione una pregunta
 
 .row
   .col-md-12
-    h3 Preguntas
     .list-group
     - @model.questions.each do |question|
       = link_to survey_question_charts_path(@survey, question), {class: 'list-group-item'}

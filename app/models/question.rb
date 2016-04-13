@@ -10,7 +10,7 @@
 #  updated_at      :datetime         not null
 #  survey_model_id :integer
 #
-
+require 'set'
 class Question < ActiveRecord::Base
   include HashHelper
 
@@ -23,7 +23,18 @@ class Question < ActiveRecord::Base
   has_many :answers
   has_many :categories
 
-  def unigrams(survey, filter, category)
+  def next
+    Question.where(survey_model_id: survey_model_id).where("index > ?", index).order(:index).first
+  end
+
+  def previous
+    Question.where(survey_model_id: survey_model_id).where("index < ?", index).order(:index).last
+  end
+
+  def unigrams(survey, filter, category, remove_ngrams)
+    skip_ngrams = hash_ngrams remove_ngrams
+    puts skip_ngrams.to_a.to_s
+
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
 
@@ -36,8 +47,10 @@ class Question < ActiveRecord::Base
         origins = proc_answer.unstemmed_text.downcase.split(' ')
 
         stems.zip origins.each do |stem, origin|
-          stem_frequencies[stem] += 1
-          stem_origins[stem][origin] += 1
+          unless skip_ngrams.include? origin
+            stem_frequencies[stem] += 1
+            stem_origins[stem][origin] += 1
+          end
         end
       end
     end
@@ -45,7 +58,8 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, 100)
   end
 
-  def bigrams(survey, filter, category)
+  def bigrams(survey, filter, category, remove_ngrams)
+    skip_ngrams = hash_ngrams remove_ngrams
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
 
@@ -74,9 +88,10 @@ class Question < ActiveRecord::Base
 
             key = build_key(i_stem, j_stem)
             value = "#{i_origin} #{j_origin}"
-
-            stem_frequencies[key] += 1
-            stem_origins[key][value] += 1
+            unless skip_ngrams.include? value.split(' ').sort().join(' ')
+              stem_frequencies[key] += 1
+              stem_origins[key][value] += 1
+            end
           end
         end
       end
@@ -85,7 +100,8 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, 100)
   end
 
-  def trigrams(survey, filter, category)
+  def trigrams(survey, filter, category, remove_ngrams)
+    skip_ngrams = hash_ngrams remove_ngrams
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
 
@@ -118,8 +134,10 @@ class Question < ActiveRecord::Base
               key = build_key(i_stem, j_stem, k_stem)
               value = "#{i_origin} #{j_origin} #{k_origin}"
 
-              stem_frequencies[key] += 1
-              stem_origins[key][value] += 1
+              unless skip_ngrams.include? value.split(' ').sort().join(' ')
+                stem_frequencies[key] += 1
+                stem_origins[key][value] += 1
+              end
             end
           end
         end
@@ -129,7 +147,8 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, 100)
   end
 
-  def ngrams(survey, n, filter, category)
+  def ngrams(survey, n, filter, category, remove_ngrams)
+    skip_ngrams = hash_ngrams remove_ngrams
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
 
@@ -157,8 +176,10 @@ class Question < ActiveRecord::Base
           key = build_key(ngram_stems)
           value = ngram_origins.join(' ')
 
-          stem_frequencies[key] += 1
-          stem_origins[key][value] += 1
+          unless skip_ngrams.include? value.split(' ').sort().join(' ')
+            stem_frequencies[key] += 1
+            stem_origins[key][value] += 1
+          end
 
           index_iterator = n - 1
           indices[index_iterator] += 1
@@ -207,5 +228,10 @@ class Question < ActiveRecord::Base
       result = {
         wordcloud: word_cloud_ready_words,
         stem_frequencies: stem_frequencies}
+    end
+
+    def hash_ngrams(remove_ngrams)
+      ngrams = remove_ngrams.downcase.split(',')
+      Set.new ngrams.map { |ngram| ngram.split(' ').sort().join(' ') }
     end
 end

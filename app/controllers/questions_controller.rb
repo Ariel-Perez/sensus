@@ -33,6 +33,7 @@ class QuestionsController < ApplicationController
       answer_id: @answers.pluck(:id)).
       group(:category_id).count()
 
+    gon.remove_ngrams = params[:remove_ngrams]
     gon.category_names = @categories.pluck(:name)
     gon.category_counts = @categories.map { |category| @answer_categories[category.id] }
   end
@@ -120,36 +121,48 @@ class QuestionsController < ApplicationController
   def unigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.unigrams(@survey, params[:filter], params[:category])
+    result = @question.unigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
+
+    @n = 1
+    gon.n = @n
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
     gon.filter = params[:filter]
     gon.category = params[:category]
+    gon.remove_ngrams = params[:remove_ngrams]
     render :wordcloud
   end
 
   def bigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.bigrams(@survey, params[:filter], params[:category])
+    result = @question.bigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
+
+    @n = 2
+    gon.n = @n
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
     gon.filter = params[:filter]
     gon.category = params[:category]
+    gon.remove_ngrams = params[:remove_ngrams]
     render :wordcloud
   end
 
   def trigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:id)
-    result = @question.trigrams(@survey, params[:filter], params[:category])
+    result = @question.trigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
+
+    @n = 3
+    gon.n = @n
 
     gon.word_frequencies = result[:wordcloud]
     gon.highest_frequency = result[:stem_frequencies].values.max
     gon.filter = params[:filter]
     gon.category = params[:category]
+    gon.remove_ngrams = params[:remove_ngrams]
     render :wordcloud
   end
 

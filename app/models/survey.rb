@@ -21,4 +21,8 @@ class Survey < ActiveRecord::Base
   belongs_to :survey_model
   has_many :answers
   has_many :answer_categories, through: :answers
+
+  def questions
+    survey_model.questions
+  end
 end

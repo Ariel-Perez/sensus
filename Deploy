@@ -139,3 +139,46 @@ rails server -e production -b 0.0.0.0 -p 3001 -d &
 =======================================
 echo `ps aux | grep [r]esque | grep -v grep | cut -c 10-16`
 sudo kill -9  `ps aux | grep [r]esque | grep -v grep | cut -c 10-16`
+
+(Server) - Servir desde Apache
+         - Usar Passenger (https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/integration_mode.html)
+=======================================
+# Install PGP key and add HTTPS support for APT
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
+sudo apt-get install -y apt-transport-https ca-certificates
+
+# Add our APT repository
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main > /etc/apt/sources.list.d/passenger.list'
+sudo apt-get update
+
+# Install Passenger + Apache module
+sudo apt-get install -y libapache2-mod-passenger
+
+# Enable Apache and Restart Apache
+sudo a2enmod passenger
+sudo apache2ctl restart
+
+# Keep up to date
+sudo apt-get update
+sudo apt-get upgrade
+
+# Add to file /etc/apache2/sites-available
+<VirtualHost *:80>
+    ...
+
+    # Configure the right version of Ruby
+    PassengerRuby /home/foris/.rubies/ruby-2.3.0/bin/ruby
+
+    # Tell Apache and Passenger where your app's 'public' directory is
+    Alias /sensus /var/www/sensus/current/public
+    <Location /sensus>
+      PassengerBaseUri /sensus
+      PassengerAppRoot /var/www/sensus/current
+    </Location>
+    # Relax Apache security settings
+    <Directory /var/www/sensus/current>
+      Allow from all
+      Options -MultiViews
+      Require all granted
+    </Directory>
+</VirtualHost>

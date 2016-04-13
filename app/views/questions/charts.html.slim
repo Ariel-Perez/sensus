@@ -1,10 +1,40 @@
-h1 = "#{@question.survey_model.name} #{@survey ? '- ' + @survey.name : ''}"
-h3 = "#{@question.label}: #{@question.description}"
-h4 = "Clasificadas: (#{@all_categorized_answers}/#{@total_answers})"
-hr
+ol.breadcrumb
+  li
+    a href="/"
+      i.glyphicon.glyphicon-home
+  li
+    a href="#{results_path}" Resultados
+  -if @survey
+    li
+      a href="#{survey_results_path(@survey)}" = "#{@question.survey_model.name} - #{@survey.name}"
+    li.active = @question.label
+  -else
+    li
+      a href="#{survey_model_path(@question.survey_model)}" = "#{@question.survey_model.name} - #{@question.label}"
+nav
+  ul.pagination
+    - @next = @question.next
+    - @previous = @question.previous
+    - @questions = @question.survey_model.questions.order(:index)
 
+    li class="#{@previous ? "" : "disabled"}"
+      a href="#{@previous ? (@survey ? survey_question_charts_path(@survey, @previous) : question_charts_path(@previous)) : "#"}" aria-label="Previous"
+        span aria-hidden="true" &laquo;
+    - @questions.each do |q|
+      li class="#{q == @question ? "active" : ""}"
+        a href="#{q == @question ? "#" : (@survey ? survey_question_charts_path(@survey, q) : question_charts_path(q))}"
+          = q.label
+    li class="#{@next ? "" : "disabled"}"
+      a href="#{@next ? (@survey ? survey_question_charts_path(@survey, @next) : question_charts_path(@next)) : "#"}" aria-label="Next"
+        span aria-hidden="true" &raquo;
+
+h4 = @question.label + ": " + @question.description
+hr
 .row
   .col-xs-12.col-md-3
+    h4
+      i.glyphicon.glyphicon-filter
+      | Filtros
     - @filters.each do |filter|
       select.filter.form-control
         option value="0" = "No filtrar por #{filter.name}"
@@ -14,76 +44,88 @@ hr
       option value="0" No filtrar por Categoría
       - @categories.each do |category|
         option value="#{category.id}" = category.name
+    input#ngram-filter.hidden.form-control type="text" name="ngram-filter" placeholder="Ingrese palabras separadas por coma"
+    hr
+    a#filter.add-filters.btn.btn-lg.btn-wide.btn-success href="#" Aplicar Filtro
 
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
-      i.glyphicon.glyphicon-stats
-      | Generar Gráfico
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_unigrams_path(@survey, @question) : question_unigrams_path(@question)}"
-      i.glyphicon.glyphicon-cloud
-      | Nube de Unigramas
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_bigrams_path(@survey, @question) : question_bigrams_path(@question)}"
-      i.glyphicon.glyphicon-cloud
-      | Nube de Bigramas
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_trigrams_path(@survey, @question) : question_trigrams_path(@question)}"
-      i.glyphicon.glyphicon-cloud
-      | Nube de Trigramas
-    / a.add-filters.btn.btn-wide.btn-primary.text-left href="#{question_download_classifications_path(@question)}"
-    /   i.glyphicon.glyphicon-download
-    /   | Descargar Datos
   .col-xs-12.col-md-9
     .row
       .col-xs-12
+        ul.nav.nav-tabs
+          li.active.col-xs-6.col-sm-3.text-center role="presentation"
+            a.add-filters href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}" Gráfico
+          li.col-xs-6.col-sm-3.text-center role="presentation"
+            a.add-filters href="#{@survey ? survey_question_unigrams_path(@survey, @question) : question_unigrams_path(@question)}"
+              i.glyphicon.glyphicon-cloud
+              | Unigramas
+          li.col-xs-6.col-sm-3.text-center role="presentation"
+            a.add-filters href="#{@survey ? survey_question_bigrams_path(@survey, @question) : question_bigrams_path(@question)}"
+              i.glyphicon.glyphicon-cloud
+              | Bigramas
+          li.col-xs-6.col-sm-3.text-center role="presentation"
+            a.add-filters href="#{@survey ? survey_question_trigrams_path(@survey, @question) : question_trigrams_path(@question)}"
+              i.glyphicon.glyphicon-cloud
+              | Trigramas
         canvas#my-chart width="850" height="400"
-        javascript:
-          // Use this sometime.
-          var data = {
-            labels: gon.category_names,
-            datasets: [
-              {
-                label: "My First dataset",
-                fillColor: "rgba(91,144,191,0.5)",
-                strokeColor: "rgba(82,128,169,0.8)",
-                highlightFill: "rgba(91,144,191,0.75)",
-                highlightStroke: "rgba(82,128,169,1.0)",
-                data: gon.category_counts
-              }
-            ]
-          };
 
-          // Get context with jQuery - using jQuery's .get() method.
-          var ctx = $("#my-chart").get(0).getContext("2d");
-          // This will get the first returned node in the jQuery collection.
-          var myBarChart = new Chart(ctx).Bar(data, {});
+javascript:
+  // Use this sometime.
+  var data = {
+    labels: gon.category_names,
+    datasets: [
+      {
+        label: "My First dataset",
+        fillColor: "rgba(91,144,191,0.5)",
+        strokeColor: "rgba(82,128,169,0.8)",
+        highlightFill: "rgba(91,144,191,0.75)",
+        highlightStroke: "rgba(82,128,169,1.0)",
+        data: gon.category_counts
+      }
+    ]
+  };
 
-          // Set filters
-          if (gon.filter) {
-            var filters = gon.filter.split(',');
-            filters.forEach(function(value, index) {
-              if (value != '0') {
-                $('select.filter')[index].value = value;
-              }
-            });
-          }
-          if (gon.category) {
-            $('#category').val(gon.category);
-          }
+  // Get context with jQuery - using jQuery's .get() method.
+  var ctx = $("#my-chart").get(0).getContext("2d");
+  // This will get the first returned node in the jQuery collection.
+  var myBarChart = new Chart(ctx).Bar(data, {});
 
-          $('.add-filters').click(function(event) {
-            event.preventDefault();
-            var new_link = $(this).attr('href') + '?filter=';
+  // Set filters
+  if (gon.filter) {
+    var filters = gon.filter.split(',');
+    filters.forEach(function(value, index) {
+      if (value != '0') {
+        $('select.filter')[index].value = value;
+      }
+    });
+  }
+  if (gon.category) {
+    $('#category').val(gon.category);
+  }
+  if (gon.remove_ngrams) {
+    $('#ngram-filter').val(gon.remove_ngrams);
+  }
 
-            var filters = $('select.filter');
-            filters.each(function(i, e) {
-              if (i > 0) {
-                new_link += ',';
-              }
-              new_link += e.value;
-            });
+  $('#filter').attr('href', window.location.pathname);
+  $('.add-filters').click(function(event) {
+    event.preventDefault();
+    var new_link = $(this).attr('href') + '?filter=';
 
-            var category = $('select#category').val();
-            new_link += '&category=' + category;
+    var filters = $('select.filter');
+    filters.each(function(i, e) {
+      if (i > 0) {
+        new_link += ',';
+      }
+      new_link += e.value;
+    });
 
-            window.location = new_link;
-          });
+    var category = $('select#category').val();
+    new_link += '&category=' + category;
 
+    var ngram_filter = $('#ngram-filter').val();
+    ngram_filter = ngram_filter.replace(/ +/g, ' ');
 
+    var ngrams = ngram_filter.split(',').filter(function(x) { return x.length > 0});
+    new_link += '&remove_ngrams=' + ngrams.join(',')
+
+    window.location = new_link;
+  });

@@ -1,9 +1,41 @@
-h1 = @question.survey_model.name
-h3 = @question.label + ": " + @question.description
+ol.breadcrumb
+  li
+    a href="/"
+      i.glyphicon.glyphicon-home
+  li
+    a href="#{results_path}" Resultados
+  -if @survey
+    li
+      a href="#{survey_results_path(@survey)}" = "#{@question.survey_model.name} - #{@survey.name}"
+    li.active = @question.label
+  -else
+    li
+      a href="#{survey_model_path(@question.survey_model)}" = "#{@question.survey_model.name} - #{@question.label}"
+nav
+  ul.pagination
+    - @next = @question.next
+    - @previous = @question.previous
+    - @questions = @question.survey_model.questions.order(:index)
+
+    li class="#{@previous ? "" : "disabled"}"
+      a href="#{@previous ? (@survey ? survey_question_charts_path(@survey, @previous) : question_charts_path(@previous)) : "#"}" aria-label="Previous"
+        span aria-hidden="true" &laquo;
+    - @questions.each do |q|
+      li class="#{q == @question ? "active" : ""}"
+        a href="#{q == @question ? "#" : (@survey ? survey_question_charts_path(@survey, q) : question_charts_path(q))}"
+          = q.label
+    li class="#{@next ? "" : "disabled"}"
+      a href="#{@next ? (@survey ? survey_question_charts_path(@survey, @next) : question_charts_path(@next)) : "#"}" aria-label="Next"
+        span aria-hidden="true" &raquo;
+
+h4 = @question.label + ": " + @question.description
 hr
 
 .row
   .col-xs-12.col-md-3
+    h4
+      i.glyphicon.glyphicon-filter
+      | Filtros
     - @filters.each do |filter|
       select.filter.form-control
         option value="0" = "No filtrar por #{filter.name}"
@@ -13,25 +45,34 @@ hr
       option value="0" No filtrar por Categoría
       - @categories.each do |category|
         option value="#{category.id}" = category.name
+    label for="ngram-filter"
+      i.glyphicon.glyphicon-remove-sign
+      | Eliminar N-gramas
+    .form-group
+      textarea#ngram-filter.form-control rows="2" name="ngram-filter" placeholder="Separe n-gramas por comas"
+    hr
+    a#filter.add-filters.btn.btn-lg.btn-wide.btn-success href="#" Aplicar Filtro
 
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
-      i.glyphicon.glyphicon-stats
-      | Generar Gráfico
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_unigrams_path(@survey, @question) : question_unigrams_path(@question)}"
-      i.glyphicon.glyphicon-cloud
-      | Nube de Unigramas
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_bigrams_path(@survey, @question) : question_bigrams_path(@question)}"
-      i.glyphicon.glyphicon-cloud
-      | Nube de Bigramas
-    a.add-filters.btn.btn-wide.btn-success.text-left href="#{@survey ? survey_question_trigrams_path(@survey, @question) : question_trigrams_path(@question)}"
-      i.glyphicon.glyphicon-cloud
-      | Nube de Trigramas
-    / a.add-filters.btn.btn-wide.btn-primary.text-left href="#{question_download_classifications_path(@question)}"
-    /   i.glyphicon.glyphicon-download
-    /   | Descargar Datos
   .col-xs-12.col-md-9
     .row
       .col-xs-12
+        ul.nav.nav-tabs
+          li.col-xs-6.col-sm-3.text-center role="presentation"
+            a.add-filters href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
+              i.glyphicon.glyphicon-stats
+              | Gráfico
+          li.col-xs-6.col-sm-3.text-center role="presentation" class="#{@n == 1 ? 'active': ''}"
+            a.add-filters href="#{@survey ? survey_question_unigrams_path(@survey, @question) : question_unigrams_path(@question)}"
+              i.glyphicon.glyphicon-cloud
+              | Unigramas
+          li.col-xs-6.col-sm-3.text-center role="presentation" class="#{@n == 2 ? 'active': ''}"
+            a.add-filters href="#{@survey ? survey_question_bigrams_path(@survey, @question) : question_bigrams_path(@question)}"
+              i.glyphicon.glyphicon-cloud
+              | Bigramas
+          li.col-xs-6.col-sm-3.text-center role="presentation" class="#{@n == 3 ? 'active': ''}"
+            a.add-filters href="#{@survey ? survey_question_trigrams_path(@survey, @question) : question_trigrams_path(@question)}"
+              i.glyphicon.glyphicon-cloud
+              | Trigramas
         div#canvas width="850" height="400"
 
 javascript:
@@ -76,6 +117,33 @@ javascript:
   });
 
   // Set filters
+  function getNgrams() {
+    var text = $('#ngram-filter').val();
+    text = text.replace(/ +/g, ' ');
+    var ngrams = text.split(',').filter(function(x) { return x.length > 0; });
+    return ngrams.map(function(x) { return x.trim(); });
+  }
+  function checkNgrams() {
+    invalid_ngrams = [];
+    ngrams = getNgrams();
+    ngrams.forEach(function(ngram, index) {
+      if (ngram.split(' ').length != gon.n) {
+        invalid_ngrams.push('"' + ngram + '"');
+      }
+    });
+
+    if (invalid_ngrams.length > 0) {
+      $('#ngram-filter').parent().addClass('has-error');
+      $('#ngram-filter').attr('title', 'El filtro contiene n-gramas inválidos: ' + invalid_ngrams.join(','));
+      console.log('invalid');
+    } else {
+      $('#ngram-filter').parent().removeClass('has-error');
+      console.log('valid');
+    }
+  }
+  $('#ngram-filter').change(function(){
+    checkNgrams();
+  });
   if (gon.filter) {
     var filters = gon.filter.split(',');
     filters.forEach(function(value, index) {
@@ -87,6 +155,12 @@ javascript:
   if (gon.category) {
     $('#category').val(gon.category);
   }
+  if (gon.remove_ngrams) {
+    $('#ngram-filter').val(gon.remove_ngrams);
+    checkNgrams();
+  }
+
+  $('#filter').attr('href', window.location.pathname);
 
   $('.add-filters').click(function(event) {
     event.preventDefault();
@@ -102,6 +176,9 @@ javascript:
 
     var category = $('select#category').val();
     new_link += '&category=' + category;
+
+    var ngrams = getNgrams();
+    new_link += '&remove_ngrams=' + ngrams.join(',')
 
     window.location = new_link;
   });
