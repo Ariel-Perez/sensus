@@ -74,7 +74,7 @@ javascript:
     "Positivo": "rgba(161,212,144,0.8)",
     "Negativo": "rgba(212,161,144,0.8)"
     };
-  var datasets = gon.data.map(function(sentiment) {
+  var datasets = gon.datasets.map(function(sentiment) {
     var dataset = {
       label: sentiment.name,
       data: sentiment.data
