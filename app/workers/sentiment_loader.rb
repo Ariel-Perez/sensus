@@ -23,9 +23,9 @@ class SentimentLoader
       student_id = row[1].to_s
       original_text = row[2].to_s
       sentiment = row[3].to_s.encode 'UTF-8'
-      sentiment_id = sentiment_hash[sentiment]
-
-      inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+      if sentiment.length > 0
+        sentiment_id = sentiment_hash[sentiment]
+        inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
     end
 
     sql = "INSERT INTO answer_sentiments (answer_id, sentiment_id, created_at, updated_at) VALUES #{inserts.join(", ")};"

@@ -10,7 +10,7 @@ sm = SurveyModel.find_or_create_by(name: 'Encuesta Oficial Inacap', student_iden
 
 positive = Sentiment.find_or_create_by(name: "Positivo")
 negative = Sentiment.find_or_create_by(name: "Negativo")
-neutral = Sentiment.find_or_create_by(name: "Neutral")
+neutral = Sentiment.find_or_create_by(name: "Neutro")
 
 Filter.find_or_create_by(survey_model_id: sm.id, name: 'Sede')
 Filter.find_or_create_by(survey_model_id: sm.id, name: 'Jornada')
