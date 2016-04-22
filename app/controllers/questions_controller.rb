@@ -22,33 +22,18 @@ class QuestionsController < ApplicationController
     if @survey
       @answers = @answers.where(survey_id: @survey.id)
     end
-    @total_answers = @answers.count
-
-    @all_categorized_answers = AnswerCategory.where(
-      category_id: @categories.pluck(:id), answer_id: @answers.pluck(:id)).
-      group(:answer_id).count.count
 
     @answers = filter_answers(@answers)
 
     @sentiments = Sentiment.all
 
-    # @answer_categories = AnswerCategory.where(
-    #   answer_id: @answers.pluck(:id))
-    #.
-    #  group(:category_id).count()
-
     gon.remove_ngrams = params[:remove_ngrams]
     gon.category_names = @categories.pluck(:name)
 
-    datasets = []
-    @sentiments.each do |sentiment|
-      sentiment_exclusive_answer_ids = @answers.where(id: sentiment.answers.pluck(:id)).pluck(:id)
-      category_indexed_data = AnswerCategory.where(answer_id: sentiment_exclusive_answer_ids).group(:category_id).count()
-
-      data = @categories.map { |category| category_indexed_data[category.id] }
-      dataset = { data: data, name: sentiment.name }
-      datasets.push dataset
-    end
+    data = @answers.joins(:answer_sentiments, :answer_categories).group(:sentiment_id, :category_id).count()
+    datasets = @sentiments.map { |sentiment| {
+      data: @categories.map { |category| data[[sentiment.id, category.id]].to_i },
+      name: sentiment.name } }
 
     gon.datasets = datasets
   end
