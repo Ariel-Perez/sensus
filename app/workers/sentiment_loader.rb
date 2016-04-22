@@ -26,6 +26,7 @@ class SentimentLoader
       if sentiment.length > 0
         sentiment_id = sentiment_hash[sentiment]
         inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+      end
     end
 
     sql = "INSERT INTO answer_sentiments (answer_id, sentiment_id, created_at, updated_at) VALUES #{inserts.join(", ")};"
