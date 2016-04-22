@@ -70,24 +70,24 @@ hr
 
 javascript:
   // Use this sometime.
+  var colors = {
+    "Positivo": "rgba(161,212,144,0.8)",
+    "Negativo": "rgba(212,161,144,0.8)"
+    };
+  var datasets = gon.data.map(function(sentiment) {
+    var dataset = {
+      label: sentiment.name,
+      data: sentiment.data
+    };
+    if (colors[sentiment.name]) {
+      dataset['backgroundColor'] = colors[sentiment.name];
+    }
+    return dataset;
+  });
+
   var data = {
     labels: gon.category_names,
-    datasets: [
-      {
-        label: "Positivo",
-        backgroundColor: "rgba(161,212,144,0.8)",
-        data: gon.category_counts
-      },
-      {
-        label: "Neutro",
-        data: gon.category_counts
-      },
-      {
-        label: "Negativo",
-        backgroundColor: "rgba(212,161,144,0.8)",
-        data: gon.category_counts
-      }
-    ]
+    datasets: datasets,
   };
 
   window.onload = function() {

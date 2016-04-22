@@ -29,13 +29,24 @@ class QuestionsController < ApplicationController
       group(:answer_id).count.count
 
     @answers = filter_answers(@answers)
+
+    @sentiments = Sentiment.all
+
     @answer_categories = AnswerCategory.where(
-      answer_id: @answers.pluck(:id)).
-      group(:category_id).count()
+      answer_id: @answers.pluck(:id))
+    #.
+    #  group(:category_id).count()
 
     gon.remove_ngrams = params[:remove_ngrams]
     gon.category_names = @categories.pluck(:name)
-    gon.category_counts = @categories.map { |category| @answer_categories[category.id] }
+    gon.data = @sentiments.map { |sentiment|
+      {
+        data: @categories.map { |category|
+          @answer_categories.where(answer_id: sentiment.answers.pluck(:id))[category.id]
+        },
+        name: sentiment.name
+      }
+    }
   end
 
   def create

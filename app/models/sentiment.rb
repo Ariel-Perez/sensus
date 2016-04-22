@@ -7,5 +7,6 @@
 #
 
 class Sentiment < ActiveRecord::Base
-  has_many :answers
+  has_many :answer_sentiments
+  has_many :answers, through: :answer_sentiments
 end
