@@ -40,6 +40,7 @@ Sensus::Application.routes.draw do
       get 'answers'
       post 'upload_stems'
       post 'upload_classifications'
+      post 'upload_sentiments'
     end
   end
 
@@ -54,6 +55,7 @@ Sensus::Application.routes.draw do
     get 'charts'
     post 'upload_stems'
     post 'upload_classifications'
+    post 'upload_sentiments'
   end
 
   mount Resque::Server, :at => "/resque"

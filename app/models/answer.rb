@@ -20,6 +20,9 @@ class Answer < ActiveRecord::Base
   belongs_to :survey
   belongs_to :question
 
+  has_many :answer_sentiments
+  has_many :sentiments, through: :answer_sentiments
+
   has_many :answer_categories
   has_many :categories, through: :answer_categories
 end

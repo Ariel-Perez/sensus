@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160406213218) do
+ActiveRecord::Schema.define(version: 20160422052325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,18 @@ ActiveRecord::Schema.define(version: 20160406213218) do
   add_index "answer_categories", ["answer_id"], name: "index_answer_categories_on_answer_id", using: :btree
   add_index "answer_categories", ["category_id"], name: "index_answer_categories_on_category_id", using: :btree
   add_index "answer_categories", ["user_id"], name: "index_answer_categories_on_user_id", using: :btree
+
+  create_table "answer_sentiments", force: :cascade do |t|
+    t.integer  "answer_id"
+    t.integer  "sentiment_id"
+    t.integer  "user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "answer_sentiments", ["answer_id"], name: "index_answer_sentiments_on_answer_id", using: :btree
+  add_index "answer_sentiments", ["sentiment_id"], name: "index_answer_sentiments_on_sentiment_id", using: :btree
+  add_index "answer_sentiments", ["user_id"], name: "index_answer_sentiments_on_user_id", using: :btree
 
   create_table "answers", force: :cascade do |t|
     t.string   "text"
@@ -89,6 +101,10 @@ ActiveRecord::Schema.define(version: 20160406213218) do
 
   add_index "questions", ["survey_model_id"], name: "index_questions_on_survey_model_id", using: :btree
 
+  create_table "sentiments", force: :cascade do |t|
+    t.string "name"
+  end
+
   create_table "student_survey_filter_values", force: :cascade do |t|
     t.integer  "filter_value_id"
     t.integer  "survey_id"
@@ -143,6 +159,9 @@ ActiveRecord::Schema.define(version: 20160406213218) do
   add_foreign_key "answer_categories", "answers"
   add_foreign_key "answer_categories", "categories"
   add_foreign_key "answer_categories", "users"
+  add_foreign_key "answer_sentiments", "answers"
+  add_foreign_key "answer_sentiments", "sentiments"
+  add_foreign_key "answer_sentiments", "users"
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "students"
   add_foreign_key "answers", "surveys"
