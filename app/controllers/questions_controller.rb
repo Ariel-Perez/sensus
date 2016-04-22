@@ -46,7 +46,8 @@ class QuestionsController < ApplicationController
       category_indexed_data = AnswerCategory.where(answer_id: sentiment_exclusive_answer_ids).group(:category_id).count()
 
       data = @categories.map { |category| category_indexed_data[category.id] }
-      datasets.push { data: data, name: sentiment.name }
+      dataset = { data: data, name: sentiment.name }
+      datasets.push dataset
     end
 
     gon.datasets = datasets
