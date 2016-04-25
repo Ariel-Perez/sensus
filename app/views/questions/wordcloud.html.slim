@@ -126,14 +126,19 @@ javascript:
       $('text').popover({
         html: true,
         container: 'body',
-        title: 'Detalles',
+        title: function() {
+          var index = $(this).attr("data-index");
+          var ngram = gon.word_frequencies[index];
+
+          return 'N-grama "' + ngram.text + '"';
+        },
         content: function() {
           var index = $(this).attr("data-index");
           var ngram = gon.word_frequencies[index];
 
           var content = $('<div></div>');
-          content.append($('<strong>Contador:</strong>'));
-          content.append($('<span>' + ngram.size + '</span>'));
+          content.append($('<strong>Contador: </strong>'));
+          content.append($('<span class="badge pull-right">' + ngram.size + '</span>'));
           content.append($('<hr/>'));
           content.append($('<strong>Ejemplos:</strong>'));
           var samples = $('<ol></ol>');
