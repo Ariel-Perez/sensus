@@ -84,6 +84,7 @@ javascript:
     var fill = d3.scale.category20();
     var height = 400;
     var width = 850;
+    window.index = 0;
 
     function draw(words) {
       d3.select("#canvas").append("svg")
@@ -101,7 +102,36 @@ javascript:
           .attr("transform", function(d) {
             return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
           })
-          .text(function(d) { return d.text; });
+          .text(function(d) { return d.text; })
+          .attr("data-index", function() {
+            return window.index++;
+          })
+          .attr("data-size", function(d) { return d.size; });
+
+      $('text').popover({
+        html: true,
+        container: 'body',
+        title: 'Detalles',
+        content: function() {
+          var index = $(this).attr("data-index");
+          var ngram = gon.word_frequencies[index];
+
+          var content = $('<div></div>');
+          content.append($('<strong>Contador:</strong>'));
+          content.append($('<span>' + ngram.size + '</span>'));
+          content.append($('<hr/>'));
+          content.append($('<strong>Ejemplos:</strong>'));
+          var samples = $('<ol></ol>');
+          ngram.samples.forEach(function(e, i) {
+            samples.append($('<li>' + e + '</li>'));
+          });
+          content.append(samples);
+          return content.html();
+        },
+        placement: 'auto right',
+        trigger: 'click',
+        viewport: '#canvas svg'
+      });
     }
 
     var layout = cloud()

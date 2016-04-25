@@ -1,0 +1,8 @@
+#canvas svg text
+{
+  cursor: pointer;
+}
+
+#canvas svg text:hover{
+  opacity: .7;
+}
