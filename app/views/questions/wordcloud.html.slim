@@ -82,6 +82,9 @@ javascript:
       sumFrequency += gon.wordcloud_data[x].size;
       return gon.wordcloud_data[x];
     });
+    ngrams.sort(function(a, b) {
+      return - (a.size - b.size);
+    });
     var avgFrequency = sumFrequency / ngrams.length;
     console.log(avgFrequency);
 
