@@ -33,7 +33,7 @@ class Question < ActiveRecord::Base
 
   def unigrams(survey, filter, category, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
-    puts skip_ngrams.to_a.to_s
+    skip_ngram_stems = Set.new
 
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
@@ -47,7 +47,11 @@ class Question < ActiveRecord::Base
         origins = proc_answer.unstemmed_text.downcase.split(' ')
 
         stems.zip origins.each do |stem, origin|
-          unless skip_ngrams.include? origin
+          if skip_ngrams.include? origin
+            skip_ngram_stems.add(stem)
+            stem_frequencies.delete stem
+            stem_origins.delete stem
+          elsif not skip_ngram_stems.include? stem
             stem_frequencies[stem] += 1
             stem_origins[stem][origin] += 1
           end
@@ -60,6 +64,7 @@ class Question < ActiveRecord::Base
 
   def bigrams(survey, filter, category, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
+    skip_ngram_stems = Set.new
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
 
@@ -83,12 +88,20 @@ class Question < ActiveRecord::Base
             i_stem = stems[i]
             j_stem = stems[j]
 
+            if i_stem == j_stem
+              next
+            end
+
             i_origin = origins[i]
             j_origin = origins[j]
 
             key = build_key(i_stem, j_stem)
             value = "#{i_origin} #{j_origin}"
-            unless skip_ngrams.include? value.split(' ').sort().join(' ')
+            if skip_ngrams.include? value.split(' ').sort().join(' ')
+              skip_ngram_stems.add key
+              stem_frequencies.delete key
+              stem_origins.delete key
+            elsif not skip_ngram_stems.include? key
               stem_frequencies[key] += 1
               stem_origins[key][value] += 1
             end
@@ -102,6 +115,7 @@ class Question < ActiveRecord::Base
 
   def trigrams(survey, filter, category, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
+    skip_ngram_stems = Set.new
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
 
@@ -127,6 +141,10 @@ class Question < ActiveRecord::Base
               j_stem = stems[j]
               k_stem = stems[k]
 
+              if i_stem == j_stem or i_stem == k_stem or j_stem == k_stem
+                next
+              end
+
               i_origin = origins[i]
               j_origin = origins[j]
               k_origin = origins[k]
@@ -134,7 +152,11 @@ class Question < ActiveRecord::Base
               key = build_key(i_stem, j_stem, k_stem)
               value = "#{i_origin} #{j_origin} #{k_origin}"
 
-              unless skip_ngrams.include? value.split(' ').sort().join(' ')
+              if skip_ngrams.include? value.split(' ').sort().join(' ')
+                skip_ngram_stems.add key
+                stem_frequencies.delete key
+                stem_origins.delete key
+              elsif not skip_ngram_stems.include? key
                 stem_frequencies[key] += 1
                 stem_origins[key][value] += 1
               end
@@ -149,6 +171,7 @@ class Question < ActiveRecord::Base
 
   def ngrams(survey, n, filter, category, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
+    skip_ngram_stems = Set.new
     filtered_answers = filter_answers(answers, filter, category)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
 
@@ -171,12 +194,21 @@ class Question < ActiveRecord::Base
 
         while indices[0] <= stems.length - n do
           ngram_stems = indices.map { |index| stems[index] }
+
+          if ngram_stems.uniq.length != n
+            next
+          end
+
           ngram_origins = indices.map { |index| origins[index] }
 
           key = build_key(ngram_stems)
           value = ngram_origins.join(' ')
 
-          unless skip_ngrams.include? value.split(' ').sort().join(' ')
+          if skip_ngrams.include? value.split(' ').sort().join(' ')
+            skip_ngram_stems.add key
+            stem_frequencies.delete key
+            stem_origins.delete key
+          elsif not skip_ngram_stems.include? key
             stem_frequencies[key] += 1
             stem_origins[key][value] += 1
           end
