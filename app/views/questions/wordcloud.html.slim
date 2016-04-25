@@ -108,6 +108,21 @@ javascript:
           })
           .attr("data-size", function(d) { return d.size; });
 
+      $('body').click(function() {
+        $('text').popover('hide');
+      });
+
+      $('text').click(function(event) {
+        event.stopPropagation();
+        var clickedElement = $(this);
+        $('text').each(function(i, e) {
+          if ($(e).attr('data-index') != $(clickedElement).attr('data-index')) {
+            $(e).popover('hide');
+          }
+        });
+        $(clickedElement).popover('toggle');
+      });
+
       $('text').popover({
         html: true,
         container: 'body',
@@ -129,7 +144,7 @@ javascript:
           return content.html();
         },
         placement: 'auto right',
-        trigger: 'click',
+        trigger: 'manual',
         viewport: '#canvas svg'
       });
     }
