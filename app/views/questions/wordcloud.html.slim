@@ -85,8 +85,9 @@ javascript:
     ngrams.sort(function(a, b) {
       return - (a.size - b.size);
     });
+    console.log(ngrams);
+
     var avgFrequency = sumFrequency / ngrams.length;
-    console.log(avgFrequency);
 
     var cloud = d3.layout.cloud;
     var fill = d3.scale.category20();
