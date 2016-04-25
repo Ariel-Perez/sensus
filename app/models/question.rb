@@ -59,7 +59,7 @@ class Question < ActiveRecord::Base
             stem_origins[stem][origin] += 1
 
             if sample_sentences[stem].length < n_samples
-              sample_sentences[stem] << proc_answer.original_text
+              # sample_sentences[stem] << proc_answer.original_text
             end
           end
         end
@@ -118,7 +118,7 @@ class Question < ActiveRecord::Base
               stem_origins[key][value] += 1
 
               if sample_sentences[key].length < n_samples
-                sample_sentences[key] << proc_answer.original_text
+                # sample_sentences[key] << proc_answer.original_text
               end
             end
           end
@@ -180,7 +180,7 @@ class Question < ActiveRecord::Base
                 stem_origins[key][value] += 1
 
                 if sample_sentences[key].length < n_samples
-                  sample_sentences[key] << proc_answer.original_text
+                  # sample_sentences[key] << proc_answer.original_text
                 end
               end
             end
@@ -239,7 +239,7 @@ class Question < ActiveRecord::Base
             stem_origins[key][value] += 1
 
             if sample_sentences[key].length < n_samples
-              sample_sentences[key] << proc_answer.original_text
+              # sample_sentences[key] << proc_answer.original_text
             end
           end
 
