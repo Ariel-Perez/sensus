@@ -42,7 +42,7 @@ hr
           option value="#{value.id}" = "#{value.value}"
     select#category.form-control
       option value="0" No filtrar por Categoría
-      - @categories.order(:name).each do |category|
+      - @categories.each do |category|
         option value="#{category.id}" = category.name
     input#ngram-filter.hidden.form-control type="text" name="ngram-filter" placeholder="Ingrese palabras separadas por coma"
     hr

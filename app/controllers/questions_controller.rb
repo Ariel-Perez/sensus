@@ -17,7 +17,7 @@ class QuestionsController < ApplicationController
 
   def charts
     @filters = @question.survey_model.filters
-    @categories = @question.categories.order(:id)
+    @categories = @question.categories.order(:name)
     @answers = Answer.where(question_id: @question.id)
     if @survey
       @answers = @answers.where(survey_id: @survey.id)
@@ -130,7 +130,7 @@ class QuestionsController < ApplicationController
 
   def unigrams
     @filters = @question.survey_model.filters
-    @categories = @question.categories.order(:id)
+    @categories = @question.categories.order(:name)
     result = @question.unigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
 
     @n = 1
@@ -147,7 +147,7 @@ class QuestionsController < ApplicationController
 
   def bigrams
     @filters = @question.survey_model.filters
-    @categories = @question.categories.order(:id)
+    @categories = @question.categories.order(:name)
     result = @question.bigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
 
     @n = 2
@@ -164,7 +164,7 @@ class QuestionsController < ApplicationController
 
   def trigrams
     @filters = @question.survey_model.filters
-    @categories = @question.categories.order(:id)
+    @categories = @question.categories.order(:name)
     result = @question.trigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
 
     @n = 3
