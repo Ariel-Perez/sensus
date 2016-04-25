@@ -34,12 +34,14 @@ class Question < ActiveRecord::Base
   def unigrams(survey, filter, category, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
+    n_samples = 3
 
     filtered_answers = filter_answers(answers, filter, category)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
+    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
+    sample_sentences = Hash.new {|hash,key| hash[key] = Array.new}
 
     proc_answers.each do |proc_answer|
       unless proc_answer.stemmed_text == "0"
@@ -51,9 +53,14 @@ class Question < ActiveRecord::Base
             skip_ngram_stems.add(stem)
             stem_frequencies.delete stem
             stem_origins.delete stem
+            sample_sentences.delete stem
           elsif not skip_ngram_stems.include? stem
             stem_frequencies[stem] += 1
             stem_origins[stem][origin] += 1
+
+            if sample_sentences[stem].length < n_samples
+              sample_sentences[stem] << proc_answer.answer.text
+            end
           end
         end
       end
@@ -65,11 +72,15 @@ class Question < ActiveRecord::Base
   def bigrams(survey, filter, category, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
+    n_samples = 3
+
     filtered_answers = filter_answers(answers, filter, category)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
+    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
+    sample_sentences = Hash.new {|hash,key| hash[key] = Array.new}
+
 
     def build_key(stem1, stem2)
       key_parts = [stem1, stem2].sort
@@ -101,9 +112,14 @@ class Question < ActiveRecord::Base
               skip_ngram_stems.add key
               stem_frequencies.delete key
               stem_origins.delete key
+              sample_sentences.delete key
             elsif not skip_ngram_stems.include? key
               stem_frequencies[key] += 1
               stem_origins[key][value] += 1
+
+              if sample_sentences[key].length < n_samples
+                sample_sentences[key] << proc_answer.answer.text
+              end
             end
           end
         end
@@ -116,11 +132,14 @@ class Question < ActiveRecord::Base
   def trigrams(survey, filter, category, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
+    n_samples = 3
+
     filtered_answers = filter_answers(answers, filter, category)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
+    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
+    sample_sentences = Hash.new {|hash,key| hash[key] = Array.new}
 
     def build_key(stem1, stem2, stem3)
       key_parts = [stem1, stem2, stem3].sort
@@ -159,6 +178,10 @@ class Question < ActiveRecord::Base
               elsif not skip_ngram_stems.include? key
                 stem_frequencies[key] += 1
                 stem_origins[key][value] += 1
+
+                if sample_sentences[key].length < n_samples
+                  sample_sentences[key] << proc_answer.answer.text
+                end
               end
             end
           end
@@ -172,11 +195,14 @@ class Question < ActiveRecord::Base
   def ngrams(survey, n, filter, category, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
+    n_samples = 3
+
     filtered_answers = filter_answers(answers, filter, category)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id))
+    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
+    sample_sentences = Hash.new {|hash,key| hash[key] = Array.new}
 
     def build_key(stems)
       key_parts = stems.sort
@@ -211,6 +237,10 @@ class Question < ActiveRecord::Base
           elsif not skip_ngram_stems.include? key
             stem_frequencies[key] += 1
             stem_origins[key][value] += 1
+
+            if sample_sentences[key].length < n_samples
+              sample_sentences[key] << proc_answer.answer.text
+            end
           end
 
           index_iterator = n - 1
