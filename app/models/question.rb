@@ -280,20 +280,22 @@ class Question < ActiveRecord::Base
     end
 
     def build_wordcloud_result(stem_frequencies, stem_origins, sample_sentences, n)
-      wordcloud_stems = HashHelper.get_n_largest(stem_frequencies, n)
+      keys = HashHelper.get_n_largest(stem_frequencies, n)
+      data = Hash.new
 
-      word_cloud_ready_words = []
-      wordcloud_stems.each do |stem|
-        word_cloud_ready_words << {
-          text: stem_origins[stem].max_by{|k,v| v}[0],
+      keys.each do |stem|
+        data[stem] = {
+          text: stem_origins[stem].max_by{|k, v| v}[0],
+          stem: stem,
           size: stem_frequencies[stem],
           samples: sample_sentences[stem]
         }
       end
 
       result = {
-        wordcloud: word_cloud_ready_words,
-        stem_frequencies: stem_frequencies}
+        wordcloud_keys: keys,
+        wordcloud_data: data
+      }
     end
 
     def hash_ngrams(remove_ngrams)

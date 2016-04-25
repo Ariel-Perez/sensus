@@ -136,8 +136,9 @@ class QuestionsController < ApplicationController
     @n = 1
     gon.n = @n
 
-    gon.word_frequencies = result[:wordcloud]
-    gon.highest_frequency = result[:stem_frequencies].values.max
+    gon.wordcloud_keys = result[:wordcloud_keys]
+    gon.wordcloud_data = result[:wordcloud_data]
+
     gon.filter = params[:filter]
     gon.category = params[:category]
     gon.remove_ngrams = params[:remove_ngrams]
@@ -152,8 +153,9 @@ class QuestionsController < ApplicationController
     @n = 2
     gon.n = @n
 
-    gon.word_frequencies = result[:wordcloud]
-    gon.highest_frequency = result[:stem_frequencies].values.max
+    gon.wordcloud_keys = result[:wordcloud_keys]
+    gon.wordcloud_data = result[:wordcloud_data]
+
     gon.filter = params[:filter]
     gon.category = params[:category]
     gon.remove_ngrams = params[:remove_ngrams]
@@ -168,8 +170,9 @@ class QuestionsController < ApplicationController
     @n = 3
     gon.n = @n
 
-    gon.word_frequencies = result[:wordcloud]
-    gon.highest_frequency = result[:stem_frequencies].values.max
+    gon.wordcloud_keys = result[:wordcloud_keys]
+    gon.wordcloud_data = result[:wordcloud_data]
+
     gon.filter = params[:filter]
     gon.category = params[:category]
     gon.remove_ngrams = params[:remove_ngrams]
