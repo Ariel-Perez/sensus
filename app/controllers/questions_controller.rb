@@ -50,7 +50,7 @@ class QuestionsController < ApplicationController
     filepath = File.join("public", params[:file].original_filename)
     FileUtils.cp tmp.path, filepath
     Resque.enqueue(StemLoader, filepath)
-    flash[:success] = "Cargando los textos procesados a la base de datos"
+    flash[:success] = "Cargando los textos procesados a la base de datos (#{params[:file].original_filename}"
 
     redirect_to @survey ? survey_question_path(@survey, @question) : question_path(@question)
   end
@@ -61,7 +61,7 @@ class QuestionsController < ApplicationController
     filepath = File.join("public", params[:file].original_filename)
     FileUtils.cp tmp.path, filepath
     Resque.enqueue(ResultLoader, @question.id, filepath)
-    flash[:success] = "Cargando las clasificaciones a la base de datos"
+    flash[:success] = "Cargando las clasificaciones a la base de datos (#{params[:file].original_filename}"
     redirect_to @survey ? survey_question_path(@survey, @question) : question_path(@question)
   end
 
@@ -71,7 +71,17 @@ class QuestionsController < ApplicationController
     filepath = File.join("public", params[:file].original_filename)
     FileUtils.cp tmp.path, filepath
     Resque.enqueue(SentimentLoader, filepath)
-    flash[:success] = "Cargando los sentimientos a la base de datos"
+    flash[:success] = "Cargando los sentimientos a la base de datos (#{params[:file].original_filename}"
+    redirect_to @survey ? survey_question_path(@survey, @question) : question_path(@question)
+  end
+
+  def upload_close_ended_answers
+    require 'fileutils'
+    tmp = params[:file].tempfile
+    filepath = File.join("public", params[:file].original_filename)
+    FileUtils.cp tmp.path, filepath
+    Resque.enqueue(CloseEndedLoader, filepath)
+    flash[:success] = "Cargando las respuestas cerradas a la base de datos (#{params[:file].original_filename})"
     redirect_to @survey ? survey_question_path(@survey, @question) : question_path(@question)
   end
 

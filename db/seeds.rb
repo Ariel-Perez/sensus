@@ -254,3 +254,72 @@ cq51 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás
 cq52 = CloseEndedQuestion.create_with(description: '¿Qué tan dispuesto estarías a recomendar a otras personas estudiar en Inacap').
                         find_or_create_by(survey_model_id: sm.id, label: "P52", index: 12)
 
+QuestionRelationship.create_with(name: "Sub-Dimensión: Satisfacción Inicial Inacap").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P2").id,
+                        close_ended_question_id: cq1.id)
+
+QuestionRelationship.create_with(name: "Sub-Dimensión: Satisfacción Inicial Sede").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P4").id,
+                        close_ended_question_id: cq3.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Conveniencia").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P5.4").id,
+                        close_ended_question_id: cq5_3.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Ciclo Inicial en Inacap").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P7").id,
+                        close_ended_question_id: cq6_5.id)
+
+QuestionRelationship.create_with(name: "Sub-Dimensión: Vicerrector de Sede").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P10").id,
+                        close_ended_question_id: cq9_4.id)
+
+QuestionRelationship.create_with(name: "Sub-Dimensión: Director de Carrera").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P19").id,
+                        close_ended_question_id: cq18_5.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Actividades Extra-Curriculares").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P27").id,
+                        close_ended_question_id: cq29_5.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Actividades Extra-Curriculares").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P28").id,
+                        close_ended_question_id: cq29_5.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Actividades Extra-Curriculares").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P30").id,
+                        close_ended_question_id: cq29_5.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Infraestructura").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P34").id,
+                        close_ended_question_id: cq33_10.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Biblioteca").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P38").id,
+                        close_ended_question_id: cq39_7.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Resolución de Problemas").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P47").id,
+                        close_ended_question_id: cq50_1.id)
+
+QuestionRelationship.create_with(name: "Dimensión: Recomendación").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P53").id,
+                        close_ended_question_id: cq52.id)
+
+QuestionRelationship.create_with(name: "Sub-Dimensión: Satisfacción Final").
+                     find_or_create_by(
+                        question_id: sm.questions.find_by_label("P55").id,
+                        close_ended_question_id: cq51.id)
