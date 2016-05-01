@@ -16,6 +16,16 @@ class CloseEndedLoader
     questions = CloseEndedQuestion.where(survey_model_id: model.id)
     options = Hash.new
 
+    parser = {
+      '1' => "Insatisfecho",
+      '2' => "Insatisfecho",
+      '3' => "Insatisfecho",
+      '4' => "Insatisfecho",
+      '5' => "Neutro",
+      '6' => "Satisfecho",
+      '7' => "Satisfecho"
+    }
+
     questions.each do |q|
       options[q.id] = Hash[ q.options.collect { |x| [x.name, x.id] } ]
     end
@@ -28,17 +38,20 @@ class CloseEndedLoader
       student_id = student_id_map[row[0].to_s]
 
       questions.each do |q|
-        option_text = row[q.index]
-        option = options[q.id][option_text]
-        values = [
-          q.id,
-          student_id,
-          survey_id,
-          option.id,
-          time,
-          time
-        ]
-        inserts.push("(#{values.join(", ")})")
+        content = row[q.index]
+        if content.length > 0
+          option_text = parser[content]
+          option = options[q.id][option_text]
+          values = [
+            q.id,
+            student_id,
+            survey_id,
+            option.id,
+            time,
+            time
+          ]
+          inserts.push("(#{values.join(", ")})")
+        end
       end
     end
 
