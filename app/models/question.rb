@@ -23,6 +23,9 @@ class Question < ActiveRecord::Base
   has_many :answers
   has_many :categories
 
+  has_many :question_relationships
+  has_many :close_ended_questions, through: :question_relationships
+
   def next
     Question.where(survey_model_id: survey_model_id).where("index > ?", index).order(:index).first
   end

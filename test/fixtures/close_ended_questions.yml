@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: close_ended_questions
+#
+#  id              :integer          not null, primary key
+#  survey_model_id :integer
+#  index           :integer
+#  label           :string
+#  description     :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  survey_model_id: 
+  index: 1
+  label: MyString
+  description: MyString
+
+two:
+  survey_model_id: 
+  index: 1
+  label: MyString
+  description: MyString

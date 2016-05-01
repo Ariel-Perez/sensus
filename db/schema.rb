@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160425134118) do
+ActiveRecord::Schema.define(version: 20160501204609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,37 @@ ActiveRecord::Schema.define(version: 20160425134118) do
 
   add_index "categories", ["question_id"], name: "index_categories_on_question_id", using: :btree
 
+  create_table "close_ended_answers", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "close_ended_question_id"
+    t.integer  "survey_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "close_ended_answers", ["close_ended_question_id"], name: "index_close_ended_answers_on_close_ended_question_id", using: :btree
+  add_index "close_ended_answers", ["student_id"], name: "index_close_ended_answers_on_student_id", using: :btree
+  add_index "close_ended_answers", ["survey_id"], name: "index_close_ended_answers_on_survey_id", using: :btree
+
+  create_table "close_ended_questions", force: :cascade do |t|
+    t.integer  "survey_model_id"
+    t.integer  "index"
+    t.string   "label"
+    t.string   "description"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "close_ended_questions", ["survey_model_id"], name: "index_close_ended_questions_on_survey_model_id", using: :btree
+
+  create_table "close_ended_questions_options", id: false, force: :cascade do |t|
+    t.integer "close_ended_question_id"
+    t.integer "option_id"
+  end
+
+  add_index "close_ended_questions_options", ["close_ended_question_id"], name: "index_close_ended_questions_options_on_close_ended_question_id", using: :btree
+  add_index "close_ended_questions_options", ["option_id"], name: "index_close_ended_questions_options_on_option_id", using: :btree
+
   create_table "filter_values", force: :cascade do |t|
     t.string   "value"
     t.integer  "filter_id"
@@ -80,6 +111,12 @@ ActiveRecord::Schema.define(version: 20160425134118) do
 
   add_index "filters", ["survey_model_id"], name: "index_filters_on_survey_model_id", using: :btree
 
+  create_table "options", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "processed_answers", force: :cascade do |t|
     t.string   "stemmed_text"
     t.string   "unstemmed_text"
@@ -90,6 +127,17 @@ ActiveRecord::Schema.define(version: 20160425134118) do
   end
 
   add_index "processed_answers", ["answer_id"], name: "index_processed_answers_on_answer_id", using: :btree
+
+  create_table "question_relationships", id: false, force: :cascade do |t|
+    t.integer  "question_id"
+    t.integer  "close_ended_question_id"
+    t.text     "name"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "question_relationships", ["close_ended_question_id"], name: "index_question_relationships_on_close_ended_question_id", using: :btree
+  add_index "question_relationships", ["question_id"], name: "index_question_relationships_on_question_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
     t.integer  "index"
@@ -167,9 +215,15 @@ ActiveRecord::Schema.define(version: 20160425134118) do
   add_foreign_key "answers", "students"
   add_foreign_key "answers", "surveys"
   add_foreign_key "categories", "questions"
+  add_foreign_key "close_ended_answers", "close_ended_questions"
+  add_foreign_key "close_ended_answers", "students"
+  add_foreign_key "close_ended_answers", "surveys"
+  add_foreign_key "close_ended_questions", "survey_models"
   add_foreign_key "filter_values", "filters"
   add_foreign_key "filters", "survey_models"
   add_foreign_key "processed_answers", "answers"
+  add_foreign_key "question_relationships", "close_ended_questions"
+  add_foreign_key "question_relationships", "questions"
   add_foreign_key "questions", "survey_models"
   add_foreign_key "student_survey_filter_values", "filter_values"
   add_foreign_key "student_survey_filter_values", "students"

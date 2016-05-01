@@ -217,3 +217,40 @@ Category.find_or_create_by(question_id: q.id, name: "Gestión Institucional")
 Category.find_or_create_by(question_id: q.id, name: "Infraestructura")
 Category.find_or_create_by(question_id: q.id, name: "Financiamiento")
 
+
+cq1 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con tu experiencia general como alumno de Inacap?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P1", index: 1)
+
+cq3 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con tu experiencia como alumno de tu Sede de Inacap?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P3", index: 2)
+
+cq5_3 = CloseEndedQuestion.create_with(description: '¿Cuál es tu nivel de satisfacción con la conveniencia de estudiar en Inacap?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P5.3", index: 3)
+
+cq6_5 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con la experiencia inicial que tuviste en tu Sede de Inacap?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P6.5", index: 4)
+
+cq9_4 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con el Vicerrector de tu Sede?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P9.4", index: 5)
+
+cq18_5 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con el Director de tu Carrera?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P18.5", index: 6)
+
+cq29_5 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con las Actividades Extra-curriculares ofrecidas en Inacap?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P29.5", index: 7)
+
+cq33_10 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con la Infraestructura de tu Sede?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P33.10", index: 8)
+
+cq39_7 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con el servicio de la Biblioteca de tu Sede?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P39.7", index: 9)
+
+cq50_1 = CloseEndedQuestion.create_with(description: 'Atención brindada por Inacap frente a tu problema').
+                        find_or_create_by(survey_model_id: sm.id, label: "P50.1", index: 10)
+
+cq51 = CloseEndedQuestion.create_with(description: '¿Qué tan satisfecho estás con tu experiencia como alumno de tu Sede de Inacap?').
+                        find_or_create_by(survey_model_id: sm.id, label: "P51", index: 11)
+
+cq52 = CloseEndedQuestion.create_with(description: '¿Qué tan dispuesto estarías a recomendar a otras personas estudiar en Inacap').
+                        find_or_create_by(survey_model_id: sm.id, label: "P52", index: 12)
+
