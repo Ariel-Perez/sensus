@@ -59,11 +59,11 @@ hr
     .row
       .col-xs-12
         ul.nav.nav-tabs
-          li.active.col-xs-6.col-sm-2.text-center role="presentation"
+          li.col-xs-6.col-sm-2.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
               i.glyphicon.glyphicon-asterisk
               | Categorías
-          li.col-xs-6.col-sm-2.text-center role="presentation"
+          li.active.col-xs-6.col-sm-2.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_clean_charts_path(@survey, @question) : question_clean__charts_path(@question)}"
               i.glyphicon.glyphicon-heart
               | Categorías
@@ -87,24 +87,32 @@ hr
 
 javascript:
   // Use this sometime.
-  var colors = {
-    "Positivo": "rgba(68,157,68,0.8)",
-    "Negativo": "rgba(217,83,79,0.8)"
-    };
-  var datasets = gon.datasets.map(function(sentiment) {
-    var dataset = {
-      label: sentiment.name,
-      data: sentiment.data
-    };
-    if (colors[sentiment.name]) {
-      dataset['backgroundColor'] = colors[sentiment.name];
-    }
-    return dataset;
-  });
+  // var colors = {
+  //   "Positivo": "rgba(68,157,68,0.8)",
+  //   "Negativo": "rgba(217,83,79,0.8)"
+  //   };
+  //var datasets = gon.datasets.map(function(sentiment) {
+  //  var dataset = {
+  //    label: sentiment.name,
+  //    data: sentiment.data
+  //  };
+  //  if (colors[sentiment.name]) {
+  //    dataset['backgroundColor'] = colors[sentiment.name];
+  //  }
+  //  return dataset;
+  //});
 
   var data = {
     labels: gon.category_names,
-    datasets: datasets,
+    datasets: [
+      {
+        label: "# Respuestas",
+        data: gon.datasets,
+        backgroundColor: "rgba(144,195,212,0.8)",
+        borderColor: "rgba(125,180,199,0.8)",
+        borderWidth: 1,
+      }
+    ],
   };
 
   window.onload = function() {
@@ -117,14 +125,7 @@ javascript:
           mode: 'label'
         },
         responsive: true,
-        scales: {
-          xAxes: [{
-            stacked: true,
-          }],
-          yAxes: [{
-            stacked: true
-          }]
-        }
+        legend: false,
       }
     });
   };

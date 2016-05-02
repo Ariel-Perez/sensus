@@ -40,6 +40,50 @@ class QuestionsController < ApplicationController
     gon.relationships = params[:relationships]
   end
 
+  def clean_charts
+    @filters = @question.survey_model.filters
+    @categories = @question.categories.order(:name)
+    @answers = Answer.where(question_id: @question.id)
+    if @survey
+      @answers = @answers.where(survey_id: @survey.id)
+    end
+
+    @relationships = @question.question_relationships.includes(:close_ended_question).includes(close_ended_question: :options)
+    @answers = filter_answers(@answers)
+
+    gon.remove_ngrams = params[:remove_ngrams]
+    gon.category_names = @categories.pluck(:name)
+
+    data = @answers.joins(:answer_categories).group(:category_id).count
+    datasets = @categories.map { |category| data[category.id].to_i }
+
+    gon.datasets = datasets
+    gon.relationships = params[:relationships]
+  end
+
+  def sentiment
+    @filters = @question.survey_model.filters
+    @categories = @question.categories.order(:name)
+    @answers = Answer.where(question_id: @question.id)
+    if @survey
+      @answers = @answers.where(survey_id: @survey.id)
+    end
+
+    @relationships = @question.question_relationships.includes(:close_ended_question).includes(close_ended_question: :options)
+    @answers = filter_answers(@answers)
+
+    @sentiments = Sentiment.order(name: :desc)
+
+    gon.remove_ngrams = params[:remove_ngrams]
+    gon.sentiment_names = @sentiments.pluck(:name)
+
+    data = @answers.joins(:answer_sentiments).group(:sentiment_id).count
+    datasets = @sentiments.map { |sentiment| data[sentiment.id].to_i }
+
+    gon.datasets = datasets
+    gon.relationships = params[:relationships]
+  end
+
   def create
     @question = Question.new(question_params)
     @question.save

@@ -5844,7 +5844,7 @@ module.exports = function(Chart) {
       } else if (dataset.pointBackgroundColor) {
         backgroundColor = helpers.getValueAtIndexOrDefault(dataset.pointBackgroundColor, index, backgroundColor);
       } else if (dataset.backgroundColor) {
-        backgroundColor = dataset.backgroundColor;
+        backgroundColor = Array.isArray(dataset.backgroundColor) ? dataset.backgroundColor[index] : dataset.backgroundColor;
       }
 
       return backgroundColor;
@@ -8750,7 +8750,7 @@ module.exports = function(Chart) {
         return helpers.isArray(data.datasets) ? data.datasets.map(function(dataset, i) {
           return {
             text: dataset.label,
-            fillStyle: dataset.backgroundColor,
+            fillStyle: Array.isArray(dataset.backgroundColor) ? dataset.backgroundColor[i] : dataset.backgroundColor,
             hidden: dataset.hidden,
             lineCap: dataset.borderCapStyle,
             lineDash: dataset.borderDash,

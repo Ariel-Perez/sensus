@@ -48,7 +48,7 @@ hr
     - @relationships.each do |r|
       h5 = r.name
       select.relationships.form-control
-        option value="0" No filtrar por respuesta
+        option value="0" No filtrar por satisfacción
         - r.close_ended_question.options.each do |o|
           option value="#{o.id}" = o.name
     label for="ngram-filter"
@@ -62,19 +62,27 @@ hr
     .row
       .col-xs-12
         ul.nav.nav-tabs
-          li.col-xs-6.col-sm-3.text-center role="presentation"
+          li.col-xs-6.col-sm-2.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
+              i.glyphicon.glyphicon-asterisk
+              | Categorías
+          li.col-xs-6.col-sm-2.text-center role="presentation"
+            a.add-filters href="#{@survey ? survey_question_clean_charts_path(@survey, @question) : question_clean_charts_path(@question)}"
               i.glyphicon.glyphicon-stats
-              | Gráfico
-          li.col-xs-6.col-sm-3.text-center role="presentation" class="#{@n == 1 ? 'active': ''}"
+              | Categorías
+          li.col-xs-6.col-sm-2.text-center role="presentation"
+            a.add-filters href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
+              i.glyphicon.glyphicon-heart
+              | Sentimiento
+          li.col-xs-6.col-sm-2.text-center role="presentation" class="#{@n == 1 ? 'active': ''}"
             a.add-filters href="#{@survey ? survey_question_unigrams_path(@survey, @question) : question_unigrams_path(@question)}"
               i.glyphicon.glyphicon-cloud
               | Unigramas
-          li.col-xs-6.col-sm-3.text-center role="presentation" class="#{@n == 2 ? 'active': ''}"
+          li.col-xs-6.col-sm-2.text-center role="presentation" class="#{@n == 2 ? 'active': ''}"
             a.add-filters href="#{@survey ? survey_question_bigrams_path(@survey, @question) : question_bigrams_path(@question)}"
               i.glyphicon.glyphicon-cloud
               | Bigramas
-          li.col-xs-6.col-sm-3.text-center role="presentation" class="#{@n == 3 ? 'active': ''}"
+          li.col-xs-6.col-sm-2.text-center role="presentation" class="#{@n == 3 ? 'active': ''}"
             a.add-filters href="#{@survey ? survey_question_trigrams_path(@survey, @question) : question_trigrams_path(@question)}"
               i.glyphicon.glyphicon-cloud
               | Trigramas

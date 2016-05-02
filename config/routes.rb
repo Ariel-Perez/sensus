@@ -33,6 +33,8 @@ Sensus::Application.routes.draw do
     post 'upload_close_ended_answers'
     resources :questions do
       get 'charts'
+      get 'clean_charts'
+      get 'sentiment'
       get 'unigrams'
       get 'bigrams'
       get 'trigrams'
@@ -46,14 +48,16 @@ Sensus::Application.routes.draw do
   end
 
   resources :questions do
-    get 'answers'
-    get 'categories'
-    get 'download_answers'
-    get 'download_classifications'
+    get 'charts'
+    get 'clean_charts'
+    get 'sentiment'
     get 'unigrams'
     get 'bigrams'
     get 'trigrams'
-    get 'charts'
+    get 'download_answers'
+    get 'download_classifications'
+    get 'answers'
+    get 'categories'
     post 'upload_stems'
     post 'upload_classifications'
     post 'upload_sentiments'
