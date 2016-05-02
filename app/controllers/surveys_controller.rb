@@ -12,7 +12,7 @@
 #
 
 class SurveysController < ApplicationController
-  before_filter :set_survey, :only => [:show, :update, :delete, :training, :results, :filters, :upload_filters]
+  before_filter :set_survey, :only => [:show, :update, :delete, :training, :results, :filters, :upload_filters, :upload_close_ended_answers]
 
   def index
     @surveys = Survey.all
