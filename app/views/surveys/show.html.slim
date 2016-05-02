@@ -1,10 +1,22 @@
 h1 = "#{@model.name} - #{@survey.name}"
 
 .row
-  .col-md-12
+  .col-sm-8
     h3 Preguntas
     .list-group
     - @model.questions.each do |question|
       = link_to survey_question_path(@survey, question), {class: 'list-group-item'}
         h4.list-group-item-heading = question.label
         p.list-group-item-text = question.description
+
+
+  .col-sm-4
+    h3 Subir Preguntas Cerradas
+    form enctype="multipart/form-data" action="#{survey_upload_close_ended_answers_path(@survey)}" charset="UTF-8" method="post"
+      = hidden_field_tag :authenticity_token, :value => form_authenticity_token
+      = hidden_field_tag :user_id, :value => "#{current_user.id}"
+
+      = label_tag :file, "Archivo"
+      = file_field_tag :file, class: 'form-control'
+
+      input.btn-lg.btn.btn-success type="submit" value="Cargar Respuestas Cerradas"

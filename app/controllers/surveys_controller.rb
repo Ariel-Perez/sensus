@@ -60,6 +60,16 @@ class SurveysController < ApplicationController
     redirect_to @survey
   end
 
+  def upload_close_ended_answers
+    require 'fileutils'
+    tmp = params[:file].tempfile
+    filepath = File.join("public", params[:file].original_filename)
+    FileUtils.cp tmp.path, filepath
+    Resque.enqueue(CloseEndedLoader, @survey.id, filepath)
+    flash[:success] = "Cargando las respuestas cerradas a la base de datos (#{params[:file].original_filename})"
+    redirect_to survey_path(@survey)
+  end
+
   private
     def survey_params
       params.require(:survey).permit(:name, :user_id, :survey_model_id)
