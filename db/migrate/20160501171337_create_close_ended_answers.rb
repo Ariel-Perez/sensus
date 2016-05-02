@@ -4,7 +4,7 @@ class CreateCloseEndedAnswers < ActiveRecord::Migration
       t.references :student, index: true, foreign_key: true
       t.references :close_ended_question, index: true, foreign_key: true
       t.references :survey, index: true, foreign_key: true
-      t.references :survey, index: true, foreign_key: true
+      t.references :option, index: true, foreign_key: true
 
       t.timestamps null: false
     end

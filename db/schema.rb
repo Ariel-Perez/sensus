@@ -66,11 +66,13 @@ ActiveRecord::Schema.define(version: 20160501204609) do
     t.integer  "student_id"
     t.integer  "close_ended_question_id"
     t.integer  "survey_id"
+    t.integer  "option_id"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
 
   add_index "close_ended_answers", ["close_ended_question_id"], name: "index_close_ended_answers_on_close_ended_question_id", using: :btree
+  add_index "close_ended_answers", ["option_id"], name: "index_close_ended_answers_on_option_id", using: :btree
   add_index "close_ended_answers", ["student_id"], name: "index_close_ended_answers_on_student_id", using: :btree
   add_index "close_ended_answers", ["survey_id"], name: "index_close_ended_answers_on_survey_id", using: :btree
 
@@ -216,6 +218,7 @@ ActiveRecord::Schema.define(version: 20160501204609) do
   add_foreign_key "answers", "surveys"
   add_foreign_key "categories", "questions"
   add_foreign_key "close_ended_answers", "close_ended_questions"
+  add_foreign_key "close_ended_answers", "options"
   add_foreign_key "close_ended_answers", "students"
   add_foreign_key "close_ended_answers", "surveys"
   add_foreign_key "close_ended_questions", "survey_models"
