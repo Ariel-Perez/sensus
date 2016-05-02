@@ -23,6 +23,7 @@ class QuestionsController < ApplicationController
       @answers = @answers.where(survey_id: @survey.id)
     end
 
+    @relationships = @question.question_relationships.includes(:close_ended_question).includes(close_ended_question: :options)
     @answers = filter_answers(@answers)
 
     @sentiments = Sentiment.all
@@ -36,6 +37,7 @@ class QuestionsController < ApplicationController
       name: sentiment.name } }
 
     gon.datasets = datasets
+    gon.relationships = params[:relationships]
   end
 
   def create
@@ -131,7 +133,13 @@ class QuestionsController < ApplicationController
   def unigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:name)
-    result = @question.unigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
+    @relationships = @question.question_relationships.includes(:close_ended_question).includes(close_ended_question: :options)
+    result = @question.unigrams(
+      @survey,
+      params[:filter],
+      params[:category],
+      params[:relationships],
+      params[:remove_ngrams])
 
     @n = 1
     gon.n = @n
@@ -141,6 +149,7 @@ class QuestionsController < ApplicationController
 
     gon.filter = params[:filter]
     gon.category = params[:category]
+    gon.relationships = params[:relationships]
     gon.remove_ngrams = params[:remove_ngrams]
     render :wordcloud
   end
@@ -148,7 +157,13 @@ class QuestionsController < ApplicationController
   def bigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:name)
-    result = @question.bigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
+    @relationships = @question.question_relationships.includes(:close_ended_question).includes(close_ended_question: :options)
+    result = @question.bigrams(
+      @survey,
+      params[:filter],
+      params[:category],
+      params[:relationships],
+      params[:remove_ngrams])
 
     @n = 2
     gon.n = @n
@@ -158,6 +173,7 @@ class QuestionsController < ApplicationController
 
     gon.filter = params[:filter]
     gon.category = params[:category]
+    gon.relationships = params[:relationships]
     gon.remove_ngrams = params[:remove_ngrams]
     render :wordcloud
   end
@@ -165,7 +181,13 @@ class QuestionsController < ApplicationController
   def trigrams
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:name)
-    result = @question.trigrams(@survey, params[:filter], params[:category], params[:remove_ngrams])
+    @relationships = @question.question_relationships.includes(:close_ended_question).includes(close_ended_question: :options)
+    result = @question.trigrams(
+      @survey,
+      params[:filter],
+      params[:category],
+      params[:relationships],
+      params[:remove_ngrams])
 
     @n = 3
     gon.n = @n
@@ -175,6 +197,7 @@ class QuestionsController < ApplicationController
 
     gon.filter = params[:filter]
     gon.category = params[:category]
+    gon.relationships = params[:relationships]
     gon.remove_ngrams = params[:remove_ngrams]
     render :wordcloud
   end
@@ -221,7 +244,7 @@ class QuestionsController < ApplicationController
     end
 
     def filter_answers(answers)
-      if params[:filter]
+      if params[:filter] and params[:filter] != "0"
         filters = Filter.where(survey_model_id: @question.survey_model.id)
         query_values = params[:filter].split(',')
 
@@ -237,6 +260,20 @@ class QuestionsController < ApplicationController
       if params[:category] and params[:category] != "0"
         answers = answers.where(id: AnswerCategory.where(category_id: params[:category]).uniq.pluck(:answer_id))
         gon.category = params[:category]
+      end
+
+      if params[:relationships] and params[:relationships] != "0"
+        options = params[:relationships].split(',')
+        options.each_with_index do |option_id, index|
+          unless option_id == "0"
+            closed_answers = CloseEndedAnswer.where(
+              option_id: option_id,
+              close_ended_question_id: close_ended_questions[index])
+
+            valid_students = closed_answers.pluck(:student_id)
+            filtered_answers = filtered_answers.where(student_id: valid_students)
+          end
+        end
       end
 
       return answers

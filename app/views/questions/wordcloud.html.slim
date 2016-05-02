@@ -45,12 +45,17 @@ hr
       option value="0" No filtrar por Categoría
       - @categories.each do |category|
         option value="#{category.id}" = category.name
+    - @relationships.each do |r|
+      h5 = r.name
+      select.relationships.form-control
+        option value="0" No filtrar por respuesta
+        - r.close_ended_question.options.each do |o|
+          option value="#{o.id}" = o.name
     label for="ngram-filter"
       i.glyphicon.glyphicon-remove-sign
       | Eliminar N-gramas
     .form-group
       textarea#ngram-filter.form-control rows="2" name="ngram-filter" placeholder="Separe n-gramas por comas"
-    hr
     a#filter.add-filters.btn.btn-lg.btn-wide.btn-success href="#" Aplicar Filtro
 
   .col-xs-12.col-md-9
@@ -213,6 +218,14 @@ javascript:
   if (gon.category) {
     $('#category').val(gon.category);
   }
+  if (gon.relationships) {
+    var filters = gon.relationships.split(',');
+    filters.forEach(function(value, index) {
+      if (value != '0') {
+        $('select.relationships')[index].value = value;
+      }
+    });
+  }
   if (gon.remove_ngrams) {
     $('#ngram-filter').val(gon.remove_ngrams);
     checkNgrams();
@@ -234,6 +247,14 @@ javascript:
 
     var category = $('select#category').val();
     new_link += '&category=' + category;
+
+    var relationships = $('select.relationships');
+    relationships.each(function(i, e) {
+      if (i > 0) {
+        new_link += ',';
+      }
+      new_link += e.value;
+    });
 
     var ngrams = getNgrams();
     new_link += '&remove_ngrams=' + ngrams.join(',')

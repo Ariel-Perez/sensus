@@ -34,12 +34,12 @@ class Question < ActiveRecord::Base
     Question.where(survey_model_id: survey_model_id).where("index < ?", index).order(:index).last
   end
 
-  def unigrams(survey, filter, category, remove_ngrams)
+  def unigrams(survey, filter, category, relationships, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
     n_samples = 3
 
-    filtered_answers = filter_answers(answers, filter, category)
+    filtered_answers = filter_answers(answers, filter, category, relationships)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
 
     stem_frequencies = Hash.new(0)
@@ -72,12 +72,12 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, sample_sentences, 100)
   end
 
-  def bigrams(survey, filter, category, remove_ngrams)
+  def bigrams(survey, filter, category, relationships, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
     n_samples = 3
 
-    filtered_answers = filter_answers(answers, filter, category)
+    filtered_answers = filter_answers(answers, filter, category, relationships)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
 
     stem_frequencies = Hash.new(0)
@@ -132,12 +132,12 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, sample_sentences, 100)
   end
 
-  def trigrams(survey, filter, category, remove_ngrams)
+  def trigrams(survey, filter, category, relationships, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
     n_samples = 3
 
-    filtered_answers = filter_answers(answers, filter, category)
+    filtered_answers = filter_answers(answers, filter, category, relationships)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
 
     stem_frequencies = Hash.new(0)
@@ -195,12 +195,12 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, sample_sentences, 100)
   end
 
-  def ngrams(survey, n, filter, category, remove_ngrams)
+  def ngrams(survey, n, filter, category, relationships, remove_ngrams)
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
     n_samples = 3
 
-    filtered_answers = filter_answers(answers, filter, category)
+    filtered_answers = filter_answers(answers, filter, category, relationships)
     proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
 
     stem_frequencies = Hash.new(0)
@@ -264,9 +264,9 @@ class Question < ActiveRecord::Base
   end
 
   private
-    def filter_answers(answers_to_filter, filter, category)
+    def filter_answers(answers_to_filter, filter, category, relationships)
       filtered_answers = answers_to_filter
-      if filter
+      if filter and filter != "0"
         query_values = filter.split(',')
         query_values.each do |value_id|
           unless value_id == "0"
@@ -277,6 +277,20 @@ class Question < ActiveRecord::Base
       end
       if category and category != "0"
         filtered_answers = filtered_answers.where(id: AnswerCategory.where(category_id: category).uniq.pluck(:answer_id))
+      end
+
+      if relationships and relationships != "0"
+        options = relationships.split(',')
+        options.each_with_index do |option_id, index|
+          unless option_id == "0"
+            closed_answers = CloseEndedAnswer.where(
+              option_id: option_id,
+              close_ended_question_id: close_ended_questions[index])
+
+            valid_students = closed_answers.pluck(:student_id)
+            filtered_answers = filtered_answers.where(student_id: valid_students)
+          end
+        end
       end
 
       return filtered_answers

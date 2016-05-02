@@ -39,13 +39,20 @@ hr
       select.filter.form-control
         option value="0" = "No filtrar por #{filter.name}"
         - filter.filter_values.order(:value).each do |value|
-          option value="#{value.id}" = "#{value.value}"
+          option value="#{value.id}" = value.value
     select#category.form-control
       option value="0" No filtrar por Categoría
       - @categories.each do |category|
         option value="#{category.id}" = category.name
+
+    - @relationships.each do |r|
+      h5 = r.name
+      select.relationships.form-control
+        option value="0" No filtrar por respuesta
+        - r.close_ended_question.options.each do |o|
+          option value="#{o.id}" = o.name
+
     input#ngram-filter.hidden.form-control type="text" name="ngram-filter" placeholder="Ingrese palabras separadas por coma"
-    hr
     a#filter.add-filters.btn.btn-lg.btn-wide.btn-success href="#" Aplicar Filtro
 
   .col-xs-12.col-md-9
@@ -127,6 +134,14 @@ javascript:
   if (gon.category) {
     $('#category').val(gon.category);
   }
+  if (gon.relationships) {
+    var filters = gon.relationships.split(',');
+    filters.forEach(function(value, index) {
+      if (value != '0') {
+        $('select.relationships')[index].value = value;
+      }
+    });
+  }
   if (gon.remove_ngrams) {
     $('#ngram-filter').val(gon.remove_ngrams);
   }
@@ -146,6 +161,23 @@ javascript:
 
     var category = $('select#category').val();
     new_link += '&category=' + category;
+
+    new_link += '&relationships=';
+    var relationships = $('select.relationships');
+    relationships.each(function(i, e) {
+      if (i > 0) {
+        new_link += ',';
+      }
+      new_link += e.value;
+    });
+  if (gon.relationships) {
+    var filters = gon.relationships.split(',');
+    filters.forEach(function(value, index) {
+      if (value != '0') {
+        $('select.relationships')[index].value = value;
+      }
+    });
+  }
 
     var ngram_filter = $('#ngram-filter').val();
     ngram_filter = ngram_filter.replace(/ +/g, ' ');
