@@ -248,6 +248,7 @@ javascript:
     var category = $('select#category').val();
     new_link += '&category=' + category;
 
+    new_link += '&relationships=';
     var relationships = $('select.relationships');
     relationships.each(function(i, e) {
       if (i > 0) {

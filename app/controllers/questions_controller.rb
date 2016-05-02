@@ -268,10 +268,10 @@ class QuestionsController < ApplicationController
           unless option_id == "0"
             closed_answers = CloseEndedAnswer.where(
               option_id: option_id,
-              close_ended_question_id: close_ended_questions[index])
+              close_ended_question_id: @question.close_ended_questions[index])
 
             valid_students = closed_answers.pluck(:student_id)
-            filtered_answers = filtered_answers.where(student_id: valid_students)
+            answers = answers.where(student_id: valid_students)
           end
         end
       end
