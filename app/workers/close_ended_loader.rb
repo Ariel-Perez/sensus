@@ -29,12 +29,12 @@ class CloseEndedLoader
       questions.each do |q|
         content = row[q.index]
         if content.length > 0
-          option = options[q.id][content]
+          option_id = options[q.id][content]
           values = [
             q.id,
             student_id,
             survey_id,
-            option.id,
+            option_id,
             time,
             time
           ]
