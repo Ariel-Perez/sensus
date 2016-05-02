@@ -31,7 +31,6 @@ class CloseEndedLoader
     end
 
     student_id_map = Hash[ students.collect { |x| [x.identifier, x.id] } ]
-    question_id_map = Hash[ questions.collect { |x| [x.name, x.id] } ]
 
     inserts = []
     sheet.each 1 do |row|
