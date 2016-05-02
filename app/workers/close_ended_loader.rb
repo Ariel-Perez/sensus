@@ -28,7 +28,7 @@ class CloseEndedLoader
 
       questions.each do |q|
         content = row[q.index]
-        if content.length > 0
+        if content
           option_id = options[q.id][content]
           values = [
             q.id,
