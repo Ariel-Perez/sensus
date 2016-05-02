@@ -12,6 +12,10 @@ positive = Sentiment.find_or_create_by(name: "Positivo")
 negative = Sentiment.find_or_create_by(name: "Negativo")
 neutral = Sentiment.find_or_create_by(name: "Neutro")
 
+sat = Option.find_or_create_by(name: "Satisfecho")
+net = Option.find_or_create_by(name: "Neutro")
+uns = Option.find_or_create_by(name: "Insatisfecho")
+
 Filter.find_or_create_by(survey_model_id: sm.id, name: 'Sede')
 Filter.find_or_create_by(survey_model_id: sm.id, name: 'Jornada')
 Filter.find_or_create_by(survey_model_id: sm.id, name: 'Institución')

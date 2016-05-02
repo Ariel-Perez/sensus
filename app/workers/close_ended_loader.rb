@@ -26,19 +26,23 @@ class CloseEndedLoader
     sheet.each 1 do |row|
       student_id = student_id_map[row[0].to_s]
 
-      questions.each do |q|
-        content = row[q.index]
-        if content
-          option_id = options[q.id][content]
-          values = [
-            q.id,
-            student_id,
-            survey_id,
-            option_id,
-            time,
-            time
-          ]
-          inserts.push("(#{values.join(", ")})")
+      if student_id
+        questions.each do |q|
+          content = row[q.index]
+          if content
+            option_id = options[q.id][content]
+            if option_id
+              values = [
+                q.id,
+                student_id,
+                survey_id,
+                option_id,
+                time,
+                time
+              ]
+              inserts.push("(#{values.join(", ")})")
+            end
+          end
         end
       end
     end
