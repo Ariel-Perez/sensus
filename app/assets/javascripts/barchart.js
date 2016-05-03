@@ -37,7 +37,11 @@ var MyBarChartMethods = {
         chart.data.labels = order.map(function(index) { return chart.data.labels[index]; });
         chart.data.datasets.forEach(function(dataset, i) {
             dataset.data = order.map(function(index) { return dataset.data[index]; });
+            if (Array.isArray(dataset.backgroundColor)) {
+              dataset.backgroundColor = order.map(function(index) { return dataset.backgroundColor[index]; });
+            }
         });
+
         chart.update();
     },
 
@@ -46,6 +50,9 @@ var MyBarChartMethods = {
         chart.data.labels = reverseOrder.map(function(index) { return chart.data.labels[index]; });
         chart.data.datasets.forEach(function(dataset, i) {
             dataset.data = reverseOrder.map(function(index) { return dataset.data[index]; });
+            if (Array.isArray(dataset.backgroundColor)) {
+              dataset.backgroundColor = reverseOrder.map(function(index) { return dataset.backgroundColor[index]; });
+            }
         });
         chart.update();
     },
