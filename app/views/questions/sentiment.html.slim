@@ -60,14 +60,14 @@ hr
       .col-xs-12
         ul.nav.nav-tabs
           li.col-xs-6.col-sm-2.text-center role="presentation"
-            a.add-filters href="#{@survey ? survey_question_clean_charts_path(@survey, @question) : question_clean__charts_path(@question)}"
+            a.add-filters href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
               i.glyphicon.glyphicon-stats
               | Categorías
           li.active.col-xs-6.col-sm-2.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_sentiment_path(@survey, @question) : question_sentiment_path(@question)}"
               i.glyphicon.glyphicon-heart
               | Sentimiento
-          li.col-xs-6.col-sm-2.text-center role="presentation"
+          li.col-xs-6.col-sm-2.col-sm-offset-2.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_unigrams_path(@survey, @question) : question_unigrams_path(@question)}"
               i.glyphicon.glyphicon-cloud
               | Unigramas
@@ -79,7 +79,7 @@ hr
             a.add-filters href="#{@survey ? survey_question_trigrams_path(@survey, @question) : question_trigrams_path(@question)}"
               i.glyphicon.glyphicon-cloud
               | Trigramas
-        canvas#my-chart width="850" height="400"
+        canvas#my-chart width="850" height="380"
 
 javascript:
   // Use this sometime.

@@ -4,7 +4,7 @@
   p Para ver los resultados del clasificador <em><strong>Sensus</strong></em>, debe seleccionar una de las encuestas clasificadas.
 
   - @surveys.each do |survey|
-    a.list-group-item href="#{survey_question_clean_charts_path(survey, survey.questions.first)}"
+    a.list-group-item href="#{survey_question_charts_path(survey, survey.questions.first)}"
       == image_tag "excel.png", alt: "Excel File", height: "30px"
       = survey.name
 
