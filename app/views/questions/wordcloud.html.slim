@@ -94,12 +94,18 @@ javascript:
     var sumFrequency = 0;
     var ngrams = gon.wordcloud_keys.map(function(x) {
       sumFrequency += gon.wordcloud_data[x].size;
-      return gon.wordcloud_data[x];
+      ngram = gon.wordcloud_data[x];
+      return {
+        text: ngram.text,
+        stem: ngram.stem,
+        size: ngram.size,
+        count: ngram.size,
+        samples: ngram.samples
+      }
     });
     ngrams.sort(function(a, b) {
       return - (a.size - b.size);
     });
-    console.log(ngrams);
 
     var avgFrequency = sumFrequency / ngrams.length;
 
@@ -126,6 +132,9 @@ javascript:
           })
           .attr("data-stem", function(d) {
             return d.stem;
+          })
+          .attr("data-count", function(d) {
+            return d.count;
           })
           .text(function(d) { return d.text; });
 
@@ -159,7 +168,7 @@ javascript:
 
           var content = $('<div></div>');
           content.append($('<strong>Contador: </strong>'));
-          content.append($('<span class="badge pull-right">' + ngram.size + '</span>'));
+          content.append($('<span class="badge pull-right">' + $(this).attr("data-count") + '</span>'));
           content.append($('<hr/>'));
           content.append($('<strong>Ejemplos:</strong>'));
           var samples = $('<ol></ol>');
@@ -175,14 +184,14 @@ javascript:
       });
     }
 
-    var defaultSize = 40;
+    var defaultSize = 12;
     var layout = cloud()
         .size([width, height])
         .words(ngrams)
         .padding(15)
         .rotate(function() { return Math.random() * -30; })
         .font("Impact")
-        .fontSize(function(d) { return d.size / avgFrequency * 12; })
+        .fontSize(function(d) { return d.size / avgFrequency * defaultSize; })
         .on("end", draw);
 
     layout.start();

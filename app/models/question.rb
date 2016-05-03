@@ -40,7 +40,7 @@ class Question < ActiveRecord::Base
     n_samples = 3
 
     filtered_answers = filter_answers(answers, filter, category, relationships)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
+    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer).order("RANDOM()")
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
@@ -84,7 +84,7 @@ class Question < ActiveRecord::Base
     n_samples = 3
 
     filtered_answers = filter_answers(answers, filter, category, relationships)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
+    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer).order("RANDOM()")
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
@@ -150,7 +150,7 @@ class Question < ActiveRecord::Base
     n_samples = 3
 
     filtered_answers = filter_answers(answers, filter, category, relationships)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
+    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer).order("RANDOM()")
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
@@ -219,7 +219,7 @@ class Question < ActiveRecord::Base
     n_samples = 3
 
     filtered_answers = filter_answers(answers, filter, category, relationships)
-    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer)
+    proc_answers = ProcessedAnswer.where(answer_id: filtered_answers.pluck(:id)).includes(:answer).order("RANDOM()")
 
     stem_frequencies = Hash.new(0)
     stem_origins = Hash.new {|hash,key| hash[key] = Hash.new(0)}
