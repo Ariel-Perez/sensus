@@ -60,16 +60,16 @@ class Question < ActiveRecord::Base
             stem_origins.delete stem
             sample_sentences.delete stem
           elsif not skip_ngram_stems.include? stem
-            if not stem_keys.include? stem
-              stem_frequencies[stem] += 1
-              stem_origins[stem][origin] += 1
+            # if not stem_keys.include? stem
+            stem_frequencies[stem] += 1
+            stem_origins[stem][origin] += 1
 
-              if sample_sentences[stem].length < n_samples
-                sample_sentences[stem] << proc_answer.original_text
-              end
-
-              stem_keys.add(stem)
+            if sample_sentences[stem].length < n_samples
+              sample_sentences[stem] << proc_answer.original_text
             end
+
+            # stem_keys.add(stem)
+            # end
           end
         end
       end
