@@ -34,7 +34,7 @@ class Question < ActiveRecord::Base
     Question.where(survey_model_id: survey_model_id).where("index < ?", index).order(:index).last
   end
 
-  def unigrams(survey, filter, category, relationships, remove_ngrams)
+  def unigrams(survey, filter=nil, category=nil, relationships=nil, remove_ngrams="")
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
     n_samples = 3
@@ -78,7 +78,7 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, sample_sentences, 100)
   end
 
-  def bigrams(survey, filter, category, relationships, remove_ngrams)
+  def bigrams(survey, filter=nil, category=nil, relationships=nil, remove_ngrams="")
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
     n_samples = 3
@@ -144,7 +144,7 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, sample_sentences, 100)
   end
 
-  def trigrams(survey, filter, category, relationships, remove_ngrams)
+  def trigrams(survey, filter=nil, category=nil, relationships=nil, remove_ngrams="")
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
     n_samples = 3
@@ -213,7 +213,7 @@ class Question < ActiveRecord::Base
     build_wordcloud_result(stem_frequencies, stem_origins, sample_sentences, 100)
   end
 
-  def ngrams(survey, n, filter, category, relationships, remove_ngrams)
+  def ngrams(survey, n, filter=nil, category=nil, relationships=nil, remove_ngrams="")
     skip_ngrams = hash_ngrams remove_ngrams
     skip_ngram_stems = Set.new
     n_samples = 3

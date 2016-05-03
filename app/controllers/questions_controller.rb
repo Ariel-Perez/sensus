@@ -183,7 +183,7 @@ class QuestionsController < ApplicationController
       params[:filter],
       params[:category],
       params[:relationships],
-      params[:remove_ngrams])
+      params[:remove_ngrams] || "")
 
     @n = 1
     gon.n = @n
@@ -207,7 +207,7 @@ class QuestionsController < ApplicationController
       params[:filter],
       params[:category],
       params[:relationships],
-      params[:remove_ngrams])
+      params[:remove_ngrams] || "")
 
     @n = 2
     gon.n = @n
@@ -231,7 +231,7 @@ class QuestionsController < ApplicationController
       params[:filter],
       params[:category],
       params[:relationships],
-      params[:remove_ngrams])
+      params[:remove_ngrams] || "")
 
     @n = 3
     gon.n = @n
