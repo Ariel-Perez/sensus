@@ -55,7 +55,7 @@ class SurveysController < ApplicationController
     filepath = File.join("public", params[:file].original_filename)
     FileUtils.cp tmp.path, filepath
     Resque.enqueue(FilterLoader, @survey.id, filepath)
-    flash[:success] = "Cargando los filtros a la base de datos"
+    flash[:success] = "Cargando los filtros a la base de datos (#{params[:file].original_filename})"
 
     redirect_to @survey
   end

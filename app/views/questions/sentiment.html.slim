@@ -142,6 +142,18 @@ javascript:
         scaleStartValue: 0,
       }
     });
+
+    var ordered = false;
+    var order = MyBarChartMethods.getOrder(myBarChart);
+
+    $('#my-chart').dblclick(function() {
+      if (ordered) {
+          MyBarChartMethods.revertOrder(myBarChart, order);
+      } else {
+          MyBarChartMethods.applyOrder(myBarChart, order);
+      }
+      ordered = !ordered;
+    });
   };
 
 
