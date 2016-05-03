@@ -59,25 +59,30 @@ hr
     .row
       .col-xs-12
         ul.nav.nav-tabs
-          li.active.col-xs-6.col-sm-2.text-center role="presentation"
+          li.active.col-md-2.col-sm-4.col-xs-6.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_charts_path(@survey, @question) : question_charts_path(@question)}"
               i.glyphicon.glyphicon-stats
+              br
               | Categorías
-          li.col-xs-6.col-sm-2.text-center role="presentation"
+          li.col-md-2.col-md-offset-2.col-md-pull-2.col-sm-4.col-sm-offset-4.col-sm-pull-4.col-xs-6.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_sentiment_path(@survey, @question) : question_sentiment_path(@question)}"
               i.glyphicon.glyphicon-heart
+              br
               | Sentimiento
-          li.col-xs-6.col-sm-2.col-sm-offset-2.text-center role="presentation"
+          li.col-md-2.col-sm-4.col-xs-6.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_unigrams_path(@survey, @question) : question_unigrams_path(@question)}"
               i.glyphicon.glyphicon-cloud
+              br
               | Unigramas
-          li.col-xs-6.col-sm-2.text-center role="presentation"
+          li.col-md-2.col-sm-4.col-xs-6.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_bigrams_path(@survey, @question) : question_bigrams_path(@question)}"
               i.glyphicon.glyphicon-cloud
+              br
               | Bigramas
-          li.col-xs-6.col-sm-2.text-center role="presentation"
+          li.col-md-2.col-sm-4.col-xs-6.text-center role="presentation"
             a.add-filters href="#{@survey ? survey_question_trigrams_path(@survey, @question) : question_trigrams_path(@question)}"
               i.glyphicon.glyphicon-cloud
+              br
               | Trigramas
         canvas#my-chart width="850" height="350"
 
