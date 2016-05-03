@@ -15,32 +15,32 @@ class QuestionsController < ApplicationController
   before_filter :set_question, :except => [:create]
   before_filter :set_survey, :except => [:create]
 
+  # def charts
+  #   @filters = @question.survey_model.filters
+  #   @categories = @question.categories.order(:name)
+  #   @answers = Answer.where(question_id: @question.id)
+  #   if @survey
+  #     @answers = @answers.where(survey_id: @survey.id)
+  #   end
+
+  #   @relationships = @question.question_relationships.includes(:close_ended_question).includes(close_ended_question: :options)
+  #   @answers = filter_answers(@answers)
+
+  #   @sentiments = Sentiment.all
+
+  #   gon.remove_ngrams = params[:remove_ngrams]
+  #   gon.category_names = @categories.pluck(:name)
+
+  #   data = @answers.joins(:answer_sentiments, :answer_categories).group(:sentiment_id, :category_id).count()
+  #   datasets = @sentiments.map { |sentiment| {
+  #     data: @categories.map { |category| data[[sentiment.id, category.id]].to_i },
+  #     name: sentiment.name } }
+
+  #   gon.datasets = datasets
+  #   gon.relationships = params[:relationships]
+  # end
+
   def charts
-    @filters = @question.survey_model.filters
-    @categories = @question.categories.order(:name)
-    @answers = Answer.where(question_id: @question.id)
-    if @survey
-      @answers = @answers.where(survey_id: @survey.id)
-    end
-
-    @relationships = @question.question_relationships.includes(:close_ended_question).includes(close_ended_question: :options)
-    @answers = filter_answers(@answers)
-
-    @sentiments = Sentiment.all
-
-    gon.remove_ngrams = params[:remove_ngrams]
-    gon.category_names = @categories.pluck(:name)
-
-    data = @answers.joins(:answer_sentiments, :answer_categories).group(:sentiment_id, :category_id).count()
-    datasets = @sentiments.map { |sentiment| {
-      data: @categories.map { |category| data[[sentiment.id, category.id]].to_i },
-      name: sentiment.name } }
-
-    gon.datasets = datasets
-    gon.relationships = params[:relationships]
-  end
-
-  def clean_charts
     @filters = @question.survey_model.filters
     @categories = @question.categories.order(:name)
     @answers = Answer.where(question_id: @question.id)

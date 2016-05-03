@@ -33,7 +33,6 @@ Sensus::Application.routes.draw do
     post 'upload_close_ended_answers'
     resources :questions do
       get 'charts'
-      get 'clean_charts'
       get 'sentiment'
       get 'unigrams'
       get 'bigrams'
@@ -49,7 +48,6 @@ Sensus::Application.routes.draw do
 
   resources :questions do
     get 'charts'
-    get 'clean_charts'
     get 'sentiment'
     get 'unigrams'
     get 'bigrams'

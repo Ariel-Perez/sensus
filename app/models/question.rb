@@ -51,6 +51,8 @@ class Question < ActiveRecord::Base
         stems = proc_answer.stemmed_text.downcase.split(' ')
         origins = proc_answer.unstemmed_text.downcase.split(' ')
 
+        stem_keys = Set.new
+
         stems.zip origins.each do |stem, origin|
           if skip_ngrams.include? origin
             skip_ngram_stems.add(stem)
@@ -58,11 +60,15 @@ class Question < ActiveRecord::Base
             stem_origins.delete stem
             sample_sentences.delete stem
           elsif not skip_ngram_stems.include? stem
-            stem_frequencies[stem] += 1
-            stem_origins[stem][origin] += 1
+            if not stem_keys.include? stem
+              stem_frequencies[stem] += 1
+              stem_origins[stem][origin] += 1
 
-            if sample_sentences[stem].length < n_samples
-              sample_sentences[stem] << proc_answer.original_text
+              if sample_sentences[stem].length < n_samples
+                sample_sentences[stem] << proc_answer.original_text
+              end
+
+              stem_keys.add(stem)
             end
           end
         end
@@ -96,6 +102,8 @@ class Question < ActiveRecord::Base
         stems = proc_answer.stemmed_text.downcase.split(' ')
         origins = proc_answer.unstemmed_text.downcase.split(' ')
 
+        stem_keys = Set.new
+
         (0..stems.length - 1).each do |i|
           max_j = [stems.length - 1, i + max_delta].min
           (i + 1..max_j).each do |j|
@@ -117,11 +125,15 @@ class Question < ActiveRecord::Base
               stem_origins.delete key
               sample_sentences.delete key
             elsif not skip_ngram_stems.include? key
-              stem_frequencies[key] += 1
-              stem_origins[key][value] += 1
+              if not stem_keys.include? key
+                stem_frequencies[key] += 1
+                stem_origins[key][value] += 1
 
-              if sample_sentences[key].length < n_samples
-                sample_sentences[key] << proc_answer.original_text
+                if sample_sentences[key].length < n_samples
+                  sample_sentences[key] << proc_answer.original_text
+                end
+
+                stem_keys.add key
               end
             end
           end
@@ -155,6 +167,8 @@ class Question < ActiveRecord::Base
         stems = proc_answer.stemmed_text.downcase.split(' ')
         origins = proc_answer.unstemmed_text.downcase.split(' ')
 
+        stem_keys = Set.new
+
         (0..stems.length - 1).each do |i|
           max_k = [stems.length - 1, i + max_delta].min
           (i + 1..max_k).each do |j|
@@ -179,11 +193,15 @@ class Question < ActiveRecord::Base
                 stem_frequencies.delete key
                 stem_origins.delete key
               elsif not skip_ngram_stems.include? key
-                stem_frequencies[key] += 1
-                stem_origins[key][value] += 1
+                if not stem_keys.include? key
+                  stem_frequencies[key] += 1
+                  stem_origins[key][value] += 1
 
-                if sample_sentences[key].length < n_samples
-                  sample_sentences[key] << proc_answer.original_text
+                  if sample_sentences[key].length < n_samples
+                    sample_sentences[key] << proc_answer.original_text
+                  end
+
+                  stem_keys.add key
                 end
               end
             end
@@ -218,6 +236,8 @@ class Question < ActiveRecord::Base
         stems = proc_answer.stemmed_text.downcase.split(' ')
         origins = proc_answer.unstemmed_text.downcase.split(' ')
 
+        stem_keys = Set.new
+
         length = stems.length
         indices = (0..n - 1).to_a
 
@@ -238,11 +258,15 @@ class Question < ActiveRecord::Base
             stem_frequencies.delete key
             stem_origins.delete key
           elsif not skip_ngram_stems.include? key
-            stem_frequencies[key] += 1
-            stem_origins[key][value] += 1
+            if not stem_keys.include? key
+              stem_frequencies[key] += 1
+              stem_origins[key][value] += 1
 
-            if sample_sentences[key].length < n_samples
-              sample_sentences[key] << proc_answer.original_text
+              if sample_sentences[key].length < n_samples
+                sample_sentences[key] << proc_answer.original_text
+              end
+
+              stem_keys.add key
             end
           end
 
