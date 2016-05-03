@@ -60,16 +60,16 @@ class Question < ActiveRecord::Base
             stem_origins.delete stem
             sample_sentences.delete stem
           elsif not skip_ngram_stems.include? stem
-            # if not stem_keys.include? stem
-            stem_frequencies[stem] += 1
-            stem_origins[stem][origin] += 1
+            if not stem_keys.include? stem
+              stem_frequencies[stem] += 1
+              stem_origins[stem][origin] += 1
 
-            if sample_sentences[stem].length < n_samples
-              sample_sentences[stem] << proc_answer.original_text
+              if sample_sentences[stem].length < n_samples
+                sample_sentences[stem] << proc_answer.original_text
+              end
+
+              stem_keys.add(stem)
             end
-
-            # stem_keys.add(stem)
-            # end
           end
         end
       end
@@ -299,6 +299,7 @@ class Question < ActiveRecord::Base
           end
         end
       end
+
       if category and category != "0"
         filtered_answers = filtered_answers.where(id: AnswerCategory.where(category_id: category).uniq.pluck(:answer_id))
       end
