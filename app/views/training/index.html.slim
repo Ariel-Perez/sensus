@@ -6,6 +6,6 @@
 
   - @surveys.each do |survey|
     /a.list-group-item href="#{survey_training_path(survey)}"
-    a.list-group-item href="#" data-turbolinks="false"
+    a.list-group-item href="#{survey_training_path(survey)}" data-turbolinks="false"
       == image_tag "excel.png", alt: "Excel File", height: "30px"
       = survey.name

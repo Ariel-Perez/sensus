@@ -11,7 +11,7 @@ var Category = function(id, name, count) {
 window.classifyLoaded = window.classifyLoaded || false;
 
 
-ready = function() {
+$(document).ready(function() {
   $('.canvas').empty();
   window.newClassId = 0;
   window.queryIndex =-1;
@@ -32,17 +32,7 @@ ready = function() {
   setupQuestionSelect();
   $('#training-next').click(next);
   $('#training-previous').click(previous);
-}
-
-
-var bodyData = $('body').data();
-if (bodyData.controllerName == 'surveys' && bodyData.actionName == 'training') {
-  if (!window.classifyLoaded) {
-    console.log("turbo load");
-    document.addEventListener("turbolinks:load", ready);
-    window.classifyLoaded = true;
-  }
-}
+});
 
 function setupQuestionSelect()
 {
