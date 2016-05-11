@@ -5,7 +5,7 @@ function ajaxCallback(url, query, callback, method) {
     headers['X-CSRF-Token'] = $('meta[name="csrf-token"]').attr('content');
   }
   $.ajax({
-    url: location.protocol + '//' + location.host + '/' + url,
+    url: location.protocol + '//' + location.host + '/sensus' + url,
     headers: headers,
     data: query,
     type: method,
@@ -20,7 +20,7 @@ function ajaxCallback(url, query, callback, method) {
 function ajaxFormPost(url, query, callback) {
   headers = {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')};
   $.ajax({
-    url: location.protocol + '//' + location.host + '/' + url,
+    url: location.protocol + '//' + location.host + '/sensus' + url,
     headers: headers,
     data: query,
     type: 'POST',
