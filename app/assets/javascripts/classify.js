@@ -177,12 +177,12 @@ function toggleClassification(id) {
       if (idx !== -1) {
         classifications[queryIndex].splice(idx, 1);
       }
-      url = 'answers/' + data.queries[queryIndex]['id'] + '/declassify.json';
+      url = '/answers/' + data.queries[queryIndex]['id'] + '/declassify.json';
     } else {
       satellite.attr('data-count', ++data.categories[id].count);
       satellite.addClass('classified');
       classifications[queryIndex].push(id);
-      url = 'answers/' + data.queries[queryIndex]['id'] + '/classify.json';
+      url = '/answers/' + data.queries[queryIndex]['id'] + '/classify.json';
     }
 
     ajaxFormPost(url, {'category_id': id}, function(data){ console.log(data); }, 'POST');
