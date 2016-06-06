@@ -103,7 +103,7 @@ javascript:
   //  return dataset;
   //});
 
-  var data = {
+  myData = {
     labels: gon.category_names,
     datasets: [
       {
@@ -120,7 +120,7 @@ javascript:
     var ctx = document.getElementById("my-chart").getContext("2d");
     window.myBarChart = new Chart(ctx, {
       type: 'bar',
-      data: data,
+      data: myData,
       options: {
         scales: {
           yAxes: [{
