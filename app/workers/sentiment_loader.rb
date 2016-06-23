@@ -17,24 +17,26 @@ class SentimentLoader
       sentiment_hash[sentiment.name] = sentiment.id
     end
 
+    puts sentiment_hash
+
     inserts = []
     sheet.each 1 do |row|
-      answer_id = row[0].to_s
-      student_id = row[1].to_s
+      answer_id = row[0].to_i
+      student_id = row[1].to_i
       original_text = row[2].to_s
       corrected_text = row[3].to_s
 
-      if row.length > 4 and row[4].to_s
+      if row.length > 4 and row[4].to_s.length > 0
         sentiment = row[4].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
-        inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+        inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
       end
-      if row.length > 5 and row[5].to_s
+      if row.length > 5 and row[5].to_s.length > 0
         sentiment = row[5].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
-        inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+        inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
       end
     end
 
