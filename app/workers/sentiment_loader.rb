@@ -30,18 +30,20 @@ class SentimentLoader
         sentiment = row[4].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
+        puts sentiment
         inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
       end
       if row.length > 5 and row[5].to_s.length > 0
         sentiment = row[5].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
+        puts sentiment
         inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
       end
     end
 
-    sql = "INSERT INTO answer_sentiments (answer_id, sentiment_id, created_at, updated_at) VALUES #{inserts.join(", ")};"
-    ActiveRecord::Base.connection.exec_query(sql, :skip_logging)
+    # sql = "INSERT INTO answer_sentiments (answer_id, sentiment_id, created_at, updated_at) VALUES #{inserts.join(", ")};"
+    # ActiveRecord::Base.connection.exec_query(sql, :skip_logging)
     FileUtils.rm filepath
   end
 end
