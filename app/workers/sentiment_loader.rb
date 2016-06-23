@@ -30,7 +30,7 @@ class SentimentLoader
         sentiment = row[4].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
-        puts sentimentkey
+        puts sentiment
         puts sentiment == 'Negativo'
         puts sentiment_id
         inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
