@@ -17,8 +17,6 @@ class SentimentLoader
       sentiment_hash[sentiment.name] = sentiment.id
     end
 
-    puts sentiment_hash
-
     inserts = []
     sheet.each 1 do |row|
       answer_id = row[0].to_i
@@ -30,18 +28,13 @@ class SentimentLoader
         sentiment = row[4].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
-        puts sentiment
-        puts sentiment == 'Negativo'
-        puts sentiment_id
-        inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
+        inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
       end
       if row.length > 5 and row[5].to_s.length > 0
         sentiment = row[5].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
-        puts sentiment
-        puts sentiment_id
-        inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
+        inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
       end
     end
 
