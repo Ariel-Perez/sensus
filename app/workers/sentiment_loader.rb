@@ -31,6 +31,7 @@ class SentimentLoader
         sentiment_id = sentiment_hash[sentiment]
 
         puts sentiment
+        puts sentiment_id
         inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
       end
       if row.length > 5 and row[5].to_s.length > 0
@@ -38,6 +39,7 @@ class SentimentLoader
         sentiment_id = sentiment_hash[sentiment]
 
         puts sentiment
+        puts sentiment_id
         inserts.push("(#{answer_id},#{sentiment},#{time},#{time})")
       end
     end
