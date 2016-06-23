@@ -23,14 +23,15 @@ class SentimentLoader
       student_id = row[1].to_s
       original_text = row[2].to_s
       corrected_text = row[3].to_s
-      if row.length > 3 and row[3].to_s
-        sentiment = row[3].to_s.encode 'UTF-8'
+
+      if row.length > 4 and row[4].to_s
+        sentiment = row[4].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
         inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
       end
-      if row.length > 4 and row[4].to_s
-        sentiment = row[4].to_s.encode 'UTF-8'
+      if row.length > 5 and row[5].to_s
+        sentiment = row[5].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
 
         inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
