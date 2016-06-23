@@ -28,6 +28,7 @@ class SentimentLoader
         sentiment_id = sentiment_hash[sentiment]
 
         inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+      end
       if row.length > 4 and row[4].to_s
         sentiment = row[4].to_s.encode 'UTF-8'
         sentiment_id = sentiment_hash[sentiment]
