@@ -38,8 +38,10 @@ class SurveyLoader
     new_student_ids = student_ids - old_student_ids
 
     inserts = new_student_ids.map { |id| "(#{id},#{time},#{time})"}
-    sql = "INSERT INTO students (identifier, created_at, updated_at) VALUES #{inserts.join(", ")};"
-    ActiveRecord::Base.connection.exec_query(sql, :skip_logging)
+    unless inserts.empty?
+      sql = "INSERT INTO students (identifier, created_at, updated_at) VALUES #{inserts.join(", ")};"
+      ActiveRecord::Base.connection.exec_query(sql, :skip_logging)
+    end
 
     all_students = Student.all
     student_id_map = Hash[ all_students.collect { |x| [x.identifier, x.id] } ]
