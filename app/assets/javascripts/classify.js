@@ -8,22 +8,6 @@ var Category = function(id, name, count) {
   Category.incrementalId = Math.max(Category.incrementalId, this.id + 1);
 };
 
-window.classifyLoaded = window.classifyLoaded || false;
-
-document.onkeydown = checkKey;
-
-function checkKey(e) {
-    e = e || window.event;
-    else if (e.keyCode == '37') {
-       // left arrow
-    }
-    else if (e.keyCode == '39') {
-       // right arrow
-    }
-
-}
-
-
 $(document).ready(function() {
   $('.canvas').empty();
   window.newClassId = 0;
