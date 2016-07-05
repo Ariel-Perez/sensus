@@ -21,21 +21,26 @@ class SentimentLoader
     sheet.each 1 do |row|
       answer_id = row[0].to_i
       student_id = row[1].to_i
-      original_text = row[2].to_s
-      corrected_text = row[3].to_s
+      text = row[2].to_s
 
-      if row.length > 4 and row[4].to_s.length > 0
-        sentiment = row[4].to_s.encode 'UTF-8'
-        sentiment_id = sentiment_hash[sentiment]
-
+      sentiment_bits = row[3:]
+      sentiment_bits.each_with_index do |b, i|
+        sentiment_id = sentiment_hash[header[3 + i]]
         inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
       end
-      if row.length > 5 and row[5].to_s.length > 0
-        sentiment = row[5].to_s.encode 'UTF-8'
-        sentiment_id = sentiment_hash[sentiment]
 
-        inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
-      end
+      # if row.length > 3 and row[3].to_s.length > 0
+      #   sentiment = row[3].to_s.encode 'UTF-8'
+      #   sentiment_id = sentiment_hash[sentiment]
+
+      #   inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+      # end
+      # if row.length > 5 and row[5].to_s.length > 0
+      #   sentiment = row[5].to_s.encode 'UTF-8'
+      #   sentiment_id = sentiment_hash[sentiment]
+
+      #   inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+      # end
     end
 
     sql = "INSERT INTO answer_sentiments (answer_id, sentiment_id, created_at, updated_at) VALUES #{inserts.join(", ")};"
