@@ -24,9 +24,12 @@ class SentimentLoader
       text = row[2].to_s
 
       sentiment_bits = row.slice(3, row.length - 3)
+      puts sentiment_bits
       sentiment_bits.each_with_index do |b, i|
-        sentiment_id = sentiment_hash[header[3 + i]]
-        inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+        if b
+          sentiment_id = sentiment_hash[header[3 + i]]
+          inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
+        end
       end
 
       # if row.length > 3 and row[3].to_s.length > 0
