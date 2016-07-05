@@ -23,7 +23,7 @@ class SentimentLoader
       student_id = row[1].to_i
       text = row[2].to_s
 
-      sentiment_bits = row[3:]
+      sentiment_bits = row.slice(3)
       sentiment_bits.each_with_index do |b, i|
         sentiment_id = sentiment_hash[header[3 + i]]
         inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
