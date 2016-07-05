@@ -10,6 +10,19 @@ var Category = function(id, name, count) {
 
 window.classifyLoaded = window.classifyLoaded || false;
 
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+    e = e || window.event;
+    else if (e.keyCode == '37') {
+       // left arrow
+    }
+    else if (e.keyCode == '39') {
+       // right arrow
+    }
+
+}
+
 
 $(document).ready(function() {
   $('.canvas').empty();
@@ -17,6 +30,16 @@ $(document).ready(function() {
   window.queryIndex =-1;
   window.data = {};
   window.classifications = {};
+  document.onkeydown = function(e) {
+    if (e.keyCode == '37') {
+      // left arrow
+      previous();
+    }
+    else if (e.keyCode == '39') {
+      // right arrow
+      next();
+    }
+  }
 
   var wHeight = $(window).height();
   var wWidth = $(window).width();
