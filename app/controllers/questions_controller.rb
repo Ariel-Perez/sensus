@@ -126,7 +126,7 @@ class QuestionsController < ApplicationController
     line_separator = "\n"
 
     categories = @question.categories
-    header = ["id", "student_id"].join(column_separator)
+    header = ["id", "student_id", "text", "Positivo", "Negativo", "Neutro"].join(column_separator)
     answers = Answer.includes(:student).where(question_id: @question.id)
 
     if @survey
