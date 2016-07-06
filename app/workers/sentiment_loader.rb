@@ -23,8 +23,11 @@ class SentimentLoader
       student_id = row[1].to_i
       text = row[2].to_s
 
-      sentiment_bits = row.slice(3, row.length - 3)
-      puts sentiment_bits
+      sentiment_bits = []
+      for i in 0..row.length - 4
+        sentiment_bits << row[i]
+      end
+
       sentiment_bits.each_with_index do |b, i|
         if b
           sentiment_id = sentiment_hash[header[3 + i]]
