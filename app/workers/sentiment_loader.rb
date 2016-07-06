@@ -29,7 +29,7 @@ class SentimentLoader
       end
 
       sentiment_bits.each_with_index do |b, i|
-        if b
+        if b == 1
           sentiment_id = sentiment_hash[header[3 + i]]
           inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
         end
