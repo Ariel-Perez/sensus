@@ -25,11 +25,11 @@ class SentimentLoader
 
       sentiment_bits = []
       for i in 0..row.length - 4
-        sentiment_bits << row[i]
+        sentiment_bits << row[3 + i]
       end
 
       sentiment_bits.each_with_index do |b, i|
-        if b == 1
+        if b
           sentiment_id = sentiment_hash[header[3 + i]]
           inserts.push("(#{answer_id},#{sentiment_id},#{time},#{time})")
         end
