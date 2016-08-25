@@ -22,6 +22,8 @@ class Survey < ActiveRecord::Base
   has_many :answers
   has_many :answer_categories, through: :answers
 
+  scope :display, -> { where(display: true) }
+
   def questions
     survey_model.questions
   end

@@ -5,7 +5,7 @@
   /p Para entrenar un clasificador de <em><strong>Sensus</strong></em>, debe seleccionar una de las encuestas cargadas al sistema.
 
   - @surveys.each do |survey|
-    /a.list-group-item href="#{survey_training_path(survey)}"
-    a.list-group-item href="#{survey_training_path(survey)}" data-turbolinks="false"
+    a.list-group-item href="#"
+      /{survey_training_path(survey)}"
       == image_tag "excel.png", alt: "Excel File", height: "30px"
       = survey.name

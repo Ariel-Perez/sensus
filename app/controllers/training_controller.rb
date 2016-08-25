@@ -1,5 +1,5 @@
 class TrainingController < ApplicationController
   def index
-    @surveys = Survey.all
+    @surveys = Survey.display
   end
 end
