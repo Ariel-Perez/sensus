@@ -144,7 +144,13 @@ class QuestionsController < ApplicationController
     line_separator = "\n"
 
     categories = @question.categories
-    header = (["Sample"] + categories.pluck(:name)).join(column_separator)
+    sentiments = Sentiment.all
+
+    header = (
+      ["Sample"] +
+      categories.pluck(:name) +
+      sentiments.pluck(:name)
+    ).join(column_separator)
 
     answer_categories = AnswerCategory.where(category_id: categories.pluck(:id))
     answer_ids = answer_categories.uniq.pluck(:answer_id)
@@ -159,6 +165,11 @@ class QuestionsController < ApplicationController
       category_column_map[c.id] = i
     end
 
+    sentiment_column_map = {}
+    sentiments.each_with_index do |c, i|
+      sentiment_column_map[c.id] = i
+    end
+
     rows = []
     answers.each do |answer|
       answer_category_ids = AnswerCategory.where(answer_id: answer.id).uniq.pluck(:category_id)
@@ -167,7 +178,17 @@ class QuestionsController < ApplicationController
         category_data[category_column_map[c]] = "1"
       end
 
-      rows.push(([answer.student.identifier] + [category_data]).join(column_separator))
+      answer_sentiment_ids = AnswerSentiment.where(answer_id: answer.id).uniq.pluck(:sentiment_id)
+      sentiment_data = ["0"] * sentiments.length
+      answer_sentiment_ids.each do |c|
+        sentiment_data[sentiment_column_map[c]] = "1"
+      end
+
+      rows.push((
+        [answer.student.identifier] +
+        [category_data] +
+        [sentiment_data]
+      ).join(column_separator))
     end
 
     data = ([header] + rows).join(line_separator)
