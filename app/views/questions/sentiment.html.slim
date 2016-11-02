@@ -42,8 +42,6 @@ hr
           option value="#{value.id}" = value.value
     select#category.form-control
       option value="0" No filtrar por Categoría
-      - @categories.each do |category|
-        option value="#{category.id}" = category.name
 
     - @relationships.each do |r|
       h5 = r.name
@@ -166,9 +164,6 @@ javascript:
       }
     });
   }
-  if (gon.category) {
-    $('#category').val(gon.category);
-  }
   if (gon.relationships) {
     var filters = gon.relationships.split(',');
     filters.forEach(function(value, index) {
@@ -193,9 +188,6 @@ javascript:
       }
       new_link += e.value;
     });
-
-    var category = $('select#category').val();
-    new_link += '&category=' + category;
 
     new_link += '&relationships=';
     var relationships = $('select.relationships');
