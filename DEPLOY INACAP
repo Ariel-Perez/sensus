@@ -1,0 +1,89 @@
+DEPLOY INACAP:
+
+Prerequisitos
+=======================================
+sudo apt-get install build-essential
+
+Instalar Ruby
+=======================================
+mkdir Downloads
+cd Downloads
+
+wget -O ruby-install-0.6.0.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.0.tar.gz
+
+tar -xzvf ruby-install-0.6.0.tar.gz
+cd ruby-install-0.6.0
+sudo make install
+
+sudo ruby-install --system ruby-2.3.0
+
+Instalar Rails
+=======================================
+gem install rails -v 4.2.5 --no-rdoc --no-ri
+
+Instalar Sensus
+=======================================
+sudo apt-get install git
+sudo mkdir -p /var/www/sensus/releases
+sudo chgrp -R www-data /var/www/sensus
+sudo chown -R sistemas /var/www/sensus
+cd /var/www/sensus
+
+Instalar Postgresql
+=======================================
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib libpq-dev
+
+Fix Perl
+=======================================
+sudo locale-gen es_CL.UTF-8
+sudo dpkg-reconfigure locales
+
+Crear Base de Datos y Usuario
+=======================================
+sudo -u postgres psql --command "CREATE USER sistemas WITH SUPERUSER;"
+sudo -u postgres createdb -O sistemas sensus
+echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+psql sensus < sensus_db
+
+Instalar NodeJs
+=======================================
+sudo apt-get install nodejs
+
+Install Passenger + Apache
+=======================================
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
+sudo apt-get install -y apt-transport-https ca-certificates
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main > /etc/apt/sources.list.d/passenger.list'
+sudo apt-get update
+sudo apt-get install -y apache2 libapache2-mod-passenger
+sudo a2enmod passenger
+sudo apache2ctl restart
+sudo apt-get update
+sudo apt-get upgrade
+
+Configurar Apache @ /etc/apache2/sites-available/000-default.conf
+=======================================
+<VirtualHost *:80>
+    ...
+
+    # Configure the right version of Ruby (Not needed)
+
+    # Tell Apache and Passenger where your app's 'public' directory is
+    Alias /sensus /var/www/sensus/current/public
+    <Location /sensus>
+      PassengerBaseUri /sensus
+      PassengerAppRoot /var/www/sensus/current
+    </Location>
+    # Relax Apache security settings
+    <Directory /var/www/sensus/current>
+      Allow from all
+      Options -MultiViews
+      Require all granted
+    </Directory>
+</VirtualHost>
+
+Reiniciar Apache
+=======================================
+sudo service apache2 restart
